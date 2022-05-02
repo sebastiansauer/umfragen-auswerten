@@ -7,7 +7,8 @@
 In diesem Kapitel benötigen wir folgende R-Pakete:
 
 
-```{r message=FALSE}
+
+```r
 library(tidyverse)  # Datenjudo
 library(sjmisc)  # recode
 library(ggstatsplot)  # Diagram aufbügeln
@@ -16,9 +17,7 @@ library(mice)  # Fehlende Werte ersetzen
 
 
 
-```{r echo=FALSE, message=FALSE}
-library(knitr)
-```
+
 
 
 
@@ -26,9 +25,19 @@ library(knitr)
 
 
  
-```{r load-extra-web, eval = TRUE}
+
+```r
 data_url <- "https://raw.githubusercontent.com/sebastiansauer/modar/master/datasets/extra.csv"
 extra <- read_csv(data_url)
+#> Rows: 826 Columns: 34
+#> ── Column specification ────────────────────────────────────
+#> Delimiter: ","
+#> chr  (8): timestamp, code, sex, presentation, clients, e...
+#> dbl (25): i01, i02r, i03, i04, i05, i06r, i07, i08, i09,...
+#> lgl  (1): i21
+#> 
+#> ℹ Use `spec()` to retrieve the full column specification for this data.
+#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ```
 
 
@@ -55,7 +64,8 @@ Manchmal liegen die Antworten noch nicht als Zahl vor, sondern als Text, etwa "s
 Diese Antwort könnte auf einer vierstufigen Skala einer 3 entsprechen. Eine einfache Möglichkeit zum Umkodieren eröffnet das Paket `sjmisc`. 
 Als Beispielaufgabe soll der Wert "Frau" in 1 umkodiert werden und "Mann" in 0; übrige Werte sollen in `NA` kodiert werden.
 
-```{r}
+
+```r
 data_rec <- extra %>% 
   rec(sex, rec = "Frau = 1; Mann = 0; else = NA")
 ```
@@ -64,9 +74,16 @@ Dabei wird eine neue Variable (Spalte) erzeugt, deren Namen der alten Variable e
 
 Prüfen wir das Ergebnis:
   
-```{r}
+
+```r
 data_rec %>% 
   count(sex_r)
+#> # A tibble: 3 × 2
+#>   sex_r     n
+#>   <chr> <int>
+#> 1 0       286
+#> 2 1       529
+#> 3 <NA>     11
 ```
 
 
@@ -92,7 +109,8 @@ Beim Umkodieren wird das Item "auf den Kopf gestellt": Der höchste Wert wird de
 Zum Umkodieren negativ kodierter Items bietet sich wieder die Funktion `rec` aus `sjmisc`.
 
 
-```{r eval = FALSE}
+
+```r
 extra %>% 
   rec(i02r, rec = "1=4; 2=3; 3=2; 4=1")
 ```
@@ -101,7 +119,8 @@ In diesem Fall ist das Item `i02r` bereits umkodiert - genau wie alle Items im D
 
 Übrigens macht es `rec()` noch einfacher und zwar mit dem Parameterwert "rev" (wie *revert*):
   
-```{r eval = FALSE}
+
+```r
 extra %>% 
   rec(i02r, rec = "rev")
 ```
@@ -126,29 +145,40 @@ In der Psychometrie werden komplexe Konstrukte wie etwa das Persönlichkeitsmerk
 
 Ein einfaches Beispiel zur Berechnung des Extraversion-Summenscore:
   
-```{r extra-bsp1, echo = TRUE}
+
+```r
 extra_bsp <- extra %>%
   select(i01:i03) %>%
   slice_head(n = 3) %>%
   mutate(extra_sum = i01 + i02r + i03)
 
 extra_bsp
+#> # A tibble: 3 × 4
+#>     i01  i02r   i03 extra_sum
+#>   <dbl> <dbl> <dbl>     <dbl>
+#> 1     3     3     3         9
+#> 2     2     2     1         5
+#> 3     3     4     1         8
 ```
 
 
 Der Wert von `extra_sum` berechnet sich jeweils als Summe der drei Itemwerte. Mit dem Mittelwert verhält es sich analog (s. Tabelle \@ref(tab:extra-score-mean)).
 
-```{r extra-bsp2}
+
+```r
 extra_bsp <- extra_bsp %>%
   mutate(extra_mean = extra_sum / 3)
 ```
 
 
-```{r extra-score-mean, echo = FALSE}
-extra_bsp %>% kable(booktabs = TRUE, 
-                    caption = "Extraversion-Score berechnen",
-                    digits = 2)
-```
+
+Table: (\#tab:extra-score-mean)Extraversion-Score berechnen
+
+| i01| i02r| i03| extra_sum| extra_mean|
+|---:|----:|---:|---------:|----------:|
+|   3|    3|   3|         9|       3.00|
+|   2|    2|   1|         5|       1.67|
+|   3|    4|   1|         8|       2.67|
 
  Praktischerweise gibt es Funktionen, die die Berechnung eines Scores noch weiter vereinfachen, zum Beispiel im Paket `sjmisc`: `row_sums()` (Summenscore pro Person) und `row_means()` (Mittelwert pro Person). 
  Da Respondenten (meist Personen) in *Zeilen* stehen heißen die Befehle `row_XXX()`.
@@ -163,9 +193,11 @@ extra_bsp %>% kable(booktabs = TRUE,
 Vergleichen wir das mit dem Mittelwert-Score. Jetzt lassen wir R die Rechenarbeit machen:
 
 
-```{r}
+
+```r
 Alois <- c(3, NA, NA)
 mean(Alois, na.rm = TRUE)
+#> [1] 3
 ```
 
 Der Mittelwert von Alois beträgt 3 -- das passt genau zu unserer Argumentation von gerade (s. oben), dass 3 eine bessere Schätzung der Ausprägung der latenten Variable von Alois ist. Daher ist der Mittelwert dem Summenscore vorzuziehen.
@@ -174,11 +206,18 @@ Ein anderer Vorteil des Mittelwerts ist, dass er etwas anschaulicher ist als der
 
 ### Berechnung mit R
 
-```{r}
+
+```r
 extra %>% 
   row_means(i01:i10, n = .90, var = "extra_avg") %>% 
   select(extra_avg) %>% 
   slice_head(n = 3)
+#> # A tibble: 3 × 1
+#>   extra_avg
+#>       <dbl>
+#> 1       2.9
+#> 2       2.1
+#> 3       2.6
 ```
 
 Der Parameter `n` bei `row_means()` gibt den Anteil der *nicht* fehlenden Werte (pro Zeile) wieder, damit ein Wert berechnet wird: Bei zu vielen fehlenden Werten (zu wenig Daten) pro Person wird sonst `NA` zurückgeliefert. Das ist sinnvoll, denn hat eine Person von 10 Items nur 1 Item beantwortet, so kann man wohl nicht zuverlässig sagen, dass Extraversion in seiner Breite zuverlässig geschätzt wird. Die Funktion fügt dem Datensatz eine Spalte hinzu, deren Name mit `var` angegeben wird.
@@ -188,7 +227,8 @@ Der Parameter `n` bei `row_means()` gibt den Anteil der *nicht* fehlenden Werte 
 
 Man kann die Aussagekraft eines Mittelwerts noch erhöhen, in dem man ihn z-skaliert. Das geht zum Beispiel so:
 
-```{r}
+
+```r
 extra_std <- extra %>% 
   std(extra_mean)
 ```
@@ -196,10 +236,17 @@ extra_std <- extra %>%
 Die Funktion `std()` z-standardisiert eine oder mehrere angegebene Spalten. Dabei werden neue Spalten erzeugt, deren Namen gleich dem alten Namen plus dem Suffix `_z` entspricht. Betrachten wir die ersten drei Zeilen:
 
 
-```{r}
+
+```r
 extra_std %>% 
   select(extra_mean, extra_mean_z) %>% 
   slice_head(n = 3)
+#> # A tibble: 3 × 2
+#>   extra_mean extra_mean_z
+#>        <dbl>        <dbl>
+#> 1        2.9       0.0202
+#> 2        2.1      -1.75  
+#> 3        2.6      -0.644
 ```
 
 
@@ -210,13 +257,28 @@ Zu beachten ist, dass der Mittelwert der Stichprobe und deren Standardabweichung
 
 Den Prozentrang einer Person kann man sich z.B. mit `percent_rank()` ausgeben lassen:
 
-```{r}
+
+```r
 extra_std <- extra_std %>% 
   mutate(extra_percrank = percent_rank(extra_mean))
 
 extra_std %>% 
   select(extra_mean, extra_mean_z, extra_percrank) %>% 
   filter(extra_percrank < .005 | extra_percrank > .995)
+#> # A tibble: 11 × 3
+#>    extra_mean extra_mean_z extra_percrank
+#>         <dbl>        <dbl>          <dbl>
+#>  1        4           2.46        1      
+#>  2        1.7        -2.64        0.00487
+#>  3        3.9         2.23        0.999  
+#>  4        1.6        -2.86        0.00122
+#>  5        1.6        -2.86        0.00122
+#>  6        1.7        -2.64        0.00487
+#>  7        1.6        -2.86        0.00122
+#>  8        3.8         2.01        0.995  
+#>  9        1.2        -3.74        0      
+#> 10        3.8         2.01        0.995  
+#> 11        3.8         2.01        0.995
 ```
 
 Mit der letzten Zeile - `filter(...)` haben wir uns das extremste Prozent (hälftig unten und oben) ausgewählt.
@@ -235,7 +297,8 @@ nicht heruntergebrochen auf Geschlechter- oder Altersgruppen. Für Extraversion 
 Auf Errisch:
 
 
-```{r}
+
+```r
 extra_sum_normstipro <- 26.67
 extra_sd_normstipro <- 5.74
 ```
@@ -253,10 +316,15 @@ Bevor wir den Vergleich mit der Normierungsstichprobe heranziehen können, müss
 
 Eine Möglichkeit, fehlende Werte zu zählen, sieht so aus:
 
-```{r}
+
+```r
 extra %>% 
   row_count(i01:i10, count = "na") %>% 
   count(rowcount)
+#> # A tibble: 1 × 2
+#>   rowcount     n
+#>      <int> <int>
+#> 1        0   826
 ```
 
 Wir haben Glück; es gibt keine fehlenden Werte in diesem Datensatz. 
@@ -272,23 +340,63 @@ die fehlenden Werte durch den Mittelwert des Items zu ersetzen.
 Ein Item wurde im Schnitt mit 3,2 beantwortet, aber für Alois fehlt der Wert? 
 Okay, ersetzen wir den fehlenden Wert für dieses Items mit 3,2.
 
-```{r}
+
+```r
 daten <- data_frame(
   namen = c("Alois", "Bertram", "Zenzi"),
   i1 = c(1, 1, NA),
   i2 = c(3, 2, NA),
   i3 = c(NA, 2, 4)
 )
+#> Warning: `data_frame()` was deprecated in tibble 1.1.0.
+#> Please use `tibble()` instead.
+#> This warning is displayed once every 8 hours.
+#> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.
 
 daten
+#> # A tibble: 3 × 4
+#>   namen      i1    i2    i3
+#>   <chr>   <dbl> <dbl> <dbl>
+#> 1 Alois       1     3    NA
+#> 2 Bertram     1     2     2
+#> 3 Zenzi      NA    NA     4
 ```
 
 Für `i1` ist "1" eine plausible Schätzung für den fehlenden Wert, bei `i2` ist "3" sinnvoll und bei `i3` "4", also jeweils der Zeilenmittelwert.
 
-```{r}
+
+```r
 daten_imp <- 
 daten %>% 
   mice(method = "mean")
+#> 
+#>  iter imp variable
+#>   1   1  i2  i3
+#>   1   2  i2  i3
+#>   1   3  i2  i3
+#>   1   4  i2  i3
+#>   1   5  i2  i3
+#>   2   1  i2  i3
+#>   2   2  i2  i3
+#>   2   3  i2  i3
+#>   2   4  i2  i3
+#>   2   5  i2  i3
+#>   3   1  i2  i3
+#>   3   2  i2  i3
+#>   3   3  i2  i3
+#>   3   4  i2  i3
+#>   3   5  i2  i3
+#>   4   1  i2  i3
+#>   4   2  i2  i3
+#>   4   3  i2  i3
+#>   4   4  i2  i3
+#>   4   5  i2  i3
+#>   5   1  i2  i3
+#>   5   2  i2  i3
+#>   5   3  i2  i3
+#>   5   4  i2  i3
+#>   5   5  i2  i3
+#> Warning: Number of logged events: 62
 
 daten2 <- complete(daten_imp, 1)
 ```
@@ -302,7 +410,8 @@ Wie wir sehen, wurde in jeder *Spalte* jeder fehlende Wert durch den Spalten-Mit
 
 Im Handbuch sind, wie oben beschrieben, nur Mittelwert und Streuung des *Summen*werts, nicht des *Mittel*werts angegeben, also müssen wir mit diesen Werten arbeiten:
 
-```{r}
+
+```r
 extra <- extra %>% 
   row_sums(i01:i10, n = .9, var = "extra_sum")
 ```
@@ -310,7 +419,8 @@ extra <- extra %>%
 
 Zuerst berechnen wir von Hand den z-Score auf Basis der Normierungsstichprobe:
 
-```{r}
+
+```r
 extra <- extra %>% 
   mutate(extra_z_normstipro = (extra_sum - extra_sum_normstipro) / extra_sd_normstipro) %>% 
   mutate(extra_percrank_normstipro = pnorm(extra_z_normstipro)) 
@@ -318,6 +428,14 @@ extra <- extra %>%
 extra %>% 
   select(extra_z_normstipro, extra_percrank_normstipro) %>% 
   slice_head(n = 5)
+#> # A tibble: 5 × 2
+#>   extra_z_normstipro extra_percrank_normstipro
+#>                <dbl>                     <dbl>
+#> 1              0.406                     0.658
+#> 2             -0.988                     0.162
+#> 3             -0.117                     0.454
+#> 4              0.406                     0.658
+#> 5              0.929                     0.823
 ```
 
 
@@ -336,23 +454,27 @@ $$\sigma_{E_X} = \sigma_x \cdot \sqrt{(1-\rho_{tt})}$$
 Die Reliabilität hatten wir vorher schon definiert,
 hier zur Erinnerung:
 
-```{r}
+
+```r
 extra_alpha <- .87
 ```
 
 
 Berechnen wir nun mit Hilfe von R den Standardmessfehler:
 
-```{r}
+
+```r
 extra_stdmessfehler = sd(extra$extra_sum, na.rm = TRUE) * sqrt(1 - extra_alpha)
 extra_stdmessfehler
+#> [1] 1.62972
 ```
 
 
 Jetzt, da wir den Standardmessfehler kennen, können wir in gewohnter Manier "links und rechts" auf einen Messwert den zweifachen Wert des Standardmessfehlers draufpacken, um ein 95% Konfidenzintervall zu erhalten:
 
 
-```{r}
+
+```r
 extra <- extra %>% 
   mutate(KI_unten = extra_sum - 2*extra_stdmessfehler,
          KI_oben = extra_sum + 2*extra_stdmessfehler)
@@ -360,6 +482,12 @@ extra <- extra %>%
 extra %>% 
   select(KI_unten, extra_sum, KI_oben) %>% 
   slice_head(n = 3)
+#> # A tibble: 3 × 3
+#>   KI_unten extra_sum KI_oben
+#>      <dbl>     <dbl>   <dbl>
+#> 1     25.7        29    32.3
+#> 2     17.7        21    24.3
+#> 3     22.7        26    29.3
 ```
 
 
@@ -369,13 +497,16 @@ extra %>%
 Eine Visualisierung der Konfidenzintervalle kann ansprechend sein; hier ist eine Möglichkeit dazu:
 
 
-```{r}
+
+```r
 extra %>% 
   slice_head(n = 5) %>% 
   ggplot() +
   aes(y = extra_sum, ymin = KI_unten, ymax = KI_oben, x = code) +
   geom_pointrange()
 ```
+
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-21-1.png" width="672" />
 
 
 `geom_pointrange()` zeichnet einen vertikalen (Fehler-)balken sowie einen Punkt in der Mitte; 
@@ -390,20 +521,32 @@ als Parameter werden der mittlere Wert, die untere Grenze und die obere Grenze a
 
 Eine grundlegende Visualisierung für eine Verteilung - wie z.B. die Testergebnisse einer Stichprobe an Bewerbern - ist ein Histogramm:
 
-```{r}
+
+```r
 extra %>% 
   ggplot(aes(x = extra_sum)) +
   geom_histogram()
+#> `stat_bin()` using `bins = 30`. Pick better value with
+#> `binwidth`.
+#> Warning: Removed 7 rows containing non-finite values
+#> (stat_bin).
 ```
+
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-22-1.png" width="672" />
 
 
 Möchte man mehrere Gruppen vergleichen, so ist der Boxplot eine geeignete Visualisierung:
 
-```{r}
+
+```r
 extra %>% 
   ggplot(aes(y = extra_sum, x = sex)) +
   geom_boxplot()
+#> Warning: Removed 7 rows containing non-finite values
+#> (stat_boxplot).
 ```
+
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-23-1.png" width="672" />
 
 
 <!-- Eine Variante, etwas aufgebügelt: -->
@@ -466,7 +609,8 @@ so dass insgesamt von diesem Diagramm abgeraten werden muss.
 
 
 
-```{r radar, eval = FALSE}
+
+```r
 library(radarchart)
 
 labs <- c("Communicator", "Data Wangler", "Programmer",
@@ -484,16 +628,15 @@ chartJSRadar(scores = scores, labs = items, maxScale = 10)
 ```
 
 
-```{r radarplot, echo = FALSE}
-knitr::include_graphics("img/radar.png")
-```
+<img src="img/radar.png" width="455" />
 
 
 ### Profildiagramme
 
 Definieren wir uns einen Auszug an Personen und Variablen (Items), die in einem Diagramm dargestellt sein sollen. 
 
-```{r}
+
+```r
 extra_auszug <- extra %>% 
   select(code, i01:i06r) %>% 
   slice(1:6) 
@@ -501,7 +644,8 @@ extra_auszug <- extra %>%
 
 Dann überführen wir dieses Diagramm in die "lange" Form:
 
-```{r}
+
+```r
 extra_auszug <- extra_auszug %>% 
   pivot_longer(-code, names_to = "Item", values_to = "Wert")
 ```
@@ -509,21 +653,27 @@ extra_auszug <- extra_auszug %>%
 
 Jetzt können wir daraus ein Balkendiagramm darstellen:
 
-```{r}
+
+```r
 extra_auszug %>% 
   ggplot(aes(y = Wert, x = Item, fill = code)) +
   geom_col() +
   facet_wrap(~ code)
 ```
 
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-26-1.png" width="672" />
+
 Dem Skalenniveau der Items kommen Punkte vielleicht besser entgegen als die Balken:
 
-```{r}
+
+```r
 extra_auszug %>% 
   ggplot(aes(y = Wert, x = Item, color = code)) +
   geom_line(group = 1) +
   geom_point() +
   facet_wrap(~ code)
 ```
+
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-27-1.png" width="672" />
 
 

@@ -1,7 +1,7 @@
 --- 
 title: "Umfragen auswerten"
 author: "Sebastian Sauer"
-date: "`r Sys.time()`"
+date: "2022-05-02 21:21:44"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
@@ -17,44 +17,25 @@ biblio-style: apalike
 
 
 
-```{r knitr-setup, echo = FALSE}
-knitr::opts_chunk$set(
-  comment = "#>",
-  collapse = TRUE,
-  message = FALSE,
-  warning = FALSE,
-  cache = TRUE,
-  out.width = "70%",
-  fig.align = 'center',
-  fig.width = 6,
-  fig.asp = 0.618,  # 1 / phi
-  fig.show = "hold",
-  # size = "tiny",
-  tidy.opts=list(width.cutoff = 80) #,
-  # tidy=TRUE
-)
-```
 
 
 
-# Einleitung
+
+## Einleitung
 
 
 
-Fragebogendaten zu psychologischen Variablen (wie z.B. Extraversion), die wissenschaftlichen Ansprüchen genügen, bezeichnet man als *psychometrische Daten* [vgl. @Steyer1993]. 
+Fragebogendaten zu psychologischen Variablen (wie z.B. Extraversion), die wissenschaftlichen Ansprüchen genügen, bezeichnet man als *psychometrische Daten* [vgl. @Steyer1993]. i
 Der Analyse psychometrischer Daten kommt große Bedeutung innerhalb der Psychologie (und angrenzender Gebiete wie Marketing) zu. 
 Der Grund ist, dass Daten häufig in Form von Fragebogen, psychometrischer Fragebogen, erhoben werden. 
-Besonders für Persönlichkeitskonstrukte und Einstellungen, kurz für Fragestellungen der Persönlichkeitspsychologie und, davon abgeleitet, der Diagnostik, 
-erfreuen sie sich weiter Verbreitung.
+Besonders für Persönlichkeitskonstrukte und Einstellungen, kurz für Fragestellungen der Persönlichkeitspsychologie und, davon abgeleitet, der Diagnostik, erfreuen sie sich weiter Verbreitung.
 
 
 Ziel dieses Beitrags ist es, eine praktische Anleitung für typische (und grundlegende) psychometrischen Analysen mittels R zu geben. 
-Dabei soll demonstriert und erläutert werden, welche Analysen und wie durchgeführt werden 
-in einer grundständigen psychometrischen Analyse. 
+Dabei soll demonstriert und erläutert werden, welche Analysen und wie durchgeführt werden in einer grundständigen psychometrischen Analyse. 
 Es wird sowohl der Einzelfall-Diagnostik Rechnung getragen, als auch der Testvalidierung. 
 Anders gesagt, dieses Dokument hilft, u.a. folgende Fragen zu beantworten: 
-"Wie leistungsfähig war der Applikant im Vergleich zu seiner Referenzgruppe?", 
-"Wie ist die Qualität dieses Testverfahrens einzuschätzen?".
+"Wie leistungsfähig war der Applikant im Vergleich zu seiner Referenzgruppe?", "Wie ist die Qualität dieses Testverfahrens einzuschätzen?".
 
 *Test* wird hier verstanden sensu @Lienert1998 (S. 14f): 
 
@@ -98,7 +79,8 @@ An anderer Stelle^[https://www.drsatow.de/cgi-bin/testorder/testorder17_0.pl?t=B
 
 Zur Reliabilität berichtet @Satow2012, dass Cronbachs Alpha bei .87 läge, was ein guter Wert ist. Machen wir diese Variable für R verfügbar:
 
-```{r}
+
+```r
 extra_alpha <- .87
 ```
 
@@ -116,7 +98,8 @@ Bitte stellen Sie sicher, dass Sie diese Pakete vor Beginn der Analyse installie
 Sie installieren ein R-Paket mit dem Befehl `install.packages(name_des_pakets)`.
 
 
-```{r libs, eval = FALSE}
+
+```r
 library(mosaic)  # Statistik allgemein
 library(tidyverse)  # Datenjudo
 library(sjmisc)  # Deskriptive Statistik
@@ -129,10 +112,7 @@ library(ggpubr)  # Visualisierung
 library(psych)  # psychometrische Analyse
 ```
 
-```{r libs-hidden, echo = FALSE}
-library(knitr)
-library(papaja)
-```
+
 
 
 
@@ -140,7 +120,8 @@ library(papaja)
 
 Sie fragen sich, was das Paket `praise()`, `fortunues()` oder `R_for_superheros()`^[noch nicht entwickelt] für Sie bereithält? Mit folgender Funktion bekommen Sie die Hilfe-Seiten eines Pakets angezeigt.
 
-```{r eval = FALSE}
+
+```r
 help(package = "apa") 
 ```
 
@@ -152,7 +133,8 @@ help(package = "apa")
 
 Die Daten können über mehrere Weg abgerufen werden. Eine Möglichkeit bietet das R-Paket `pradadata`^[https://github.com/sebastiansauer/pradadata], da es auf Github^[https://github.com/] zu finden ist, muss zuerst ein Paket verfügbar sein, dass R-Paket von dort aus installiert. Dazu verwenden wir das Paket `devtools`; wie jedes Paket muss es zuerst installiert sein:
   
-```{r eval = FALSE}
+
+```r
 install.packages("devtools")  # nur einmalig
 ```
 
@@ -160,14 +142,16 @@ install.packages("devtools")  # nur einmalig
 Dann können wir das Paket installieren:
   
   
-```{r eval = FALSE}
+
+```r
 install_github("sebastiansauer/pradadata")
 ```
 
 
 laden und daraus den Datensatz zur Extraversion:
   
-```{r}
+
+```r
 library("pradadata")
 data(extra)
 ```
@@ -175,7 +159,8 @@ data(extra)
 
 Betrachten wir den Datensatz
 
-```{r eval = FALSE}
+
+```r
 inspect(extra)
 ```
 
@@ -184,7 +169,8 @@ inspect(extra)
 
 *Alternativ* zur Installation via R-Paket `pradadata` stehen die Daten  unter diesem Link zum Herunterladen bereit:
   
-```{r load-extra-web, eval = FALSE}
+
+```r
 data_url <- "https://raw.githubusercontent.com/sebastiansauer/modar/master/datasets/extra.csv"
 extra <- read_csv(data_url)
 ```
@@ -202,14 +188,9 @@ Sessioninfo:
 
 
 
-```{r echo = FALSE}
-si <- sessioninfo::session_info()
-pckgs <- map2(si$packages$package, si$packages$loadedversion,
-     ~ paste0(.x, " ", .y)) %>% 
-  simplify()
-```
 
-- Datum: `r si$platform$date`
-- R-Version: `r si$platform$version`
-- Betriebssystem: `r si$platofrm$os`
+
+- Datum: 2022-05-02
+- R-Version: R version 4.1.3 (2022-03-10)
+- Betriebssystem: 
 

@@ -1,0 +1,527 @@
+# Daten aufräumen
+
+
+## R-Pakete
+
+
+In diesem Kapitel benötigen wir folgende R-Pakete:
+
+
+```{r message=FALSE}
+library(tidyverse)  # Datenjudo
+library(sjmisc)  # recode
+library(ggstatsplot)  # Diagram aufbügeln
+```
+
+
+
+```{r echo=FALSE, message=FALSE}
+library(knitr)
+```
+
+
+
+## Daten
+
+
+ 
+```{r load-extra-web, eval = FALSE}
+data_url <- "https://raw.githubusercontent.com/sebastiansauer/modar/master/datasets/extra.csv"
+extra <- read_csv(data_url)
+```
+
+
+## Überblick
+
+
+
+Häufig sind Daten noch nicht "aufbereitet" und müssen noch "geputzt" oder "aufgeräumt" werden. Dazu gehören Schritte wie
+
+- Daten umkodieren
+- Daten aggregieren
+- Daten gruppieren
+- Fehlende Werte ersetzen
+- Datenqualität prüfen
+- Verteilungsformen prüfen
+- Ausreißer behandeln
+
+Betrachten wir einige zentrale Aspekte dieser Schritte.
+
+## Daten umformen
+
+In einer Fragebogenstudie (oder vergleichbarer Studie) liegen in der Regel pro Respondent (allgemeiner: pro Beobachtung) eine Reihe von Antworten auf Fragebogen-Items vor. 
+Manchmal liegen die Antworten noch nicht als Zahl vor, sondern als Text, etwa "stimme eher zu". 
+Diese Antwort könnte auf einer vierstufigen Skala einer 3 entsprechen. Eine einfache Möglichkeit zum Umkodieren eröffnet das Paket `sjmisc`. 
+Als Beispielaufgabe soll der Wert "Frau" in 1 umkodiert werden und "Mann" in 0; übrige Werte sollen in `NA` kodiert werden.
+
+```{r}
+data_rec <- extra %>% 
+  rec(sex, rec = "Frau = 1; Mann = 0; else = NA")
+```
+
+Dabei wird eine neue Variable (Spalte) erzeugt, deren Namen der alten Variable entspricht, plus dem Suffix `_r`, in diesem Fall also `sex_r`. Man beachte, dass Textwerte (Strings) *nicht* in Anführungsstriche gesetzt werden müssen, nur der ganze "Rekodierungsterm" muss einmal in Anführungsstriche gesetzt werden.
+
+Prüfen wir das Ergebnis:
+  
+```{r}
+data_rec %>% 
+  count(sex_r)
+```
+
+
+## Items umkodieren
+
+In Fragebogen werden immer wieder Items *negativ* kodiert. Das bedeutet, dass sie gegenteilig zum messenden Konstrukt formuliert sind. Ist das Konstrukt Extraversion, so würde ein negatives Item im Sinne von Introversion kodiert sein. Ein Beispiel-Item für negative Kodierung wäre: "Ich bin ein Couch-Potato" oder "Ich bleibe am liebsten alleine zuhause."
+
+Zuerst müssen wir die Anzahl der Antwortstufen wissen; diese Information findet sich in der Dokumentation der Skala (im "Manual" auch "Testdokumentation" oder "Benutzerhandbuch" genannt). Natürlich kann man prüfen, welche Antwortstufen die Respondenten gefunden haben, aber man wäre nicht sicher, ob auch alle möglichen Antworten ausgeschöpft wurden.
+
+Im vorliegenden Fall ist der Dokumentation des Instruments zu entnehmen, dass jedes Item vier Antwortstufen (Likertformat) aufweist. Likert-skalierte Items zeichnen sich dadurch aus, dass sie so formuliert sind, dass höhere Werte in der Antwortstufe mit höherer Ausprägung des zu messenden Konstrukts einher gehen.  
+
+Beim Umkodieren wird das Item "auf den Kopf gestellt": Der höchste Wert wird der kleinste, der zwei kleinste wird der zweitgrößte und so weiter. Im Schema sieht dies so aus:
+  
+  
+```
+1 --> 4
+2 --> 3
+3 --> 2
+4 --> 1
+```
+
+
+Zum Umkodieren negativ kodierter Items bietet sich wieder die Funktion `rec` aus `sjmisc`.
+
+
+```{r eval = FALSE}
+extra %>% 
+  rec(i02r, rec = "1=4; 2=3; 3=2; 4=1")
+```
+
+In diesem Fall ist das Item `i02r` bereits umkodiert - genau wie alle Items im Datensatz die mit dem Suffix `r` gekennzeichnet sind. In anderen Situationen kann es aber nötig sein, Items umzukodieren. Vergessen Sie dann nicht, das Ergebnis als (neuen) Datensatz zu speichern.
+
+Übrigens macht es `rec()` noch einfacher und zwar mit dem Parameterwert "rev" (wie *revert*):
+  
+```{r eval = FALSE}
+extra %>% 
+  rec(i02r, rec = "rev")
+```
+
+
+
+
+
+
+
+
+### Vertiefung: Duplikate entfernen
+
+
+## Extraversionsscore berechnen
+
+
+### Summen- und Mittelwerte
+
+In der Psychometrie werden komplexe Konstrukte wie etwa das Persönlichkeitsmerkmal Extraversion anhand mehrerer Indikatoren (meistens Items eines Fragebogens) gemessen. Um zu einem Personenwert für Extraversion zu gelangen, werden die Itemwerte im einfachsten Fall summiert. Alternativ kann man auch einen Mittelwert bilden. Dieses Aggregieren bietet den Vorteil, dass sich Messfehler (möglicherweise) herausmitteln. Außerdem versucht man so abzubilden, dass Extraversion aus mehreren unterschiedlichen Facetten besteht, die nicht mit einem einzelnen Item, sondern über mehrere unterschiedliche Items, erfasst werden. Viele Psychometriker sind skeptisch, wenn man versuchen würde, Extraversion mit der Frage "Wie extrovertiert sind Sie?" zu erfassen. Ihre Bedenken sind, dass Menschen die vielen Facetten von Extraversion nicht im Arbeitsgedächtnis vorhalten können. Fragt man hingegen nur einen kleinen Aspekt von Extraversion ab, trägt man der Breite des Konstrukts nicht Rechnung.
+
+
+Ein einfaches Beispiel zur Berechnung des Extraversion-Summenscore:
+  
+```{r extra-bsp1, echo = TRUE}
+extra_bsp <- extra %>%
+  select(i01:i03) %>%
+  slice_head(n = 3) %>%
+  mutate(extra_sum = i01 + i02r + i03)
+
+extra_bsp
+```
+
+
+Der Wert von `extra_sum` berechnet sich jeweils als Summe der drei Itemwerte. Mit dem Mittelwert verhält es sich analog (s. Tabelle \@ref(tab:extra-score-mean)).
+
+```{r extra-bsp2}
+extra_bsp <- extra_bsp %>%
+  mutate(extra_mean = extra_sum / 3)
+```
+
+
+```{r extra-score-mean, echo = FALSE}
+extra_bsp %>% kable(booktabs = TRUE, 
+                    caption = "Extraversion-Score berechnen",
+                    digits = 2)
+```
+
+ Praktischerweise gibt es Funktionen, die die Berechnung eines Scores noch weiter vereinfachen, zum Beispiel im Paket `sjmisc`: `row_sums()` (Summenscore pro Person) und `row_means()` (Mittelwert pro Person). 
+ Da Respondenten (meist Personen) in *Zeilen* stehen heißen die Befehle `row_XXX()`.
+ Fragt sich noch, ob es mehr Sinn macht, einen Summenscore oder einen Mittelwert zu berechnen. Kurz gesagt macht es keinen großen Unterschied, solange es keine fehlenden Werte gibt. 
+ Gibt es aber fehlende Werte, sollte man Mittelwerte statt Summenwerte vorziehen.
+
+
+### Vertiefung: Summen- vs. Mittelwertscores
+  Dazu ein erläuterndes Beispiel. Alois habe in einem Persönlichkeitstest mit 3 Items nur Item 1 beantwortet und zwar mit "3", wobei Antwortstufen von 1 bis 4 vorgegeben waren. Vermutlich ist der Gesamtwert im Form des Summenscores von 3 zu klein, unterschätzt als Alois' Wert. Schließlich hat er beim ersten Item die Antwort "3" gewählt, insofern ist es plausibel, dass er bei den anderen auch diese Option gewählt hätte. Somit hätte er insgesamt 9 Punkte (nicht 3) erzielt. Würden wir 3 als Gesamtwert (Summenscore) annehmen, so bedeutet das, das wir davon ausgehen, dass er im Schnitt "1" gewählt hat. Eine Annahme, die nicht sehr plausibel erscheint.
+
+
+Vergleichen wir das mit dem Mittelwert-Score. Jetzt lassen wir R die Rechenarbeit machen:
+
+
+```{r}
+Alois <- c(3, NA, NA)
+mean(Alois, na.rm = TRUE)
+```
+
+Der Mittelwert von Alois beträgt 3 -- das passt genau zu unserer Argumentation von gerade (s. oben), dass 3 eine bessere Schätzung der Ausprägung der latenten Variable von Alois ist. Daher ist der Mittelwert dem Summenscore vorzuziehen.
+
+Ein anderer Vorteil des Mittelwerts ist, dass er etwas anschaulicher ist als der Summenscore: Ein Mittelwert von 3 (auf einer Skala von 1 bis 4) ist anschaulicher als eine Summe von 9 (bei drei Items). Wir werden daher den Mittelwert vorziehen.
+
+### Berechnung mit R
+
+```{r}
+extra %>% 
+  row_means(i01:i10, n = .90, var = "extra_avg") %>% 
+  select(extra_avg) %>% 
+  slice_head(n = 3)
+```
+
+Der Parameter `n` bei `row_means()` gibt den Anteil der *nicht* fehlenden Werte (pro Zeile) wieder, damit ein Wert berechnet wird: Bei zu vielen fehlenden Werten (zu wenig Daten) pro Person wird sonst `NA` zurückgeliefert. Das ist sinnvoll, denn hat eine Person von 10 Items nur 1 Item beantwortet, so kann man wohl nicht zuverlässig sagen, dass Extraversion in seiner Breite zuverlässig geschätzt wird. Die Funktion fügt dem Datensatz eine Spalte hinzu, deren Name mit `var` angegeben wird.
+
+
+### z-Werte
+
+Man kann die Aussagekraft eines Mittelwerts noch erhöhen, in dem man ihn z-skaliert. Das geht zum Beispiel so:
+
+```{r}
+extra_std <- extra %>% 
+  std(extra_mean)
+```
+
+Die Funktion `std()` z-standardisiert eine oder mehrere angegebene Spalten. Dabei werden neue Spalten erzeugt, deren Namen gleich dem alten Namen plus dem Suffix `_z` entspricht. Betrachten wir die ersten drei Zeilen:
+
+
+```{r}
+extra_std %>% 
+  select(extra_mean, extra_mean_z) %>% 
+  slice_head(n = 3)
+```
+
+
+Zu beachten ist, dass der Mittelwert der Stichprobe und deren Standardabweichung als Referenzwerte herangezogen wurden, nicht die entsprechenden Größen der Normierungsstichprobe. Dazu später mehr.
+
+
+### Prozentränge
+
+Den Prozentrang einer Person kann man sich z.B. mit `percent_rank()` ausgeben lassen:
+
+```{r}
+extra_std <- extra_std %>% 
+  mutate(extra_percrank = percent_rank(extra_mean))
+
+extra_std %>% 
+  select(extra_mean, extra_mean_z, extra_percrank) %>% 
+  filter(extra_percrank < .005 | extra_percrank > .995)
+```
+
+Mit der letzten Zeile - `filter(...)` haben wir uns das extremste Prozent (hälftig unten und oben) ausgewählt.
+
+
+## Vergleich mit Normierungsstichprobe
+
+
+@Satow2012 berichtet Normierungswerte, leider aber nur für die Allgemeinbevölkerung, 
+nicht heruntergebrochen auf Geschlechter- oder Altersgruppen. Für Extraversion berichtet er folgende Daten:
+
+- Summenscore: 26,67 
+- Standardabweichung: 5,74
+
+
+Auf Errisch:
+
+
+```{r}
+extra_sum_normstipro <- 26.67
+extra_sd_normstipro <- 5.74
+```
+
+
+
+Ob die Daten normal verteilt sind, wird in der Publikation nicht erwähnt. 
+Wir gehen im Folgenden davon aus. Allerdings ist es ein Manko, wenn diese Information nicht gegeben ist. 
+Weiter berichtet @Satow2012 nicht, ob fehlende Werte die Summenscores verringert haben bzw. wie er ggf. mit diesem Problem umgegangen ist. 
+Bevor wir den Vergleich mit der Normierungsstichprobe heranziehen können, müssen wir uns um fehlende Werte kümmern.
+
+
+### Anzahl der fehlenden Werte
+
+
+Eine Möglichkeit, fehlende Werte zu zählen, sieht so aus:
+
+```{r}
+extra %>% 
+  row_count(i01:i10, count = "na") %>% 
+  count(rowcount)
+```
+
+Wir haben Glück; es gibt keine fehlenden Werte in diesem Datensatz. 
+Aber haben wir wirklich Glück? Vermutlich wurden die Respondenten gezwungen, alle Fragen zu beantworten. 
+Vielleicht wurden sie damit ordentlich genervt und haben zur Strafe Blümchen gekreuzt? 
+Wir wissen es nicht genau, sollten aber die Datenqualität noch einmal überprüfen.
+
+
+### Vertiefung: Fehlende Werte ersetzen
+
+Das Ersetzen fehlender Werte ist eine Wissenschaft für sich, aber ein einfacher (alldieweil nicht optimaler) Weg besteht darin, 
+die fehlenden Werte durch den Mittelwert des Items zu ersetzen. 
+Ein Item wurde im Schnitt mit 3,2 beantwortet, aber für Alois fehlt der Wert? 
+Okay, ersetzen wir den fehlenden Wert für dieses Items mit 3,2.
+
+```{r}
+daten <- data_frame(
+  namen = c("Alois", "Bertram", "Zenzi"),
+  i1 = c(1, 1, NA),
+  i2 = c(3, 2, NA),
+  i3 = c(NA, 2, 4)
+)
+
+daten
+```
+
+Für `i1` ist "1" eine plausible Schätzung für den fehlenden Wert, bei `i2` ist "3" sinnvoll und bei `i3` "4", also jeweils der Zeilenmittelwert.
+
+```{r}
+daten_imp <- 
+daten %>% 
+  mice(method = "mean")
+
+daten2 <- complete(daten_imp, 1)
+```
+
+
+Wie wir sehen, wurde in jeder *Spalte* jeder fehlende Wert durch den Spalten-Mittelwert ersetzt.
+
+
+
+### z-Werte auf Basis der Normierungsstichprobe
+
+Im Handbuch sind, wie oben beschrieben, nur Mittelwert und Streuung des *Summen*werts, nicht des *Mittel*werts angegeben, also müssen wir mit diesen Werten arbeiten:
+
+```{r}
+extra <- extra %>% 
+  row_sums(i01:i10, n = .9, var = "extra_sum")
+```
+
+
+Zuerst berechnen wir von Hand den z-Score auf Basis der Normierungsstichprobe:
+
+```{r}
+extra <- extra %>% 
+  mutate(extra_z_normstipro = (extra_sum - extra_sum_normstipro) / extra_sd_normstipro) %>% 
+  mutate(extra_percrank_normstipro = pnorm(extra_z_normstipro)) 
+
+extra %>% 
+  select(extra_z_normstipro, extra_percrank_normstipro) %>% 
+  slice_head(n = 5)
+```
+
+
+### Konfidenzintervalle für den Personenparameter
+
+
+Sicherlich ist unsere Messung der Extraversion nicht perfekt; wir müssen davon ausgehen, dass ein Messfehler vorliegt. Eine Berechnungsvorschrift für den Messfehler sieht so aus [@Buhner2011]:
+
+$$\sigma^2_{E_X} = \sigma^2_X \cdot(1-\rho_{tt})$$
+
+Dabei ist $\sigma^2_{E_X}$ der quadrierte Standardmessfehler, $\sigma^2_X$ die Varianz des Messwerts und $\rho_{tt}$ die Reliabilität des Messwerts. Die Wurzel daraus ist der sog. *Standardmessfehler*:
+
+$$\sigma_{E_X} = \sigma_x \cdot \sqrt{(1-\rho_{tt})}$$
+
+
+Die Reliabilität hatten wir vorher schon definiert,
+hier zur Erinnerung:
+
+```{r}
+extra_alpha <- .87
+```
+
+
+Berechnen wir nun mit Hilfe von R den Standardmessfehler:
+
+```{r}
+extra_stdmessfehler = sd(extra$extra_sum, na.rm = TRUE) * sqrt(1 - extra_alpha)
+extra_stdmessfehler
+```
+
+
+Jetzt, da wir den Standardmessfehler kennen, können wir in gewohnter Manier "links und rechts" auf einen Messwert den zweifachen Wert des Standardmessfehlers draufpacken, um ein 95% Konfidenzintervall zu erhalten:
+
+
+```{r}
+extra <- extra %>% 
+  mutate(KI_unten = extra_sum - 2*extra_stdmessfehler,
+         KI_oben = extra_sum + 2*extra_stdmessfehler)
+
+extra %>% 
+  select(KI_unten, extra_sum, KI_oben) %>% 
+  slice_head(n = 3)
+```
+
+
+
+### Visualisierung der Konfidenzintervalle
+
+Eine Visualisierung der Konfidenzintervalle kann ansprechend sein; hier ist eine Möglichkeit dazu:
+
+
+```{r}
+extra %>% 
+  slice_head(n = 5) %>% 
+  ggplot() +
+  aes(y = extra_sum, ymin = KI_unten, ymax = KI_oben, x = code) +
+  geom_pointrange()
+```
+
+
+`geom_pointrange()` zeichnet einen vertikalen (Fehler-)balken sowie einen Punkt in der Mitte; 
+als Parameter werden der mittlere Wert, die untere Grenze und die obere Grenze angegeben. Nach der Tilde steht die Variable der X-Achse.
+
+
+
+## Vergleich vieler Personen (interindividual differenzierende Diagnostik)
+
+
+### Histogramm
+
+Eine grundlegende Visualisierung für eine Verteilung - wie z.B. die Testergebnisse einer Stichprobe an Bewerbern - ist ein Histogramm:
+
+```{r}
+extra %>% 
+  ggplot(aes(x = extra_sum)) +
+  geom_histogram()
+```
+
+
+Möchte man mehrere Gruppen vergleichen, so ist der Boxplot eine geeignete Visualisierung:
+
+```{r}
+extra %>% 
+  ggplot(aes(y = extra_sum, x = sex)) +
+  geom_boxplot()
+```
+
+
+<!-- Eine Variante, etwas aufgebügelt: -->
+
+
+<!-- ```{r} -->
+<!-- extra %>%  -->
+<!--   mutate(sex = factor(sex)) %>%  -->
+<!--   ggbetweenstats(data = extra, -->
+<!--   x = sex,  -->
+<!--   y = extra_mean -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- Hier werden noch einige (Test-)statistiken angegeben. -->
+
+<!-- ### Dotplot -->
+
+<!-- Ein häufiges Szenario in der Diagnostik ist die vergleichende Analyse einer Reihe von Personen z.B. Bewerbern. Bringen wir die Gesamtwerte einer Auswahl von Personen in ein Diagramm. Ein "Dotplot" ist dazu eine interessante Möglichkeit: -->
+
+
+<!-- ```{r fig.asp = 1} -->
+<!-- extra %>%  -->
+<!--   slice(1:20) %>%  -->
+<!-- ggdotplotstats( -->
+<!--   y = code, -->
+<!--   x = extra_mean, -->
+<!--   test.value = 25, -->
+<!--   test.value.line = TRUE, -->
+<!--   test.line.labeller = TRUE, -->
+<!--   test.value.color = "red", -->
+<!--   centrality.para = "median", -->
+<!--   centrality.k = 0, -->
+<!--   title = "Verteilung der Testwerte der Bewerber", -->
+<!--   xlab = "Testergebnis", -->
+<!--   bf.message = TRUE, -->
+<!--   messages = FALSE -->
+<!-- ) -->
+<!-- ``` -->
+
+
+
+## Detaillierte Einzelfalldiagnostik
+
+
+Bisher haben wir *einen* Wert pro Person ausgerechnet; 
+in einigen Fällen wird man daran interessiert sein, *mehrere* Werte einer Person (bzw. einer Beobachtungseinheit) zu berechnen, um ein Profil zu erstellen. 
+Gehen wir im Folgenden davon aus, dass die einzelnen 10 Items der Extraversionsskala hinreichend belastbare Messwerte sind, 
+die sich lohnen, einzeln darzustellen. 
+Der Übersichtlichkeit halber begrenzen wir uns auf die Darstellung von sehr wenig Personen.
+
+
+### Spinnendiagramm
+
+
+Ein Spinnennetz- oder Radardiagramm ist eine Möglichkeit, 
+ein Werteprofil einer oder mehrerer Personen gleichzeitig darzustellen. 
+Es weißt allerdings gravierende Mängel auf (siehe[hier](https://rpubs.com/Xtophe/268920)), 
+so dass insgesamt von diesem Diagramm abgeraten werden muss.
+
+
+
+```{r radar, eval = FALSE}
+library(radarchart)
+
+labs <- c("Communicator", "Data Wangler", "Programmer",
+          "Technologist",  "Modeller", "Visualizer")
+
+items <- c("i01", "i02r", "i03", "i04", "i05", "i06")
+
+scores <- list(
+  "Anna" = c(9, 7, 4, 5, 3, 7),
+  "Bert" = c(7, 6, 6, 2, 6, 9),
+  "Carl" = c(6, 5, 8, 4, 7, 6)
+)
+
+chartJSRadar(scores = scores, labs = items, maxScale = 10)
+```
+
+
+```{r radarplot, echo = FALSE}
+knitr::include_graphics("img/radar.png")
+```
+
+
+### Profildiagramme
+
+Definieren wir uns einen Auszug an Personen und Variablen (Items), die in einem Diagramm dargestellt sein sollen. 
+
+```{r}
+extra_auszug <- extra %>% 
+  select(code, i01:i06r) %>% 
+  slice(1:6) 
+```
+
+Dann überführen wir dieses Diagramm in die "lange" Form:
+
+```{r}
+extra_auszug <- extra_auszug %>% 
+  pivot_longer(-code, names_to = "Item", values_to = "Wert")
+```
+
+
+Jetzt können wir daraus ein Balkendiagramm darstellen:
+
+```{r}
+extra_auszug %>% 
+  ggplot(aes(y = Wert, x = Item, fill = code)) +
+  geom_col() +
+  facet_wrap(~ code)
+```
+
+Dem Skalenniveau der Items kommen Punkte vielleicht besser in Betracht als die Balken:
+
+```{r}
+extra_auszug %>% 
+  ggplot(aes(y = Wert, x = Item, color = code)) +
+  geom_line(group = 1) +
+  geom_point() +
+```
+  facet_wrap(~ code)
+

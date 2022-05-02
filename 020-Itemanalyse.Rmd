@@ -1,0 +1,83 @@
+
+# Itemanalyse
+
+
+
+## R-Pakete
+
+
+In diesem Kapitel benötigen wir folgende R-Pakete:
+
+
+```{r message=FALSE}
+library(tidyverse)  # Datenjudo
+library(sjmisc)  # recode
+library(psych)  # Itemanalyse
+```
+
+
+
+```{r echo=FALSE, message=FALSE}
+library(knitr)
+```
+
+
+
+## Daten
+
+
+ 
+```{r load-extra-web, eval = FALSE}
+data_url <- "https://raw.githubusercontent.com/sebastiansauer/modar/master/datasets/extra.csv"
+extra <- read_csv(data_url)
+```
+
+## Einführung
+
+Unter *Itemanalyse* versteht man einen wesentlichen Teil der Validierung eines psychometrischen Tests. Zentrales Element ist die empirische Prüfung der Güte der Items eines Instruments. Entsprechend kann man von der *internen Validität* eines *Tests*^[nicht zu verwechseln mit der internen Validität einer Studie] sprechen. Üblicherweise werden dabei die folgenden Aspekte untersucht:
+
+1. Itemschwierigkeit
+2. Itemtrennschärfe
+3. Reliabilität (Interne Konsistenz; z.B. mittels Cronbachs Alpha)
+3. Faktorenstruktur
+
+
+Die Analyse der Faktorenstruktur ist in dieser Analyse nicht umgesetzt.
+
+
+Die ersten drei Punkte werden durch eine Funktion, `alpha()` aus dem Paket `psych` abgedeckt. Dieser Funktion übergibt man eine Tabelle mit Items; man bekommt einige Item-Statistiken zurück. Zuerst erstellen wir eine Tabelle, `extra_items` nur mit den Items.
+
+```{r}
+extra_items <- extra %>% 
+  select(i01:i10) %>% 
+  drop_na()
+```
+
+
+Dann führen wir `alpha()` mit dieser Tabelle aus: 
+
+```{r}
+psych::alpha(extra_items)
+```
+
+Hilfe zur recht ausführlichen Ausgabe bekommt man `?alpha`.
+
+Das `raw_alpha` ist das für gewöhnliche berichtete Alpha-Koeffizient ($\alpha$) berechnet auf Basis der Kovarianzen, nicht Korrelationen), als Schätzwert für die Reliabilität im Sinne der internen Konsistenz der Skala.  Außerdem wird ein Konfidenzbereich für den Alpha-Koeffizienten angegeben.  Interessant ist auch die Frage, ob bzw. wie sich die Reliabilität der Skala ändert, wenn man ein bestimmtes Items entfernt: Wird die Reliabilität besser nach Entfernen des Items, so ist das ein Hinweis, dass das Item umformuliert oder entfernt werden sollte. Im vorliegenden Fall ist das Item `i03` ein Kandidat zur Überarbeitung.
+
+Darüber hinaus wird Guttmans $\lambda_6$ (Lambda-6) berichtet, der in dieser Analyse aber nicht weiter betrachtet wird. `average_r` ist die mittlere Korrelation aller Itempaare ("Interitemkorrelation"); dieser Koeffizient misst, wie stark die paarweise Korrelation der Items untereinander ist. Bei der Schwierigkeit ist es wünschenswert, dass ein breiter Bereich abgedeckt wird, also einige Items leicht und andere schwer sind, damit Personen mit geringer und hoher Ausprägung in der latenten Fähigkeit^["Fähigkeit" wird hier im breiten Sine verwendet, auch für Persönlichkeitskonstrukte wie Extroversion.] jeweils Items mit passender Schwierigkeit auffinden.
+
+
+`mean` gibt den Mittelwert der Skala an (über alle Items); das ist ein Hinweis zur "Gesamtschwierigkeit" der Skala.Weiter unten in der Ausgabe wird für jedes einzelne Item die Schwierigkeit ausgegeben; `sd` ist die zugehörige Streuung. `S/N` steht für Signal-Noise-Ratio; dieser Koeffizient wird hier nicht weiter analysiert.
+
+Die Itemtrennschärfe (synonym: Part-Whole-Korrelation) wird pro Item mit `raw.r` angezeigt.
+
+
+
+
+
+## Literaturempfehlungen
+
+@Buhner2011 bietet eine gute Einführung in die Analyse psychometrischer Daten, allerdings mit SPSS-Syntax, keine R-Syntax.
+
+
+

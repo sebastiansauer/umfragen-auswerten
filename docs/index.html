@@ -7,7 +7,7 @@
 <title>Kapitel 1 Einleitung | Umfragen auswerten</title>
 <meta name="author" content="Sebastian Sauer">
 <meta name="description" content="Kapitel 1 Einleitung | Umfragen auswerten: Statistische Analyse psychometrisch fundierter Ratingskalen">
-<meta name="generator" content="bookdown 0.26.2 with bs4_book()">
+<meta name="generator" content="bookdown 0.26 with bs4_book()">
 <meta property="og:title" content="Kapitel 1 Einleitung | Umfragen auswerten">
 <meta property="og:type" content="book">
 <meta property="og:description" content="Kapitel 1 Einleitung | Umfragen auswerten: Statistische Analyse psychometrisch fundierter Ratingskalen">
@@ -45,7 +45,8 @@
         <ul class="book-toc list-unstyled">
 <li><a class="active" href="index.html"><span class="header-section-number">1</span> Einleitung</a></li>
 <li><a class="" href="daten-aufr%C3%A4umen.html"><span class="header-section-number">2</span> Daten aufräumen</a></li>
-<li><a class="" href="itemanalyse.html"><span class="header-section-number">3</span> Itemanalyse</a></li>
+<li><a class="" href="solution.html"><span class="header-section-number">3</span> Solution</a></li>
+<li><a class="" href="itemanalyse.html"><span class="header-section-number">4</span> Itemanalyse</a></li>
 </ul>
 
         <div class="book-extra">
@@ -57,15 +58,18 @@
 <h1>
 <span class="header-section-number">Kapitel 1</span> Einleitung<a class="anchor" aria-label="anchor" href="#einleitung"><i class="fas fa-link"></i></a>
 </h1>
-<p>Fragebogendaten zu psychologischen Variablen (wie z.B. Extraversion), die wissenschaftlichen Ansprüchen genügen, bezeichnet man als <em>psychometrische Daten</em> <span class="citation">(vgl. <strong>Steyer1993?</strong>)</span>. i
+<p>Fragebogendaten zu psychologischen Variablen (wie z.B. Extraversion), die wissenschaftlichen Ansprüchen genügen, bezeichnet man als <em>psychometrische Daten</em> <span class="citation">(vgl. <strong>Steyer1993?</strong>)</span>.
 Der Analyse psychometrischer Daten kommt große Bedeutung innerhalb der Psychologie (und angrenzender Gebiete wie Marketing) zu.
 Der Grund ist, dass Daten häufig in Form von Fragebogen, psychometrischer Fragebogen, erhoben werden.
-Besonders für Persönlichkeitskonstrukte und Einstellungen, kurz für Fragestellungen der Persönlichkeitspsychologie und, davon abgeleitet, der Diagnostik, erfreuen sie sich weiter Verbreitung.</p>
+Besonders für Persönlichkeitskonstrukte und Einstellungen, kurz für Fragestellungen der Persönlichkeitspsychologie und, davon abgeleitet, der Diagnostik,
+erfreuen sie sich weiter Verbreitung.</p>
 <p>Ziel dieses Beitrags ist es, eine praktische Anleitung für typische (und grundlegende) psychometrischen Analysen mittels R zu geben.
-Dabei soll demonstriert und erläutert werden, welche Analysen und wie durchgeführt werden in einer grundständigen psychometrischen Analyse.
+Dabei soll demonstriert und erläutert werden, welche Analysen und wie durchgeführt werden
+in einer grundständigen psychometrischen Analyse.
 Es wird sowohl der Einzelfall-Diagnostik Rechnung getragen, als auch der Testvalidierung.
 Anders gesagt, dieses Dokument hilft, u.a. folgende Fragen zu beantworten:
-“Wie leistungsfähig war der Applikant im Vergleich zu seiner Referenzgruppe?”, “Wie ist die Qualität dieses Testverfahrens einzuschätzen?”.</p>
+“Wie leistungsfähig war der Applikant im Vergleich zu seiner Referenzgruppe?”,
+“Wie ist die Qualität dieses Testverfahrens einzuschätzen?”.</p>
 <p><em>Test</em> wird hier verstanden sensu <span class="citation">(<strong>Lienert1998?</strong>)</span> (S. 14f):</p>
 <blockquote>
 <p>ein wissenschaftliches Routineverfahren zur Untersuchung eines oder mehrerer empirisch abgrenzbarer Persönlichkeitsmerkmale mit dem Ziel einer möglichst quantitativen Aussage über den relativen Grad der individuellen Merkmalsausprägung.</p>
@@ -176,8 +180,8 @@ Sie installieren ein R-Paket mit dem Befehl <code>install.packages(name_des_pake
 </h2>
 <p>Sessioninfo:</p>
 <ul>
-<li>Datum: 2022-05-02</li>
-<li>R-Version: R version 4.1.3 (2022-03-10)</li>
+<li>Datum: 2022-05-25</li>
+<li>R-Version: R version 4.2.0 (2022-04-22)</li>
 <li>Betriebssystem:</li>
 </ul>
 </div>
@@ -220,7 +224,7 @@ Sie installieren ein R-Paket mit dem Befehl <code>install.packages(name_des_pake
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2022-05-02 21:27:18.</p>
+    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2022-05-25 12:46:24.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

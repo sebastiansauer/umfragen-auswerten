@@ -14,9 +14,12 @@ daten-aufräumen
 r-pakete-1
 daten-1
 überblick
+brave-daten
+text-in-zahlen-umwandeln
+answerlist
+solution
 daten-umformen
 items-umkodieren
-vertiefung-duplikate-entfernen
 extraversionsscore-berechnen
 summen--und-mittelwerte
 vertiefung-summen--vs.-mittelwertscores

@@ -7,7 +7,7 @@
 <title>Kapitel 2 Daten aufräumen | Umfragen auswerten</title>
 <meta name="author" content="Sebastian Sauer">
 <meta name="description" content="2.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # recode library(ggstatsplot) # Diagram aufbügeln library(mice) # Fehlende Werte...">
-<meta name="generator" content="bookdown 0.26.2 with bs4_book()">
+<meta name="generator" content="bookdown 0.26 with bs4_book()">
 <meta property="og:title" content="Kapitel 2 Daten aufräumen | Umfragen auswerten">
 <meta property="og:type" content="book">
 <meta property="og:description" content="2.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # recode library(ggstatsplot) # Diagram aufbügeln library(mice) # Fehlende Werte...">
@@ -45,7 +45,8 @@
         <ul class="book-toc list-unstyled">
 <li><a class="" href="index.html"><span class="header-section-number">1</span> Einleitung</a></li>
 <li><a class="active" href="daten-aufr%C3%A4umen.html"><span class="header-section-number">2</span> Daten aufräumen</a></li>
-<li><a class="" href="itemanalyse.html"><span class="header-section-number">3</span> Itemanalyse</a></li>
+<li><a class="" href="solution.html"><span class="header-section-number">3</span> Solution</a></li>
+<li><a class="" href="itemanalyse.html"><span class="header-section-number">4</span> Itemanalyse</a></li>
 </ul>
 
         <div class="book-extra">
@@ -101,504 +102,87 @@
 </ul>
 <p>Betrachten wir einige zentrale Aspekte dieser Schritte.</p>
 </div>
-<div id="daten-umformen" class="section level2" number="2.4">
+<div id="brave-daten" class="section level2" number="2.4">
 <h2>
-<span class="header-section-number">2.4</span> Daten umformen<a class="anchor" aria-label="anchor" href="#daten-umformen"><i class="fas fa-link"></i></a>
+<span class="header-section-number">2.4</span> Brave Daten<a class="anchor" aria-label="anchor" href="#brave-daten"><i class="fas fa-link"></i></a>
 </h2>
-<p>In einer Fragebogenstudie (oder vergleichbarer Studie) liegen in der Regel pro Respondent (allgemeiner: pro Beobachtung) eine Reihe von Antworten auf Fragebogen-Items vor.
-Manchmal liegen die Antworten noch nicht als Zahl vor, sondern als Text, etwa “stimme eher zu”.
-Diese Antwort könnte auf einer vierstufigen Skala einer 3 entsprechen. Eine einfache Möglichkeit zum Umkodieren eröffnet das Paket <code>sjmisc</code>.
-Als Beispielaufgabe soll der Wert “Frau” in 1 umkodiert werden und “Mann” in 0; übrige Werte sollen in <code>NA</code> kodiert werden.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data_rec</span> <span class="op">&lt;-</span> <span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://strengejacke.github.io/sjmisc/reference/rec.html">rec</a></span><span class="op">(</span><span class="va">sex</span>, rec <span class="op">=</span> <span class="st">"Frau = 1; Mann = 0; else = NA"</span><span class="op">)</span></code></pre></div>
-<p>Dabei wird eine neue Variable (Spalte) erzeugt, deren Namen der alten Variable entspricht, plus dem Suffix <code>_r</code>, in diesem Fall also <code>sex_r</code>. Man beachte, dass Textwerte (Strings) <em>nicht</em> in Anführungsstriche gesetzt werden müssen, nur der ganze “Rekodierungsterm” muss einmal in Anführungsstriche gesetzt werden.</p>
-<p>Prüfen wir das Ergebnis:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data_rec</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">sex_r</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 3 × 2</span>
-<span class="co">#&gt;   sex_r     n</span>
-<span class="co">#&gt;   &lt;chr&gt; &lt;int&gt;</span>
-<span class="co">#&gt; 1 0       286</span>
-<span class="co">#&gt; 2 1       529</span>
-<span class="co">#&gt; 3 &lt;NA&gt;     11</span></code></pre></div>
-</div>
-<div id="items-umkodieren" class="section level2" number="2.5">
-<h2>
-<span class="header-section-number">2.5</span> Items umkodieren<a class="anchor" aria-label="anchor" href="#items-umkodieren"><i class="fas fa-link"></i></a>
-</h2>
-<p>In Fragebogen werden immer wieder Items <em>negativ</em> kodiert. Das bedeutet, dass sie gegenteilig zum messenden Konstrukt formuliert sind. Ist das Konstrukt Extraversion, so würde ein negatives Item im Sinne von Introversion kodiert sein. Ein Beispiel-Item für negative Kodierung wäre: “Ich bin ein Couch-Potato” oder “Ich bleibe am liebsten alleine zuhause.”</p>
-<p>Zuerst müssen wir die Anzahl der Antwortstufen wissen; diese Information findet sich in der Dokumentation der Skala (im “Manual” auch “Testdokumentation” oder “Benutzerhandbuch” genannt). Natürlich kann man prüfen, welche Antwortstufen die Respondenten gefunden haben, aber man wäre nicht sicher, ob auch alle möglichen Antworten ausgeschöpft wurden.</p>
-<p>Im vorliegenden Fall ist der Dokumentation des Instruments zu entnehmen, dass jedes Item vier Antwortstufen (Likertformat) aufweist. Likert-skalierte Items zeichnen sich dadurch aus, dass sie so formuliert sind, dass höhere Werte in der Antwortstufe mit höherer Ausprägung des zu messenden Konstrukts einher gehen.</p>
-<p>Beim Umkodieren wird das Item “auf den Kopf gestellt”: Der höchste Wert wird der kleinste, der zwei kleinste wird der zweitgrößte und so weiter. Im Schema sieht dies so aus:</p>
-<pre><code>1 --&gt; 4
-2 --&gt; 3
-3 --&gt; 2
-4 --&gt; 1</code></pre>
-<p>Zum Umkodieren negativ kodierter Items bietet sich wieder die Funktion <code>rec</code> aus <code>sjmisc</code>.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://strengejacke.github.io/sjmisc/reference/rec.html">rec</a></span><span class="op">(</span><span class="va">i02r</span>, rec <span class="op">=</span> <span class="st">"1=4; 2=3; 3=2; 4=1"</span><span class="op">)</span></code></pre></div>
-<p>In diesem Fall ist das Item <code>i02r</code> bereits umkodiert - genau wie alle Items im Datensatz die mit dem Suffix <code>r</code> gekennzeichnet sind. In anderen Situationen kann es aber nötig sein, Items umzukodieren. Vergessen Sie dann nicht, das Ergebnis als (neuen) Datensatz zu speichern.</p>
-<p>Übrigens macht es <code><a href="https://strengejacke.github.io/sjmisc/reference/rec.html">rec()</a></code> noch einfacher und zwar mit dem Parameterwert “rev” (wie <em>revert</em>):</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://strengejacke.github.io/sjmisc/reference/rec.html">rec</a></span><span class="op">(</span><span class="va">i02r</span>, rec <span class="op">=</span> <span class="st">"rev"</span><span class="op">)</span></code></pre></div>
-<div id="vertiefung-duplikate-entfernen" class="section level3" number="2.5.1">
-<h3>
-<span class="header-section-number">2.5.1</span> Vertiefung: Duplikate entfernen<a class="anchor" aria-label="anchor" href="#vertiefung-duplikate-entfernen"><i class="fas fa-link"></i></a>
-</h3>
-</div>
-</div>
-<div id="extraversionsscore-berechnen" class="section level2" number="2.6">
-<h2>
-<span class="header-section-number">2.6</span> Extraversionsscore berechnen<a class="anchor" aria-label="anchor" href="#extraversionsscore-berechnen"><i class="fas fa-link"></i></a>
-</h2>
-<div id="summen--und-mittelwerte" class="section level3" number="2.6.1">
-<h3>
-<span class="header-section-number">2.6.1</span> Summen- und Mittelwerte<a class="anchor" aria-label="anchor" href="#summen--und-mittelwerte"><i class="fas fa-link"></i></a>
-</h3>
-<p>In der Psychometrie werden komplexe Konstrukte wie etwa das Persönlichkeitsmerkmal Extraversion anhand mehrerer Indikatoren (meistens Items eines Fragebogens) gemessen. Um zu einem Personenwert für Extraversion zu gelangen, werden die Itemwerte im einfachsten Fall summiert. Alternativ kann man auch einen Mittelwert bilden. Dieses Aggregieren bietet den Vorteil, dass sich Messfehler (möglicherweise) herausmitteln. Außerdem versucht man so abzubilden, dass Extraversion aus mehreren unterschiedlichen Facetten besteht, die nicht mit einem einzelnen Item, sondern über mehrere unterschiedliche Items, erfasst werden. Viele Psychometriker sind skeptisch, wenn man versuchen würde, Extraversion mit der Frage “Wie extrovertiert sind Sie?” zu erfassen. Ihre Bedenken sind, dass Menschen die vielen Facetten von Extraversion nicht im Arbeitsgedächtnis vorhalten können. Fragt man hingegen nur einen kleinen Aspekt von Extraversion ab, trägt man der Breite des Konstrukts nicht Rechnung.</p>
-<p>Ein einfaches Beispiel zur Berechnung des Extraversion-Summenscore:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra_bsp</span> <span class="op">&lt;-</span> <span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">i01</span><span class="op">:</span><span class="va">i03</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>extra_sum <span class="op">=</span> <span class="va">i01</span> <span class="op">+</span> <span class="va">i02r</span> <span class="op">+</span> <span class="va">i03</span><span class="op">)</span>
-
-<span class="va">extra_bsp</span>
-<span class="co">#&gt; # A tibble: 3 × 4</span>
-<span class="co">#&gt;     i01  i02r   i03 extra_sum</span>
-<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;</span>
-<span class="co">#&gt; 1     3     3     3         9</span>
-<span class="co">#&gt; 2     2     2     1         5</span>
-<span class="co">#&gt; 3     3     4     1         8</span></code></pre></div>
-<p>Der Wert von <code>extra_sum</code> berechnet sich jeweils als Summe der drei Itemwerte. Mit dem Mittelwert verhält es sich analog (s. Tabelle <a href="daten-aufr%C3%A4umen.html#tab:extra-score-mean">2.1</a>).</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra_bsp</span> <span class="op">&lt;-</span> <span class="va">extra_bsp</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>extra_mean <span class="op">=</span> <span class="va">extra_sum</span> <span class="op">/</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
-<div class="inline-table"><table class="table table-sm">
-<caption>
-<span id="tab:extra-score-mean">Table 2.1: </span>Extraversion-Score berechnen</caption>
-<thead><tr class="header">
-<th align="right">i01</th>
-<th align="right">i02r</th>
-<th align="right">i03</th>
-<th align="right">extra_sum</th>
-<th align="right">extra_mean</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="right">3</td>
-<td align="right">3</td>
-<td align="right">3</td>
-<td align="right">9</td>
-<td align="right">3.00</td>
-</tr>
-<tr class="even">
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">1</td>
-<td align="right">5</td>
-<td align="right">1.67</td>
-</tr>
-<tr class="odd">
-<td align="right">3</td>
-<td align="right">4</td>
-<td align="right">1</td>
-<td align="right">8</td>
-<td align="right">2.67</td>
-</tr>
-</tbody>
-</table></div>
-<p>Praktischerweise gibt es Funktionen, die die Berechnung eines Scores noch weiter vereinfachen, zum Beispiel im Paket <code>sjmisc</code>: <code><a href="https://strengejacke.github.io/sjmisc/reference/row_sums.html">row_sums()</a></code> (Summenscore pro Person) und <code><a href="https://strengejacke.github.io/sjmisc/reference/row_sums.html">row_means()</a></code> (Mittelwert pro Person).
-Da Respondenten (meist Personen) in <em>Zeilen</em> stehen heißen die Befehle <code>row_XXX()</code>.
-Fragt sich noch, ob es mehr Sinn macht, einen Summenscore oder einen Mittelwert zu berechnen. Kurz gesagt macht es keinen großen Unterschied, solange es keine fehlenden Werte gibt.
-Gibt es aber fehlende Werte, sollte man Mittelwerte statt Summenwerte vorziehen.</p>
-</div>
-<div id="vertiefung-summen--vs.-mittelwertscores" class="section level3" number="2.6.2">
-<h3>
-<span class="header-section-number">2.6.2</span> Vertiefung: Summen- vs. Mittelwertscores<a class="anchor" aria-label="anchor" href="#vertiefung-summen--vs.-mittelwertscores"><i class="fas fa-link"></i></a>
-</h3>
-<p>Dazu ein erläuterndes Beispiel. Alois habe in einem Persönlichkeitstest mit 3 Items nur Item 1 beantwortet und zwar mit “3”, wobei Antwortstufen von 1 bis 4 vorgegeben waren. Vermutlich ist der Gesamtwert im Form des Summenscores von 3 zu klein, unterschätzt als Alois’ Wert. Schließlich hat er beim ersten Item die Antwort “3” gewählt, insofern ist es plausibel, dass er bei den anderen auch diese Option gewählt hätte. Somit hätte er insgesamt 9 Punkte (nicht 3) erzielt. Würden wir 3 als Gesamtwert (Summenscore) annehmen, so bedeutet das, das wir davon ausgehen, dass er im Schnitt “1” gewählt hat. Eine Annahme, die nicht sehr plausibel erscheint.</p>
-<p>Vergleichen wir das mit dem Mittelwert-Score. Jetzt lassen wir R die Rechenarbeit machen:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Alois</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>
-<span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">mean</a></span><span class="op">(</span><span class="va">Alois</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; [1] 3</span></code></pre></div>
-<p>Der Mittelwert von Alois beträgt 3 – das passt genau zu unserer Argumentation von gerade (s. oben), dass 3 eine bessere Schätzung der Ausprägung der latenten Variable von Alois ist. Daher ist der Mittelwert dem Summenscore vorzuziehen.</p>
-<p>Ein anderer Vorteil des Mittelwerts ist, dass er etwas anschaulicher ist als der Summenscore: Ein Mittelwert von 3 (auf einer Skala von 1 bis 4) ist anschaulicher als eine Summe von 9 (bei drei Items). Wir werden daher den Mittelwert vorziehen.</p>
-</div>
-<div id="berechnung-mit-r" class="section level3" number="2.6.3">
-<h3>
-<span class="header-section-number">2.6.3</span> Berechnung mit R<a class="anchor" aria-label="anchor" href="#berechnung-mit-r"><i class="fas fa-link"></i></a>
-</h3>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://strengejacke.github.io/sjmisc/reference/row_sums.html">row_means</a></span><span class="op">(</span><span class="va">i01</span><span class="op">:</span><span class="va">i10</span>, n <span class="op">=</span> <span class="fl">.90</span>, var <span class="op">=</span> <span class="st">"extra_avg"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">extra_avg</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 3 × 1</span>
-<span class="co">#&gt;   extra_avg</span>
-<span class="co">#&gt;       &lt;dbl&gt;</span>
-<span class="co">#&gt; 1       2.9</span>
-<span class="co">#&gt; 2       2.1</span>
-<span class="co">#&gt; 3       2.6</span></code></pre></div>
-<p>Der Parameter <code>n</code> bei <code><a href="https://strengejacke.github.io/sjmisc/reference/row_sums.html">row_means()</a></code> gibt den Anteil der <em>nicht</em> fehlenden Werte (pro Zeile) wieder, damit ein Wert berechnet wird: Bei zu vielen fehlenden Werten (zu wenig Daten) pro Person wird sonst <code>NA</code> zurückgeliefert. Das ist sinnvoll, denn hat eine Person von 10 Items nur 1 Item beantwortet, so kann man wohl nicht zuverlässig sagen, dass Extraversion in seiner Breite zuverlässig geschätzt wird. Die Funktion fügt dem Datensatz eine Spalte hinzu, deren Name mit <code>var</code> angegeben wird.</p>
-</div>
-<div id="z-werte" class="section level3" number="2.6.4">
-<h3>
-<span class="header-section-number">2.6.4</span> z-Werte<a class="anchor" aria-label="anchor" href="#z-werte"><i class="fas fa-link"></i></a>
-</h3>
-<p>Man kann die Aussagekraft eines Mittelwerts noch erhöhen, in dem man ihn z-skaliert. Das geht zum Beispiel so:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra_std</span> <span class="op">&lt;-</span> <span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://strengejacke.github.io/sjmisc/reference/std.html">std</a></span><span class="op">(</span><span class="va">extra_mean</span><span class="op">)</span></code></pre></div>
-<p>Die Funktion <code><a href="https://strengejacke.github.io/sjmisc/reference/std.html">std()</a></code> z-standardisiert eine oder mehrere angegebene Spalten. Dabei werden neue Spalten erzeugt, deren Namen gleich dem alten Namen plus dem Suffix <code>_z</code> entspricht. Betrachten wir die ersten drei Zeilen:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra_std</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">extra_mean</span>, <span class="va">extra_mean_z</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 3 × 2</span>
-<span class="co">#&gt;   extra_mean extra_mean_z</span>
-<span class="co">#&gt;        &lt;dbl&gt;        &lt;dbl&gt;</span>
-<span class="co">#&gt; 1        2.9       0.0202</span>
-<span class="co">#&gt; 2        2.1      -1.75  </span>
-<span class="co">#&gt; 3        2.6      -0.644</span></code></pre></div>
-<p>Zu beachten ist, dass der Mittelwert der Stichprobe und deren Standardabweichung als Referenzwerte herangezogen wurden, nicht die entsprechenden Größen der Normierungsstichprobe. Dazu später mehr.</p>
-</div>
-<div id="prozentränge" class="section level3" number="2.6.5">
-<h3>
-<span class="header-section-number">2.6.5</span> Prozentränge<a class="anchor" aria-label="anchor" href="#prozentr%C3%A4nge"><i class="fas fa-link"></i></a>
-</h3>
-<p>Den Prozentrang einer Person kann man sich z.B. mit <code><a href="https://dplyr.tidyverse.org/reference/ranking.html">percent_rank()</a></code> ausgeben lassen:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra_std</span> <span class="op">&lt;-</span> <span class="va">extra_std</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>extra_percrank <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/ranking.html">percent_rank</a></span><span class="op">(</span><span class="va">extra_mean</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">extra_std</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">extra_mean</span>, <span class="va">extra_mean_z</span>, <span class="va">extra_percrank</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">extra_percrank</span> <span class="op">&lt;</span> <span class="fl">.005</span> <span class="op">|</span> <span class="va">extra_percrank</span> <span class="op">&gt;</span> <span class="fl">.995</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 11 × 3</span>
-<span class="co">#&gt;    extra_mean extra_mean_z extra_percrank</span>
-<span class="co">#&gt;         &lt;dbl&gt;        &lt;dbl&gt;          &lt;dbl&gt;</span>
-<span class="co">#&gt;  1        4           2.46        1      </span>
-<span class="co">#&gt;  2        1.7        -2.64        0.00487</span>
-<span class="co">#&gt;  3        3.9         2.23        0.999  </span>
-<span class="co">#&gt;  4        1.6        -2.86        0.00122</span>
-<span class="co">#&gt;  5        1.6        -2.86        0.00122</span>
-<span class="co">#&gt;  6        1.7        -2.64        0.00487</span>
-<span class="co">#&gt;  7        1.6        -2.86        0.00122</span>
-<span class="co">#&gt;  8        3.8         2.01        0.995  </span>
-<span class="co">#&gt;  9        1.2        -3.74        0      </span>
-<span class="co">#&gt; 10        3.8         2.01        0.995  </span>
-<span class="co">#&gt; 11        3.8         2.01        0.995</span></code></pre></div>
-<p>Mit der letzten Zeile - <code>filter(...)</code> haben wir uns das extremste Prozent (hälftig unten und oben) ausgewählt.</p>
-</div>
-</div>
-<div id="vergleich-mit-normierungsstichprobe" class="section level2" number="2.7">
-<h2>
-<span class="header-section-number">2.7</span> Vergleich mit Normierungsstichprobe<a class="anchor" aria-label="anchor" href="#vergleich-mit-normierungsstichprobe"><i class="fas fa-link"></i></a>
-</h2>
-<p><span class="citation">(<strong>Satow2012?</strong>)</span> berichtet Normierungswerte, leider aber nur für die Allgemeinbevölkerung,
-nicht heruntergebrochen auf Geschlechter- oder Altersgruppen. Für Extraversion berichtet er folgende Daten:</p>
+<p>Wie muss eine Tabelle gestaltet sein,
+damit man sie gut in R importieren kann, bzw. gut damit weiterarbeiten kann?</p>
+<p><a href="https://www.tandfonline.com/doi/full/10.1080/00031305.2017.1375989">Das ist eine gute Quelle</a> zu diesem Thema.</p>
+<p>Im Überblick sollten Sie auf Folgendes achten:</p>
 <ul>
-<li>Summenscore: 26,67</li>
-<li>Standardabweichung: 5,74</li>
+<li>Wenn Sie händisch Daten eintragen, hacken Sie das einfach in Excel sein.</li>
+<li>CSV-Dateien bieten sich als Datenformat an.</li>
+<li>Alternativ kann man auch Excel-Dateien in R importieren.</li>
+<li>Es muss genau eine Kopfzeile geben.</li>
+<li>Es darf keine Lücken geben (leere Zeilen oder Spalten oder Zellen).</li>
+<li>Vermeiden Sie Umlaute und Leerzeichen in den Variablennamen.</li>
 </ul>
-<p>Auf Errisch:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra_sum_normstipro</span> <span class="op">&lt;-</span> <span class="fl">26.67</span>
-<span class="va">extra_sd_normstipro</span> <span class="op">&lt;-</span> <span class="fl">5.74</span></code></pre></div>
-<p>Ob die Daten normal verteilt sind, wird in der Publikation nicht erwähnt.
-Wir gehen im Folgenden davon aus. Allerdings ist es ein Manko, wenn diese Information nicht gegeben ist.
-Weiter berichtet <span class="citation">(<strong>Satow2012?</strong>)</span> nicht, ob fehlende Werte die Summenscores verringert haben bzw. wie er ggf. mit diesem Problem umgegangen ist.
-Bevor wir den Vergleich mit der Normierungsstichprobe heranziehen können, müssen wir uns um fehlende Werte kümmern.</p>
-<div id="anzahl-der-fehlenden-werte" class="section level3" number="2.7.1">
-<h3>
-<span class="header-section-number">2.7.1</span> Anzahl der fehlenden Werte<a class="anchor" aria-label="anchor" href="#anzahl-der-fehlenden-werte"><i class="fas fa-link"></i></a>
-</h3>
-<p>Eine Möglichkeit, fehlende Werte zu zählen, sieht so aus:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://strengejacke.github.io/sjmisc/reference/row_count.html">row_count</a></span><span class="op">(</span><span class="va">i01</span><span class="op">:</span><span class="va">i10</span>, count <span class="op">=</span> <span class="st">"na"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">rowcount</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1 × 2</span>
-<span class="co">#&gt;   rowcount     n</span>
-<span class="co">#&gt;      &lt;int&gt; &lt;int&gt;</span>
-<span class="co">#&gt; 1        0   826</span></code></pre></div>
-<p>Wir haben Glück; es gibt keine fehlenden Werte in diesem Datensatz.
-Aber haben wir wirklich Glück? Vermutlich wurden die Respondenten gezwungen, alle Fragen zu beantworten.
-Vielleicht wurden sie damit ordentlich genervt und haben zur Strafe Blümchen gekreuzt?
-Wir wissen es nicht genau, sollten aber die Datenqualität noch einmal überprüfen.</p>
+<p>Beachten Sie das Prinzip von “tidy data”:</p>
+<ul>
+<li>In jeder Zeile steht <em>eine Beobachtung</em>.</li>
+<li>In jeder Spalte steht <em>eine Variable</em>.</li>
+<li>In jeder Zelle steht <em>eine Wert</em>.</li>
+</ul>
 </div>
-<div id="vertiefung-fehlende-werte-ersetzen" class="section level3" number="2.7.2">
-<h3>
-<span class="header-section-number">2.7.2</span> Vertiefung: Fehlende Werte ersetzen<a class="anchor" aria-label="anchor" href="#vertiefung-fehlende-werte-ersetzen"><i class="fas fa-link"></i></a>
-</h3>
-<p>Das Ersetzen fehlender Werte ist eine Wissenschaft für sich, aber ein einfacher (alldieweil nicht optimaler) Weg besteht darin,
-die fehlenden Werte durch den Mittelwert des Items zu ersetzen.
-Ein Item wurde im Schnitt mit 3,2 beantwortet, aber für Alois fehlt der Wert?
-Okay, ersetzen wir den fehlenden Wert für dieses Items mit 3,2.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">daten</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/deprecated.html">data_frame</a></span><span class="op">(</span>
-  namen <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Alois"</span>, <span class="st">"Bertram"</span>, <span class="st">"Zenzi"</span><span class="op">)</span>,
-  i1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="cn">NA</span><span class="op">)</span>,
-  i2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span>, <span class="cn">NA</span><span class="op">)</span>,
-  i3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>
-<span class="op">)</span>
-<span class="co">#&gt; Warning: `data_frame()` was deprecated in tibble 1.1.0.</span>
-<span class="co">#&gt; Please use `tibble()` instead.</span>
-<span class="co">#&gt; This warning is displayed once every 8 hours.</span>
-<span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</span>
+<div id="text-in-zahlen-umwandeln" class="section level2" number="2.5">
+<h2>
+<span class="header-section-number">2.5</span> Text in Zahlen umwandeln<a class="anchor" aria-label="anchor" href="#text-in-zahlen-umwandeln"><i class="fas fa-link"></i></a>
+</h2>
+<p>Sie haben eine Umfrage durchgeführt, Daten sind erhoben, puh, bald können Sie das Projekt abschließen.</p>
+<p>Jetzt haben Sie die Daten in R importiert,
+aber müssen zu Ihrem Schrecken feststellen,
+dass die Spalten (Variablen) die eigentlich Zahlen sein sollten,
+als <code>character</code>, Text also, formatiert sind in R.</p>
+<p>Anstelle der Zahl <code>5</code> steht in der Spalte also <code>"5"</code> (man beachte die Anführungszeichen, die anzeigen, dass es sich um einen Text handelt).</p>
+<p>Na toll.</p>
+<p>Mit Wörtern (Text) kann man nicht rechnen, und Sie rechnen doch so gern…</p>
+<p>R weigert sich standhaft, mit Text zu rechnen:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="st">"5"</span> <span class="op">+</span> <span class="st">"5"</span>
+<span class="co">#&gt; Error in "5" + "5": non-numeric argument to binary operator</span></code></pre></div>
+<p>Hätten wir brave Zahlen, wäre alles paletti:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fl">5</span><span class="op">+</span><span class="fl">5</span>
+<span class="co">#&gt; [1] 10</span></code></pre></div>
+<p>Der Einfachheit halber erzeugen wir uns eine einfache Tabelle, mit ein paar Spalten,
+die <em>als Text</em> formatierte Zahlen enthalten:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
 
-<span class="va">daten</span>
-<span class="co">#&gt; # A tibble: 3 × 4</span>
-<span class="co">#&gt;   namen      i1    i2    i3</span>
-<span class="co">#&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 Alois       1     3    NA</span>
-<span class="co">#&gt; 2 Bertram     1     2     2</span>
-<span class="co">#&gt; 3 Zenzi      NA    NA     4</span></code></pre></div>
-<p>Für <code>i1</code> ist “1” eine plausible Schätzung für den fehlenden Wert, bei <code>i2</code> ist “3” sinnvoll und bei <code>i3</code> “4”, also jeweils der Zeilenmittelwert.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">daten_imp</span> <span class="op">&lt;-</span> 
-<span class="va">daten</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://amices.org/mice/reference/mice.html">mice</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  iter imp variable</span>
-<span class="co">#&gt;   1   1  i2  i3</span>
-<span class="co">#&gt;   1   2  i2  i3</span>
-<span class="co">#&gt;   1   3  i2  i3</span>
-<span class="co">#&gt;   1   4  i2  i3</span>
-<span class="co">#&gt;   1   5  i2  i3</span>
-<span class="co">#&gt;   2   1  i2  i3</span>
-<span class="co">#&gt;   2   2  i2  i3</span>
-<span class="co">#&gt;   2   3  i2  i3</span>
-<span class="co">#&gt;   2   4  i2  i3</span>
-<span class="co">#&gt;   2   5  i2  i3</span>
-<span class="co">#&gt;   3   1  i2  i3</span>
-<span class="co">#&gt;   3   2  i2  i3</span>
-<span class="co">#&gt;   3   3  i2  i3</span>
-<span class="co">#&gt;   3   4  i2  i3</span>
-<span class="co">#&gt;   3   5  i2  i3</span>
-<span class="co">#&gt;   4   1  i2  i3</span>
-<span class="co">#&gt;   4   2  i2  i3</span>
-<span class="co">#&gt;   4   3  i2  i3</span>
-<span class="co">#&gt;   4   4  i2  i3</span>
-<span class="co">#&gt;   4   5  i2  i3</span>
-<span class="co">#&gt;   5   1  i2  i3</span>
-<span class="co">#&gt;   5   2  i2  i3</span>
-<span class="co">#&gt;   5   3  i2  i3</span>
-<span class="co">#&gt;   5   4  i2  i3</span>
-<span class="co">#&gt;   5   5  i2  i3</span>
-<span class="co">#&gt; Warning: Number of logged events: 62</span>
-
-<span class="va">daten2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://amices.org/mice/reference/complete.mids.html">complete</a></span><span class="op">(</span><span class="va">daten_imp</span>, <span class="fl">1</span><span class="op">)</span></code></pre></div>
-<p>Wie wir sehen, wurde in jeder <em>Spalte</em> jeder fehlende Wert durch den Spalten-Mittelwert ersetzt.</p>
-</div>
-<div id="z-werte-auf-basis-der-normierungsstichprobe" class="section level3" number="2.7.3">
-<h3>
-<span class="header-section-number">2.7.3</span> z-Werte auf Basis der Normierungsstichprobe<a class="anchor" aria-label="anchor" href="#z-werte-auf-basis-der-normierungsstichprobe"><i class="fas fa-link"></i></a>
-</h3>
-<p>Im Handbuch sind, wie oben beschrieben, nur Mittelwert und Streuung des <em>Summen</em>werts, nicht des <em>Mittel</em>werts angegeben, also müssen wir mit diesen Werten arbeiten:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra</span> <span class="op">&lt;-</span> <span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://strengejacke.github.io/sjmisc/reference/row_sums.html">row_sums</a></span><span class="op">(</span><span class="va">i01</span><span class="op">:</span><span class="va">i10</span>, n <span class="op">=</span> <span class="fl">.9</span>, var <span class="op">=</span> <span class="st">"extra_sum"</span><span class="op">)</span></code></pre></div>
-<p>Zuerst berechnen wir von Hand den z-Score auf Basis der Normierungsstichprobe:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra</span> <span class="op">&lt;-</span> <span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>extra_z_normstipro <span class="op">=</span> <span class="op">(</span><span class="va">extra_sum</span> <span class="op">-</span> <span class="va">extra_sum_normstipro</span><span class="op">)</span> <span class="op">/</span> <span class="va">extra_sd_normstipro</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>extra_percrank_normstipro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span><span class="op">(</span><span class="va">extra_z_normstipro</span><span class="op">)</span><span class="op">)</span> 
-
-<span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">extra_z_normstipro</span>, <span class="va">extra_percrank_normstipro</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 5 × 2</span>
-<span class="co">#&gt;   extra_z_normstipro extra_percrank_normstipro</span>
-<span class="co">#&gt;                &lt;dbl&gt;                     &lt;dbl&gt;</span>
-<span class="co">#&gt; 1              0.406                     0.658</span>
-<span class="co">#&gt; 2             -0.988                     0.162</span>
-<span class="co">#&gt; 3             -0.117                     0.454</span>
-<span class="co">#&gt; 4              0.406                     0.658</span>
-<span class="co">#&gt; 5              0.929                     0.823</span></code></pre></div>
-</div>
-<div id="konfidenzintervalle-für-den-personenparameter" class="section level3" number="2.7.4">
-<h3>
-<span class="header-section-number">2.7.4</span> Konfidenzintervalle für den Personenparameter<a class="anchor" aria-label="anchor" href="#konfidenzintervalle-f%C3%BCr-den-personenparameter"><i class="fas fa-link"></i></a>
-</h3>
-<p>Sicherlich ist unsere Messung der Extraversion nicht perfekt; wir müssen davon ausgehen, dass ein Messfehler vorliegt. Eine Berechnungsvorschrift für den Messfehler sieht so aus <span class="citation">(<strong>Buhner2011?</strong>)</span>:</p>
-<p><span class="math display">\[\sigma^2_{E_X} = \sigma^2_X \cdot(1-\rho_{tt})\]</span></p>
-<p>Dabei ist <span class="math inline">\(\sigma^2_{E_X}\)</span> der quadrierte Standardmessfehler, <span class="math inline">\(\sigma^2_X\)</span> die Varianz des Messwerts und <span class="math inline">\(\rho_{tt}\)</span> die Reliabilität des Messwerts. Die Wurzel daraus ist der sog. <em>Standardmessfehler</em>:</p>
-<p><span class="math display">\[\sigma_{E_X} = \sigma_x \cdot \sqrt{(1-\rho_{tt})}\]</span></p>
-<p>Die Reliabilität hatten wir vorher schon definiert,
-hier zur Erinnerung:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra_alpha</span> <span class="op">&lt;-</span> <span class="fl">.87</span></code></pre></div>
-<p>Berechnen wir nun mit Hilfe von R den Standardmessfehler:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra_stdmessfehler</span> <span class="op">=</span> <span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">sd</a></span><span class="op">(</span><span class="va">extra</span><span class="op">$</span><span class="va">extra_sum</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">extra_alpha</span><span class="op">)</span>
-<span class="va">extra_stdmessfehler</span>
-<span class="co">#&gt; [1] 1.62972</span></code></pre></div>
-<p>Jetzt, da wir den Standardmessfehler kennen, können wir in gewohnter Manier “links und rechts” auf einen Messwert den zweifachen Wert des Standardmessfehlers draufpacken, um ein 95% Konfidenzintervall zu erhalten:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra</span> <span class="op">&lt;-</span> <span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>KI_unten <span class="op">=</span> <span class="va">extra_sum</span> <span class="op">-</span> <span class="fl">2</span><span class="op">*</span><span class="va">extra_stdmessfehler</span>,
-         KI_oben <span class="op">=</span> <span class="va">extra_sum</span> <span class="op">+</span> <span class="fl">2</span><span class="op">*</span><span class="va">extra_stdmessfehler</span><span class="op">)</span>
-
-<span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">KI_unten</span>, <span class="va">extra_sum</span>, <span class="va">KI_oben</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
+<span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>i01 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"3"</span>, <span class="st">"4"</span><span class="op">)</span>,  <span class="co"># von 1 bis 4</span>
+            i02 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"-2"</span>, <span class="st">"+3"</span>, <span class="st">"-1"</span><span class="op">)</span>,  <span class="co"># von -3 bis -3</span>
+            i03 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"-2"</span>, <span class="st">"+2"</span>, <span class="st">"-1"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>  <span class="co"># als Faktorvariable formatiert</span>
+<span class="va">d</span>
 <span class="co">#&gt; # A tibble: 3 × 3</span>
-<span class="co">#&gt;   KI_unten extra_sum KI_oben</span>
-<span class="co">#&gt;      &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;</span>
-<span class="co">#&gt; 1     25.7        29    32.3</span>
-<span class="co">#&gt; 2     17.7        21    24.3</span>
-<span class="co">#&gt; 3     22.7        26    29.3</span></code></pre></div>
+<span class="co">#&gt;   i01   i02   i03  </span>
+<span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt; &lt;fct&gt;</span>
+<span class="co">#&gt; 1 1     -2    -2   </span>
+<span class="co">#&gt; 2 3     +3    +2   </span>
+<span class="co">#&gt; 3 4     -1    -1</span></code></pre></div>
+<p>Für diejenigen, die kompliziert mögen, ist hier noch eine <code>factor</code>-Spalte hinzugefügt. Erstmal ignorieren.</p>
+<p>Stellen Sie sich vor, die Tabelle ist ein Auszug aus Ihrer Umfrage,
+wobei <code>i01</code> das erste Item (Frage) Ihres Fragebogens darstellt etc.</p>
+<p>Wie kann man R beibringen,
+dass die fraglichen Spalte <code>i01</code> doch “in Wirklichkeit” Zahlen sind und kein Text?</p>
+<p>Welcher R-Befehl hilft hier? Wählen Sie die am besten passende Antwort!</p>
 </div>
-<div id="visualisierung-der-konfidenzintervalle" class="section level3" number="2.7.5">
-<h3>
-<span class="header-section-number">2.7.5</span> Visualisierung der Konfidenzintervalle<a class="anchor" aria-label="anchor" href="#visualisierung-der-konfidenzintervalle"><i class="fas fa-link"></i></a>
-</h3>
-<p>Eine Visualisierung der Konfidenzintervalle kann ansprechend sein; hier ist eine Möglichkeit dazu:</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">extra_sum</span>, ymin <span class="op">=</span> <span class="va">KI_unten</span>, ymax <span class="op">=</span> <span class="va">KI_oben</span>, x <span class="op">=</span> <span class="va">code</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_pointrange</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-21-1.png" width="672"></div>
-<p><code><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_pointrange()</a></code> zeichnet einen vertikalen (Fehler-)balken sowie einen Punkt in der Mitte;
-als Parameter werden der mittlere Wert, die untere Grenze und die obere Grenze angegeben. Nach der Tilde steht die Variable der X-Achse.</p>
-</div>
-</div>
-<div id="vergleich-vieler-personen-interindividual-differenzierende-diagnostik" class="section level2" number="2.8">
+<div id="answerlist" class="section level2" number="2.6">
 <h2>
-<span class="header-section-number">2.8</span> Vergleich vieler Personen (interindividual differenzierende Diagnostik)<a class="anchor" aria-label="anchor" href="#vergleich-vieler-personen-interindividual-differenzierende-diagnostik"><i class="fas fa-link"></i></a>
+<span class="header-section-number">2.6</span> Answerlist<a class="anchor" aria-label="anchor" href="#answerlist"><i class="fas fa-link"></i></a>
 </h2>
-<div id="histogramm" class="section level3" number="2.8.1">
-<h3>
-<span class="header-section-number">2.8.1</span> Histogramm<a class="anchor" aria-label="anchor" href="#histogramm"><i class="fas fa-link"></i></a>
-</h3>
-<p>Eine grundlegende Visualisierung für eine Verteilung - wie z.B. die Testergebnisse einer Stichprobe an Bewerbern - ist ein Histogramm:</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">extra_sum</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; `stat_bin()` using `bins = 30`. Pick better value with</span>
-<span class="co">#&gt; `binwidth`.</span>
-<span class="co">#&gt; Warning: Removed 7 rows containing non-finite values</span>
-<span class="co">#&gt; (stat_bin).</span></code></pre></div>
-<div class="inline-figure"><img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-22-1.png" width="672"></div>
-<p>Möchte man mehrere Gruppen vergleichen, so ist der Boxplot eine geeignete Visualisierung:</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">extra_sum</span>, x <span class="op">=</span> <span class="va">sex</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Warning: Removed 7 rows containing non-finite values</span>
-<span class="co">#&gt; (stat_boxplot).</span></code></pre></div>
-<div class="inline-figure"><img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-23-1.png" width="672"></div>
-<!-- Eine Variante, etwas aufgebügelt: -->
-<!-- ```{r} -->
-<!-- extra %>%  -->
-<!--   mutate(sex = factor(sex)) %>%  -->
-<!--   ggbetweenstats(data = extra, -->
-<!--   x = sex,  -->
-<!--   y = extra_mean -->
-<!-- ) -->
-<!-- ``` -->
-<!-- Hier werden noch einige (Test-)statistiken angegeben. -->
-<!-- ### Dotplot -->
-<!-- Ein häufiges Szenario in der Diagnostik ist die vergleichende Analyse einer Reihe von Personen z.B. Bewerbern. Bringen wir die Gesamtwerte einer Auswahl von Personen in ein Diagramm. Ein "Dotplot" ist dazu eine interessante Möglichkeit: -->
-<!-- ```{r fig.asp = 1} -->
-<!-- extra %>%  -->
-<!--   slice(1:20) %>%  -->
-<!-- ggdotplotstats( -->
-<!--   y = code, -->
-<!--   x = extra_mean, -->
-<!--   test.value = 25, -->
-<!--   test.value.line = TRUE, -->
-<!--   test.line.labeller = TRUE, -->
-<!--   test.value.color = "red", -->
-<!--   centrality.para = "median", -->
-<!--   centrality.k = 0, -->
-<!--   title = "Verteilung der Testwerte der Bewerber", -->
-<!--   xlab = "Testergebnis", -->
-<!--   bf.message = TRUE, -->
-<!--   messages = FALSE -->
-<!-- ) -->
-<!-- ``` -->
-</div>
-</div>
-<div id="detaillierte-einzelfalldiagnostik" class="section level2" number="2.9">
-<h2>
-<span class="header-section-number">2.9</span> Detaillierte Einzelfalldiagnostik<a class="anchor" aria-label="anchor" href="#detaillierte-einzelfalldiagnostik"><i class="fas fa-link"></i></a>
-</h2>
-<p>Bisher haben wir <em>einen</em> Wert pro Person ausgerechnet;
-in einigen Fällen wird man daran interessiert sein, <em>mehrere</em> Werte einer Person (bzw. einer Beobachtungseinheit) zu berechnen, um ein Profil zu erstellen.
-Gehen wir im Folgenden davon aus, dass die einzelnen 10 Items der Extraversionsskala hinreichend belastbare Messwerte sind,
-die sich lohnen, einzeln darzustellen.
-Der Übersichtlichkeit halber begrenzen wir uns auf die Darstellung von sehr wenig Personen.</p>
-<div id="spinnendiagramm" class="section level3" number="2.9.1">
-<h3>
-<span class="header-section-number">2.9.1</span> Spinnendiagramm<a class="anchor" aria-label="anchor" href="#spinnendiagramm"><i class="fas fa-link"></i></a>
-</h3>
-<p>Ein Spinnennetz- oder Radardiagramm ist eine Möglichkeit,
-ein Werteprofil einer oder mehrerer Personen gleichzeitig darzustellen.
-Es weißt allerdings gravierende Mängel auf (siehe<a href="https://rpubs.com/Xtophe/268920">hier</a>),
-so dass insgesamt von diesem Diagramm abgeraten werden muss.</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mangothecat/radarchart">radarchart</a></span><span class="op">)</span>
-
-<span class="va">labs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Communicator"</span>, <span class="st">"Data Wangler"</span>, <span class="st">"Programmer"</span>,
-          <span class="st">"Technologist"</span>,  <span class="st">"Modeller"</span>, <span class="st">"Visualizer"</span><span class="op">)</span>
-
-<span class="va">items</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"i01"</span>, <span class="st">"i02r"</span>, <span class="st">"i03"</span>, <span class="st">"i04"</span>, <span class="st">"i05"</span>, <span class="st">"i06"</span><span class="op">)</span>
-
-<span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-  <span class="st">"Anna"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">9</span>, <span class="fl">7</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">7</span><span class="op">)</span>,
-  <span class="st">"Bert"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">7</span>, <span class="fl">6</span>, <span class="fl">6</span>, <span class="fl">2</span>, <span class="fl">6</span>, <span class="fl">9</span><span class="op">)</span>,
-  <span class="st">"Carl"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">5</span>, <span class="fl">8</span>, <span class="fl">4</span>, <span class="fl">7</span>, <span class="fl">6</span><span class="op">)</span>
-<span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/pkg/radarchart/man/chartJSRadar.html">chartJSRadar</a></span><span class="op">(</span>scores <span class="op">=</span> <span class="va">scores</span>, labs <span class="op">=</span> <span class="va">items</span>, maxScale <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="img/radar.png" width="455"></div>
-</div>
-<div id="profildiagramme" class="section level3" number="2.9.2">
-<h3>
-<span class="header-section-number">2.9.2</span> Profildiagramme<a class="anchor" aria-label="anchor" href="#profildiagramme"><i class="fas fa-link"></i></a>
-</h3>
-<p>Definieren wir uns einen Auszug an Personen und Variablen (Items), die in einem Diagramm dargestellt sein sollen.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra_auszug</span> <span class="op">&lt;-</span> <span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">code</span>, <span class="va">i01</span><span class="op">:</span><span class="va">i06r</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span> </code></pre></div>
-<p>Dann überführen wir dieses Diagramm in die “lange” Form:</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra_auszug</span> <span class="op">&lt;-</span> <span class="va">extra_auszug</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="op">-</span><span class="va">code</span>, names_to <span class="op">=</span> <span class="st">"Item"</span>, values_to <span class="op">=</span> <span class="st">"Wert"</span><span class="op">)</span></code></pre></div>
-<p>Jetzt können wir daraus ein Balkendiagramm darstellen:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra_auszug</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Wert</span>, x <span class="op">=</span> <span class="va">Item</span>, fill <span class="op">=</span> <span class="va">code</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">code</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-26-1.png" width="672"></div>
-<p>Dem Skalenniveau der Items kommen Punkte vielleicht besser entgegen als die Balken:</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra_auszug</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Wert</span>, x <span class="op">=</span> <span class="va">Item</span>, color <span class="op">=</span> <span class="va">code</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>group <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">code</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-27-1.png" width="672"></div>
-
-</div>
+<ul>
+<li><code>as.character(i01)</code></li>
+<li><code>d %&gt;% mutate(i01 = as.number(i01))</code></li>
+<li><code>d %&gt;% mutate(i01 = mach_mir_ne_zahl(i01))</code></li>
+<li><code>d %&gt;% mutate(i01 = parse_number(i01))</code></li>
+<li><code>d %&gt;% mutate(i01 = as.numeric(i01))</code></li>
+</ul>
 </div>
 </div>
   <div class="chapter-nav">
 <div class="prev"><a href="index.html"><span class="header-section-number">1</span> Einleitung</a></div>
-<div class="next"><a href="itemanalyse.html"><span class="header-section-number">3</span> Itemanalyse</a></div>
+<div class="next"><a href="solution.html"><span class="header-section-number">3</span> Solution</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
@@ -606,37 +190,9 @@ so dass insgesamt von diesem Diagramm abgeraten werden muss.</p>
 <li><a class="nav-link" href="#r-pakete-1"><span class="header-section-number">2.1</span> R-Pakete</a></li>
 <li><a class="nav-link" href="#daten-1"><span class="header-section-number">2.2</span> Daten</a></li>
 <li><a class="nav-link" href="#%C3%BCberblick"><span class="header-section-number">2.3</span> Überblick</a></li>
-<li><a class="nav-link" href="#daten-umformen"><span class="header-section-number">2.4</span> Daten umformen</a></li>
-<li>
-<a class="nav-link" href="#items-umkodieren"><span class="header-section-number">2.5</span> Items umkodieren</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#vertiefung-duplikate-entfernen"><span class="header-section-number">2.5.1</span> Vertiefung: Duplikate entfernen</a></li></ul>
-</li>
-<li>
-<a class="nav-link" href="#extraversionsscore-berechnen"><span class="header-section-number">2.6</span> Extraversionsscore berechnen</a><ul class="nav navbar-nav">
-<li><a class="nav-link" href="#summen--und-mittelwerte"><span class="header-section-number">2.6.1</span> Summen- und Mittelwerte</a></li>
-<li><a class="nav-link" href="#vertiefung-summen--vs.-mittelwertscores"><span class="header-section-number">2.6.2</span> Vertiefung: Summen- vs. Mittelwertscores</a></li>
-<li><a class="nav-link" href="#berechnung-mit-r"><span class="header-section-number">2.6.3</span> Berechnung mit R</a></li>
-<li><a class="nav-link" href="#z-werte"><span class="header-section-number">2.6.4</span> z-Werte</a></li>
-<li><a class="nav-link" href="#prozentr%C3%A4nge"><span class="header-section-number">2.6.5</span> Prozentränge</a></li>
-</ul>
-</li>
-<li>
-<a class="nav-link" href="#vergleich-mit-normierungsstichprobe"><span class="header-section-number">2.7</span> Vergleich mit Normierungsstichprobe</a><ul class="nav navbar-nav">
-<li><a class="nav-link" href="#anzahl-der-fehlenden-werte"><span class="header-section-number">2.7.1</span> Anzahl der fehlenden Werte</a></li>
-<li><a class="nav-link" href="#vertiefung-fehlende-werte-ersetzen"><span class="header-section-number">2.7.2</span> Vertiefung: Fehlende Werte ersetzen</a></li>
-<li><a class="nav-link" href="#z-werte-auf-basis-der-normierungsstichprobe"><span class="header-section-number">2.7.3</span> z-Werte auf Basis der Normierungsstichprobe</a></li>
-<li><a class="nav-link" href="#konfidenzintervalle-f%C3%BCr-den-personenparameter"><span class="header-section-number">2.7.4</span> Konfidenzintervalle für den Personenparameter</a></li>
-<li><a class="nav-link" href="#visualisierung-der-konfidenzintervalle"><span class="header-section-number">2.7.5</span> Visualisierung der Konfidenzintervalle</a></li>
-</ul>
-</li>
-<li>
-<a class="nav-link" href="#vergleich-vieler-personen-interindividual-differenzierende-diagnostik"><span class="header-section-number">2.8</span> Vergleich vieler Personen (interindividual differenzierende Diagnostik)</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#histogramm"><span class="header-section-number">2.8.1</span> Histogramm</a></li></ul>
-</li>
-<li>
-<a class="nav-link" href="#detaillierte-einzelfalldiagnostik"><span class="header-section-number">2.9</span> Detaillierte Einzelfalldiagnostik</a><ul class="nav navbar-nav">
-<li><a class="nav-link" href="#spinnendiagramm"><span class="header-section-number">2.9.1</span> Spinnendiagramm</a></li>
-<li><a class="nav-link" href="#profildiagramme"><span class="header-section-number">2.9.2</span> Profildiagramme</a></li>
-</ul>
-</li>
+<li><a class="nav-link" href="#brave-daten"><span class="header-section-number">2.4</span> Brave Daten</a></li>
+<li><a class="nav-link" href="#text-in-zahlen-umwandeln"><span class="header-section-number">2.5</span> Text in Zahlen umwandeln</a></li>
+<li><a class="nav-link" href="#answerlist"><span class="header-section-number">2.6</span> Answerlist</a></li>
 </ul>
 
       <div class="book-extra">
@@ -654,7 +210,7 @@ so dass insgesamt von diesem Diagramm abgeraten werden muss.</p>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2022-05-02 21:27:18.</p>
+    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2022-05-25 12:46:24.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

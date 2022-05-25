@@ -132,6 +132,7 @@ library(psych)  # psychometrische Analyse
 ```{r libs-hidden, echo = FALSE}
 library(knitr)
 library(papaja)
+library(tidyverse)
 ```
 
 

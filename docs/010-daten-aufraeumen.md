@@ -57,6 +57,164 @@ Häufig sind Daten noch nicht "aufbereitet" und müssen noch "geputzt" oder "auf
 
 Betrachten wir einige zentrale Aspekte dieser Schritte.
 
+
+## Brave Daten
+
+Wie muss eine Tabelle gestaltet sein,
+damit man sie gut in R importieren kann, bzw. gut damit weiterarbeiten kann?
+
+[Das ist eine gute Quelle](https://www.tandfonline.com/doi/full/10.1080/00031305.2017.1375989) zu diesem Thema.
+
+Im Überblick sollten Sie auf Folgendes achten:
+
+- Wenn Sie händisch Daten eintragen, hacken Sie das einfach in Excel sein.
+- CSV-Dateien bieten sich als Datenformat an.
+- Alternativ kann man auch Excel-Dateien in R importieren.
+- Es muss genau eine Kopfzeile geben.
+- Es darf keine Lücken geben (leere Zeilen oder Spalten oder Zellen).
+- Vermeiden Sie Umlaute und Leerzeichen in den Variablennamen.
+
+
+
+Beachten Sie das Prinzip von "tidy data":
+
+- In jeder Zeile steht *eine Beobachtung*.
+- In jeder Spalte steht *eine Variable*.
+- In jeder Zelle steht *eine Wert*.
+
+
+## Text in Zahlen umwandeln
+
+
+Sie haben eine Umfrage durchgeführt, Daten sind erhoben, puh, bald können Sie das Projekt abschließen.
+
+Jetzt haben Sie die Daten in R importiert,
+aber müssen zu Ihrem Schrecken feststellen,
+dass die Spalten (Variablen) die eigentlich Zahlen sein sollten, 
+als `character`, Text also, formatiert sind in R.
+
+Anstelle der Zahl `5` steht in der Spalte also `"5"` (man beachte die Anführungszeichen, die anzeigen, dass es sich um einen Text handelt).
+
+Na toll.
+
+Mit Wörtern (Text) kann man nicht rechnen, und Sie rechnen doch so gern...
+
+R weigert sich standhaft, mit Text zu rechnen:
+
+
+```r
+"5" + "5"
+#> Error in "5" + "5": non-numeric argument to binary operator
+```
+
+Hätten wir brave Zahlen, wäre alles paletti:
+
+
+```r
+5+5
+#> [1] 10
+```
+
+Der Einfachheit halber erzeugen wir uns eine einfache Tabelle, mit ein paar Spalten,
+die *als Text* formatierte Zahlen enthalten:
+
+
+```r
+library(tidyverse)
+
+d <- tibble(i01 = c("1", "3", "4"),  # von 1 bis 4
+            i02 = c("-2", "+3", "-1"),  # von -3 bis -3
+            i03 = factor(c("-2", "+2", "-1")))  # als Faktorvariable formatiert
+d
+#> # A tibble: 3 × 3
+#>   i01   i02   i03  
+#>   <chr> <chr> <fct>
+#> 1 1     -2    -2   
+#> 2 3     +3    +2   
+#> 3 4     -1    -1
+```
+
+Für diejenigen, die kompliziert mögen, ist hier noch eine `factor`-Spalte hinzugefügt. Erstmal ignorieren.
+
+Stellen Sie sich vor, die Tabelle ist ein Auszug aus Ihrer Umfrage,
+wobei `i01` das erste Item (Frage) Ihres Fragebogens darstellt etc.
+
+
+Wie kann man R beibringen, 
+dass die fraglichen Spalte `i01` doch "in Wirklichkeit" Zahlen sind und kein Text?
+
+Welcher R-Befehl hilft hier? Wählen Sie die am besten passende Antwort!
+
+Answerlist
+----------
+* `as.character(i01)`
+* `d %>% mutate(i01 = as.number(i01))`
+* `d %>% mutate(i01 = mach_mir_ne_zahl(i01))`
+* `d %>% mutate(i01 = parse_number(i01))`
+* `d %>% mutate(i01 = as.numeric(i01))`
+
+
+
+Solution
+========
+
+
+```r
+d2 <- 
+  d %>% 
+  mutate(i01 = parse_number(i01))
+d
+#> # A tibble: 3 × 3
+#>   i01   i02   i03  
+#>   <chr> <chr> <fct>
+#> 1 1     -2    -2   
+#> 2 3     +3    +2   
+#> 3 4     -1    -1
+```
+
+So würde es *in einigen Fällen* auch gehen:
+
+
+```r
+d %>% mutate(i01_r = as.numeric(i01))
+#> # A tibble: 3 × 4
+#>   i01   i02   i03   i01_r
+#>   <chr> <chr> <fct> <dbl>
+#> 1 1     -2    -2        1
+#> 2 3     +3    +2        3
+#> 3 4     -1    -1        4
+```
+
+Aber wenn `i01` als `factor()` formatiert ist, dann geht es nicht unbedingt.
+
+
+```r
+d %>% mutate(i02_r = as.numeric(factor(i02)))
+#> # A tibble: 3 × 4
+#>   i01   i02   i03   i02_r
+#>   <chr> <chr> <fct> <dbl>
+#> 1 1     -2    -2        2
+#> 2 3     +3    +2        3
+#> 3 4     -1    -1        1
+```
+Hoppla! Die Zahlen passen nicht!
+
+`parse_number()` verlangt als Input `character`,
+so dass Sie ggf. noch von `factor` auf `character` umformatieren müssen.
+
+
+```r
+d %>% mutate(i03_r = parse_number(as.character(i03)))
+#> # A tibble: 3 × 4
+#>   i01   i02   i03   i03_r
+#>   <chr> <chr> <fct> <dbl>
+#> 1 1     -2    -2       -2
+#> 2 3     +3    +2        2
+#> 3 4     -1    -1       -1
+```
+
+
+
 ## Daten umformen
 
 In einer Fragebogenstudie (oder vergleichbarer Studie) liegen in der Regel pro Respondent (allgemeiner: pro Beobachtung) eine Reihe von Antworten auf Fragebogen-Items vor. 
@@ -132,7 +290,7 @@ extra %>%
 
 
 
-### Vertiefung: Duplikate entfernen
+<!-- ### Vertiefung: Duplikate entfernen -->
 
 
 ## Extraversionsscore berechnen
@@ -506,7 +664,7 @@ extra %>%
   geom_pointrange()
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-21-1.png" width="672" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-28-1.png" width="672" />
 
 
 `geom_pointrange()` zeichnet einen vertikalen (Fehler-)balken sowie einen Punkt in der Mitte; 
@@ -532,7 +690,7 @@ extra %>%
 #> (stat_bin).
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-22-1.png" width="672" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-29-1.png" width="672" />
 
 
 Möchte man mehrere Gruppen vergleichen, so ist der Boxplot eine geeignete Visualisierung:
@@ -546,7 +704,7 @@ extra %>%
 #> (stat_boxplot).
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-23-1.png" width="672" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-30-1.png" width="672" />
 
 
 <!-- Eine Variante, etwas aufgebügelt: -->
@@ -661,7 +819,7 @@ extra_auszug %>%
   facet_wrap(~ code)
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-26-1.png" width="672" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-33-1.png" width="672" />
 
 Dem Skalenniveau der Items kommen Punkte vielleicht besser entgegen als die Balken:
 
@@ -674,6 +832,6 @@ extra_auszug %>%
   facet_wrap(~ code)
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-27-1.png" width="672" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-34-1.png" width="672" />
 
 

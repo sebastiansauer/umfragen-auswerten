@@ -1,7 +1,7 @@
 --- 
 title: "Umfragen auswerten"
 author: "Sebastian Sauer"
-date: "2022-05-02 21:27:18"
+date: "2022-05-25 12:46:24"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
@@ -25,17 +25,20 @@ biblio-style: apalike
 
 
 
-Fragebogendaten zu psychologischen Variablen (wie z.B. Extraversion), die wissenschaftlichen Ansprüchen genügen, bezeichnet man als *psychometrische Daten* [vgl. @Steyer1993]. i
+Fragebogendaten zu psychologischen Variablen (wie z.B. Extraversion), die wissenschaftlichen Ansprüchen genügen, bezeichnet man als *psychometrische Daten* [vgl. @Steyer1993]. 
 Der Analyse psychometrischer Daten kommt große Bedeutung innerhalb der Psychologie (und angrenzender Gebiete wie Marketing) zu. 
 Der Grund ist, dass Daten häufig in Form von Fragebogen, psychometrischer Fragebogen, erhoben werden. 
-Besonders für Persönlichkeitskonstrukte und Einstellungen, kurz für Fragestellungen der Persönlichkeitspsychologie und, davon abgeleitet, der Diagnostik, erfreuen sie sich weiter Verbreitung.
+Besonders für Persönlichkeitskonstrukte und Einstellungen, kurz für Fragestellungen der Persönlichkeitspsychologie und, davon abgeleitet, der Diagnostik, 
+erfreuen sie sich weiter Verbreitung.
 
 
 Ziel dieses Beitrags ist es, eine praktische Anleitung für typische (und grundlegende) psychometrischen Analysen mittels R zu geben. 
-Dabei soll demonstriert und erläutert werden, welche Analysen und wie durchgeführt werden in einer grundständigen psychometrischen Analyse. 
+Dabei soll demonstriert und erläutert werden, welche Analysen und wie durchgeführt werden 
+in einer grundständigen psychometrischen Analyse. 
 Es wird sowohl der Einzelfall-Diagnostik Rechnung getragen, als auch der Testvalidierung. 
 Anders gesagt, dieses Dokument hilft, u.a. folgende Fragen zu beantworten: 
-"Wie leistungsfähig war der Applikant im Vergleich zu seiner Referenzgruppe?", "Wie ist die Qualität dieses Testverfahrens einzuschätzen?".
+"Wie leistungsfähig war der Applikant im Vergleich zu seiner Referenzgruppe?", 
+"Wie ist die Qualität dieses Testverfahrens einzuschätzen?".
 
 *Test* wird hier verstanden sensu @Lienert1998 (S. 14f): 
 
@@ -190,7 +193,7 @@ Sessioninfo:
 
 
 
-- Datum: 2022-05-02
-- R-Version: R version 4.1.3 (2022-03-10)
+- Datum: 2022-05-25
+- R-Version: R version 4.2.0 (2022-04-22)
 - Betriebssystem: 
 

@@ -86,7 +86,9 @@ Beachten Sie das Prinzip von "tidy data":
 ## Text in Zahlen umwandeln
 
 
-Sie haben eine Umfrage durchgeführt, Daten sind erhoben, puh, bald können Sie das Projekt abschließen.
+### Hilfe, ich habe keine Zahlen
+
+Kennen Sie das? Sie haben eine Umfrage durchgeführt, Daten sind erhoben, puh, bald können Sie das Projekt abschließen.
 
 Jetzt haben Sie die Daten in R importiert,
 aber müssen zu Ihrem Schrecken feststellen,
@@ -143,20 +145,12 @@ wobei `i01` das erste Item (Frage) Ihres Fragebogens darstellt etc.
 Wie kann man R beibringen, 
 dass die fraglichen Spalte `i01` doch "in Wirklichkeit" Zahlen sind und kein Text?
 
-Welcher R-Befehl hilft hier? Wählen Sie die am besten passende Antwort!
+Welcher R-Befehl hilft hier? 
 
-Answerlist
-----------
-* `as.character(i01)`
-* `d %>% mutate(i01 = as.number(i01))`
-* `d %>% mutate(i01 = mach_mir_ne_zahl(i01))`
-* `d %>% mutate(i01 = parse_number(i01))`
-* `d %>% mutate(i01 = as.numeric(i01))`
+### Introducing `parse_number()`
 
+`parse_number()` (aus `{tidyverse}`) löst das Problem für Sie:
 
-
-Solution
-========
 
 
 ```r

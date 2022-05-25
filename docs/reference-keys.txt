@@ -16,8 +16,8 @@ daten-1
 überblick
 brave-daten
 text-in-zahlen-umwandeln
-answerlist
-solution
+hilfe-ich-habe-keine-zahlen
+introducing-parse_number
 daten-umformen
 items-umkodieren
 extraversionsscore-berechnen

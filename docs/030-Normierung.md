@@ -4,23 +4,7 @@
 
 
 
-```{r knitr-setup, echo = FALSE}
-knitr::opts_chunk$set(
-  comment = "#>",
-  collapse = TRUE,
-  message = FALSE,
-  warning = FALSE,
-  cache = TRUE,
-  out.width = "70%",
-  fig.align = 'center',
-  fig.width = 6,
-  fig.asp = 0.618,  # 1 / phi
-  fig.show = "hold",
-  # size = "tiny",
-  tidy.opts=list(width.cutoff = 80) #,
-  # tidy=TRUE
-)
-```
+
 
 
 
@@ -30,7 +14,8 @@ knitr::opts_chunk$set(
 In diesem Kapitel benötigen wir folgende R-Pakete:
 
 
-```{r message=FALSE}
+
+```r
 library(tidyverse)  # Datenjudo
 library(sjmisc)  # Datenhausmeister
 library(mice)  # fehlende Daten imputieren
@@ -41,7 +26,8 @@ library(mice)  # fehlende Daten imputieren
 
 
   
-```{r load-extra-web}
+
+```r
 data_url <- "https://raw.githubusercontent.com/sebastiansauer/modar/master/datasets/extra.csv"
 extra <- read_csv(data_url)
 ```
@@ -59,7 +45,8 @@ nicht heruntergebrochen auf Geschlechter- oder Altersgruppen. Für Extraversion 
 Auf Errisch:
   
   
-```{r}
+
+```r
 extra_sum_normstipro <- 26.67
 extra_sd_normstipro <- 5.74
 ```
@@ -77,10 +64,15 @@ Bevor wir den Vergleich mit der Normierungsstichprobe heranziehen können, müss
 
 Eine Möglichkeit, fehlende Werte zu zählen, sieht so aus:
   
-```{r}
+
+```r
 extra %>% 
   row_count(i01:i10, count = "na") %>% 
   count(rowcount)
+#> # A tibble: 1 × 2
+#>   rowcount     n
+#>      <int> <int>
+#> 1        0   826
 ```
 
 Wir haben Glück; es gibt keine fehlenden Werte in diesem Datensatz. 
@@ -96,7 +88,8 @@ die fehlenden Werte durch den Mittelwert des Items zu ersetzen.
 Ein Item wurde im Schnitt mit 3,2 beantwortet, aber für Alois fehlt der Wert? 
   Okay, ersetzen wir den fehlenden Wert für dieses Items mit 3,2.
 
-```{r}
+
+```r
 daten <- data_frame(
   namen = c("Alois", "Bertram", "Zenzi"),
   i1 = c(1, 1, NA),
@@ -105,14 +98,48 @@ daten <- data_frame(
 )
 
 daten
+#> # A tibble: 3 × 4
+#>   namen      i1    i2    i3
+#>   <chr>   <dbl> <dbl> <dbl>
+#> 1 Alois       1     3    NA
+#> 2 Bertram     1     2     2
+#> 3 Zenzi      NA    NA     4
 ```
 
 Für `i1` ist "1" eine plausible Schätzung für den fehlenden Wert, bei `i2` ist "3" sinnvoll und bei `i3` "4", also jeweils der Zeilenmittelwert.
 
-```{r}
+
+```r
 daten_imp <- 
   daten %>% 
   mice(method = "mean")
+#> 
+#>  iter imp variable
+#>   1   1  i2  i3
+#>   1   2  i2  i3
+#>   1   3  i2  i3
+#>   1   4  i2  i3
+#>   1   5  i2  i3
+#>   2   1  i2  i3
+#>   2   2  i2  i3
+#>   2   3  i2  i3
+#>   2   4  i2  i3
+#>   2   5  i2  i3
+#>   3   1  i2  i3
+#>   3   2  i2  i3
+#>   3   3  i2  i3
+#>   3   4  i2  i3
+#>   3   5  i2  i3
+#>   4   1  i2  i3
+#>   4   2  i2  i3
+#>   4   3  i2  i3
+#>   4   4  i2  i3
+#>   4   5  i2  i3
+#>   5   1  i2  i3
+#>   5   2  i2  i3
+#>   5   3  i2  i3
+#>   5   4  i2  i3
+#>   5   5  i2  i3
 
 daten2 <- complete(daten_imp, 1)
 ```
@@ -126,7 +153,8 @@ Wie wir sehen, wurde in jeder *Spalte* jeder fehlende Wert durch den Spalten-Mit
 
 Im Handbuch sind, wie oben beschrieben, nur Mittelwert und Streuung des *Summen*werts, nicht des *Mittel*werts angegeben, also müssen wir mit diesen Werten arbeiten:
   
-```{r}
+
+```r
 extra <- extra %>% 
   row_sums(i01:i10, n = .9, var = "extra_sum")
 ```
@@ -134,7 +162,8 @@ extra <- extra %>%
 
 Zuerst berechnen wir von Hand den z-Score auf Basis der Normierungsstichprobe:
   
-```{r}
+
+```r
 extra <- extra %>% 
   mutate(extra_z_normstipro = (extra_sum - extra_sum_normstipro) / extra_sd_normstipro) %>% 
   mutate(extra_percrank_normstipro = pnorm(extra_z_normstipro)) 
@@ -142,6 +171,14 @@ extra <- extra %>%
 extra %>% 
   select(extra_z_normstipro, extra_percrank_normstipro) %>% 
   slice_head(n = 5)
+#> # A tibble: 5 × 2
+#>   extra_z_normstipro extra_percrank_normstipro
+#>                <dbl>                     <dbl>
+#> 1              0.406                     0.658
+#> 2             -0.988                     0.162
+#> 3             -0.117                     0.454
+#> 4              0.406                     0.658
+#> 5              0.929                     0.823
 ```
 
 

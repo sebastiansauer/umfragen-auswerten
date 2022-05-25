@@ -1,6 +1,10 @@
 # Daten aufräumen
 
 
+
+
+
+
 ## R-Pakete
 
 
@@ -29,15 +33,6 @@ library(mice)  # Fehlende Werte ersetzen
 ```r
 data_url <- "https://raw.githubusercontent.com/sebastiansauer/modar/master/datasets/extra.csv"
 extra <- read_csv(data_url)
-#> Rows: 826 Columns: 34
-#> ── Column specification ────────────────────────────────────
-#> Delimiter: ","
-#> chr  (8): timestamp, code, sex, presentation, clients, e...
-#> dbl (25): i01, i02r, i03, i04, i05, i06r, i07, i08, i09,...
-#> lgl  (1): i21
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ```
 
 
@@ -436,167 +431,6 @@ extra_std %>%
 Mit der letzten Zeile - `filter(...)` haben wir uns das extremste Prozent (hälftig unten und oben) ausgewählt.
 
 
-## Vergleich mit Normierungsstichprobe
-
-
-@Satow2012 berichtet Normierungswerte, leider aber nur für die Allgemeinbevölkerung, 
-nicht heruntergebrochen auf Geschlechter- oder Altersgruppen. Für Extraversion berichtet er folgende Daten:
-
-- Summenscore: 26,67 
-- Standardabweichung: 5,74
-
-
-Auf Errisch:
-
-
-
-```r
-extra_sum_normstipro <- 26.67
-extra_sd_normstipro <- 5.74
-```
-
-
-
-Ob die Daten normal verteilt sind, wird in der Publikation nicht erwähnt. 
-Wir gehen im Folgenden davon aus. Allerdings ist es ein Manko, wenn diese Information nicht gegeben ist. 
-Weiter berichtet @Satow2012 nicht, ob fehlende Werte die Summenscores verringert haben bzw. wie er ggf. mit diesem Problem umgegangen ist. 
-Bevor wir den Vergleich mit der Normierungsstichprobe heranziehen können, müssen wir uns um fehlende Werte kümmern.
-
-
-### Anzahl der fehlenden Werte
-
-
-Eine Möglichkeit, fehlende Werte zu zählen, sieht so aus:
-
-
-```r
-extra %>% 
-  row_count(i01:i10, count = "na") %>% 
-  count(rowcount)
-#> # A tibble: 1 × 2
-#>   rowcount     n
-#>      <int> <int>
-#> 1        0   826
-```
-
-Wir haben Glück; es gibt keine fehlenden Werte in diesem Datensatz. 
-Aber haben wir wirklich Glück? Vermutlich wurden die Respondenten gezwungen, alle Fragen zu beantworten. 
-Vielleicht wurden sie damit ordentlich genervt und haben zur Strafe Blümchen gekreuzt? 
-Wir wissen es nicht genau, sollten aber die Datenqualität noch einmal überprüfen.
-
-
-### Vertiefung: Fehlende Werte ersetzen
-
-Das Ersetzen fehlender Werte ist eine Wissenschaft für sich, aber ein einfacher (alldieweil nicht optimaler) Weg besteht darin, 
-die fehlenden Werte durch den Mittelwert des Items zu ersetzen. 
-Ein Item wurde im Schnitt mit 3,2 beantwortet, aber für Alois fehlt der Wert? 
-Okay, ersetzen wir den fehlenden Wert für dieses Items mit 3,2.
-
-
-```r
-daten <- data_frame(
-  namen = c("Alois", "Bertram", "Zenzi"),
-  i1 = c(1, 1, NA),
-  i2 = c(3, 2, NA),
-  i3 = c(NA, 2, 4)
-)
-#> Warning: `data_frame()` was deprecated in tibble 1.1.0.
-#> Please use `tibble()` instead.
-#> This warning is displayed once every 8 hours.
-#> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.
-
-daten
-#> # A tibble: 3 × 4
-#>   namen      i1    i2    i3
-#>   <chr>   <dbl> <dbl> <dbl>
-#> 1 Alois       1     3    NA
-#> 2 Bertram     1     2     2
-#> 3 Zenzi      NA    NA     4
-```
-
-Für `i1` ist "1" eine plausible Schätzung für den fehlenden Wert, bei `i2` ist "3" sinnvoll und bei `i3` "4", also jeweils der Zeilenmittelwert.
-
-
-```r
-daten_imp <- 
-daten %>% 
-  mice(method = "mean")
-#> 
-#>  iter imp variable
-#>   1   1  i2  i3
-#>   1   2  i2  i3
-#>   1   3  i2  i3
-#>   1   4  i2  i3
-#>   1   5  i2  i3
-#>   2   1  i2  i3
-#>   2   2  i2  i3
-#>   2   3  i2  i3
-#>   2   4  i2  i3
-#>   2   5  i2  i3
-#>   3   1  i2  i3
-#>   3   2  i2  i3
-#>   3   3  i2  i3
-#>   3   4  i2  i3
-#>   3   5  i2  i3
-#>   4   1  i2  i3
-#>   4   2  i2  i3
-#>   4   3  i2  i3
-#>   4   4  i2  i3
-#>   4   5  i2  i3
-#>   5   1  i2  i3
-#>   5   2  i2  i3
-#>   5   3  i2  i3
-#>   5   4  i2  i3
-#>   5   5  i2  i3
-#> Warning: Number of logged events: 62
-
-daten2 <- complete(daten_imp, 1)
-```
-
-
-Wie wir sehen, wurde in jeder *Spalte* jeder fehlende Wert durch den Spalten-Mittelwert ersetzt.
-
-
-
-### z-Werte auf Basis der Normierungsstichprobe
-
-Im Handbuch sind, wie oben beschrieben, nur Mittelwert und Streuung des *Summen*werts, nicht des *Mittel*werts angegeben, also müssen wir mit diesen Werten arbeiten:
-
-
-```r
-extra <- extra %>% 
-  row_sums(i01:i10, n = .9, var = "extra_sum")
-```
-
-
-Zuerst berechnen wir von Hand den z-Score auf Basis der Normierungsstichprobe:
-
-
-```r
-extra <- extra %>% 
-  mutate(extra_z_normstipro = (extra_sum - extra_sum_normstipro) / extra_sd_normstipro) %>% 
-  mutate(extra_percrank_normstipro = pnorm(extra_z_normstipro)) 
-
-extra %>% 
-  select(extra_z_normstipro, extra_percrank_normstipro) %>% 
-  slice_head(n = 5)
-#> # A tibble: 5 × 2
-#>   extra_z_normstipro extra_percrank_normstipro
-#>                <dbl>                     <dbl>
-#> 1              0.406                     0.658
-#> 2             -0.988                     0.162
-#> 3             -0.117                     0.454
-#> 4              0.406                     0.658
-#> 5              0.929                     0.823
-```
-
-
-### Konfidenzintervalle für den Personenparameter
-
-
-Sicherlich ist unsere Messung der Extraversion nicht perfekt; wir müssen davon ausgehen, dass ein Messfehler vorliegt. Eine Berechnungsvorschrift für den Messfehler sieht so aus [@Buhner2011]:
-
-$$\sigma^2_{E_X} = \sigma^2_X \cdot(1-\rho_{tt})$$
 
 Dabei ist $\sigma^2_{E_X}$ der quadrierte Standardmessfehler, $\sigma^2_X$ die Varianz des Messwerts und $\rho_{tt}$ die Reliabilität des Messwerts. Die Wurzel daraus ist der sog. *Standardmessfehler*:
 
@@ -616,9 +450,9 @@ Berechnen wir nun mit Hilfe von R den Standardmessfehler:
 
 
 ```r
-extra_stdmessfehler = sd(extra$extra_sum, na.rm = TRUE) * sqrt(1 - extra_alpha)
+extra_stdmessfehler = sd(extra$extra_mean, na.rm = TRUE) * sqrt(1 - extra_alpha)
 extra_stdmessfehler
-#> [1] 1.62972
+#> [1] 0.1628459
 ```
 
 
@@ -628,18 +462,18 @@ Jetzt, da wir den Standardmessfehler kennen, können wir in gewohnter Manier "li
 
 ```r
 extra <- extra %>% 
-  mutate(KI_unten = extra_sum - 2*extra_stdmessfehler,
-         KI_oben = extra_sum + 2*extra_stdmessfehler)
+  mutate(KI_unten = extra_mean - 2*extra_stdmessfehler,
+         KI_oben = extra_mean + 2*extra_stdmessfehler)
 
 extra %>% 
-  select(KI_unten, extra_sum, KI_oben) %>% 
+  select(KI_unten, extra_mean, KI_oben) %>% 
   slice_head(n = 3)
 #> # A tibble: 3 × 3
-#>   KI_unten extra_sum KI_oben
-#>      <dbl>     <dbl>   <dbl>
-#> 1     25.7        29    32.3
-#> 2     17.7        21    24.3
-#> 3     22.7        26    29.3
+#>   KI_unten extra_mean KI_oben
+#>      <dbl>      <dbl>   <dbl>
+#> 1     2.57        2.9    3.23
+#> 2     1.77        2.1    2.43
+#> 3     2.27        2.6    2.93
 ```
 
 
@@ -654,11 +488,11 @@ Eine Visualisierung der Konfidenzintervalle kann ansprechend sein; hier ist eine
 extra %>% 
   slice_head(n = 5) %>% 
   ggplot() +
-  aes(y = extra_sum, ymin = KI_unten, ymax = KI_oben, x = code) +
+  aes(y = extra_mean, ymin = KI_unten, ymax = KI_oben, x = code) +
   geom_pointrange()
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-28-1.png" width="672" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-22-1.png" width="70%" style="display: block; margin: auto;" />
 
 
 `geom_pointrange()` zeichnet einen vertikalen (Fehler-)balken sowie einen Punkt in der Mitte; 
@@ -676,15 +510,11 @@ Eine grundlegende Visualisierung für eine Verteilung - wie z.B. die Testergebni
 
 ```r
 extra %>% 
-  ggplot(aes(x = extra_sum)) +
+  ggplot(aes(x = extra_mean)) +
   geom_histogram()
-#> `stat_bin()` using `bins = 30`. Pick better value with
-#> `binwidth`.
-#> Warning: Removed 7 rows containing non-finite values
-#> (stat_bin).
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-29-1.png" width="672" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-23-1.png" width="70%" style="display: block; margin: auto;" />
 
 
 Möchte man mehrere Gruppen vergleichen, so ist der Boxplot eine geeignete Visualisierung:
@@ -692,13 +522,11 @@ Möchte man mehrere Gruppen vergleichen, so ist der Boxplot eine geeignete Visua
 
 ```r
 extra %>% 
-  ggplot(aes(y = extra_sum, x = sex)) +
+  ggplot(aes(y = extra_mean, x = sex)) +
   geom_boxplot()
-#> Warning: Removed 7 rows containing non-finite values
-#> (stat_boxplot).
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-30-1.png" width="672" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-24-1.png" width="70%" style="display: block; margin: auto;" />
 
 
 <!-- Eine Variante, etwas aufgebügelt: -->
@@ -780,7 +608,7 @@ chartJSRadar(scores = scores, labs = items, maxScale = 10)
 ```
 
 
-<img src="img/radar.png" width="455" />
+<img src="img/radar.png" width="70%" style="display: block; margin: auto;" />
 
 
 ### Profildiagramme
@@ -813,7 +641,7 @@ extra_auszug %>%
   facet_wrap(~ code)
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-33-1.png" width="672" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-27-1.png" width="70%" style="display: block; margin: auto;" />
 
 Dem Skalenniveau der Items kommen Punkte vielleicht besser entgegen als die Balken:
 
@@ -826,6 +654,6 @@ extra_auszug %>%
   facet_wrap(~ code)
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-34-1.png" width="672" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-28-1.png" width="70%" style="display: block; margin: auto;" />
 
 

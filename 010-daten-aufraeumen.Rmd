@@ -1,6 +1,26 @@
 # Daten aufräumen
 
 
+
+
+```{r knitr-setup, echo = FALSE}
+knitr::opts_chunk$set(
+  comment = "#>",
+  collapse = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = TRUE,
+  out.width = "70%",
+  fig.align = 'center',
+  fig.width = 6,
+  fig.asp = 0.618,  # 1 / phi
+  fig.show = "hold",
+  # size = "tiny",
+  tidy.opts=list(width.cutoff = 80) #,
+  # tidy=TRUE
+)
+```
+
 ## R-Pakete
 
 
@@ -352,7 +372,7 @@ extra_alpha <- .87
 Berechnen wir nun mit Hilfe von R den Standardmessfehler:
 
 ```{r}
-extra_stdmessfehler = sd(extra$extra_sum, na.rm = TRUE) * sqrt(1 - extra_alpha)
+extra_stdmessfehler = sd(extra$extra_mean, na.rm = TRUE) * sqrt(1 - extra_alpha)
 extra_stdmessfehler
 ```
 
@@ -362,11 +382,11 @@ Jetzt, da wir den Standardmessfehler kennen, können wir in gewohnter Manier "li
 
 ```{r}
 extra <- extra %>% 
-  mutate(KI_unten = extra_sum - 2*extra_stdmessfehler,
-         KI_oben = extra_sum + 2*extra_stdmessfehler)
+  mutate(KI_unten = extra_mean - 2*extra_stdmessfehler,
+         KI_oben = extra_mean + 2*extra_stdmessfehler)
 
 extra %>% 
-  select(KI_unten, extra_sum, KI_oben) %>% 
+  select(KI_unten, extra_mean, KI_oben) %>% 
   slice_head(n = 3)
 ```
 
@@ -381,7 +401,7 @@ Eine Visualisierung der Konfidenzintervalle kann ansprechend sein; hier ist eine
 extra %>% 
   slice_head(n = 5) %>% 
   ggplot() +
-  aes(y = extra_sum, ymin = KI_unten, ymax = KI_oben, x = code) +
+  aes(y = extra_mean, ymin = KI_unten, ymax = KI_oben, x = code) +
   geom_pointrange()
 ```
 
@@ -400,7 +420,7 @@ Eine grundlegende Visualisierung für eine Verteilung - wie z.B. die Testergebni
 
 ```{r}
 extra %>% 
-  ggplot(aes(x = extra_sum)) +
+  ggplot(aes(x = extra_mean)) +
   geom_histogram()
 ```
 
@@ -409,7 +429,7 @@ Möchte man mehrere Gruppen vergleichen, so ist der Boxplot eine geeignete Visua
 
 ```{r}
 extra %>% 
-  ggplot(aes(y = extra_sum, x = sex)) +
+  ggplot(aes(y = extra_mean, x = sex)) +
   geom_boxplot()
 ```
 

@@ -500,116 +500,6 @@ als Parameter werden der mittlere Wert, die untere Grenze und die obere Grenze a
 
 
 
-## Vergleich vieler Personen (interindividual differenzierende Diagnostik)
-
-
-### Histogramm
-
-Eine grundlegende Visualisierung für eine Verteilung - wie z.B. die Testergebnisse einer Stichprobe an Bewerbern - ist ein Histogramm:
-
-
-```r
-extra %>% 
-  ggplot(aes(x = extra_mean)) +
-  geom_histogram()
-```
-
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-23-1.png" width="70%" style="display: block; margin: auto;" />
-
-
-Möchte man mehrere Gruppen vergleichen, so ist der Boxplot eine geeignete Visualisierung:
-
-
-```r
-extra %>% 
-  ggplot(aes(y = extra_mean, x = sex)) +
-  geom_boxplot()
-```
-
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-24-1.png" width="70%" style="display: block; margin: auto;" />
-
-
-<!-- Eine Variante, etwas aufgebügelt: -->
-
-
-<!-- ```{r} -->
-<!-- extra %>%  -->
-<!--   mutate(sex = factor(sex)) %>%  -->
-<!--   ggbetweenstats(data = extra, -->
-<!--   x = sex,  -->
-<!--   y = extra_mean -->
-<!-- ) -->
-<!-- ``` -->
-
-<!-- Hier werden noch einige (Test-)statistiken angegeben. -->
-
-<!-- ### Dotplot -->
-
-<!-- Ein häufiges Szenario in der Diagnostik ist die vergleichende Analyse einer Reihe von Personen z.B. Bewerbern. Bringen wir die Gesamtwerte einer Auswahl von Personen in ein Diagramm. Ein "Dotplot" ist dazu eine interessante Möglichkeit: -->
-
-
-<!-- ```{r fig.asp = 1} -->
-<!-- extra %>%  -->
-<!--   slice(1:20) %>%  -->
-<!-- ggdotplotstats( -->
-<!--   y = code, -->
-<!--   x = extra_mean, -->
-<!--   test.value = 25, -->
-<!--   test.value.line = TRUE, -->
-<!--   test.line.labeller = TRUE, -->
-<!--   test.value.color = "red", -->
-<!--   centrality.para = "median", -->
-<!--   centrality.k = 0, -->
-<!--   title = "Verteilung der Testwerte der Bewerber", -->
-<!--   xlab = "Testergebnis", -->
-<!--   bf.message = TRUE, -->
-<!--   messages = FALSE -->
-<!-- ) -->
-<!-- ``` -->
-
-
-
-## Detaillierte Einzelfalldiagnostik
-
-
-Bisher haben wir *einen* Wert pro Person ausgerechnet; 
-in einigen Fällen wird man daran interessiert sein, *mehrere* Werte einer Person (bzw. einer Beobachtungseinheit) zu berechnen, um ein Profil zu erstellen. 
-Gehen wir im Folgenden davon aus, dass die einzelnen 10 Items der Extraversionsskala hinreichend belastbare Messwerte sind, 
-die sich lohnen, einzeln darzustellen. 
-Der Übersichtlichkeit halber begrenzen wir uns auf die Darstellung von sehr wenig Personen.
-
-
-### Spinnendiagramm
-
-
-Ein Spinnennetz- oder Radardiagramm ist eine Möglichkeit, 
-ein Werteprofil einer oder mehrerer Personen gleichzeitig darzustellen. 
-Es weißt allerdings gravierende Mängel auf (siehe[hier](https://rpubs.com/Xtophe/268920)), 
-so dass insgesamt von diesem Diagramm abgeraten werden muss.
-
-
-
-
-```r
-library(radarchart)
-
-labs <- c("Communicator", "Data Wangler", "Programmer",
-          "Technologist",  "Modeller", "Visualizer")
-
-items <- c("i01", "i02r", "i03", "i04", "i05", "i06")
-
-scores <- list(
-  "Anna" = c(9, 7, 4, 5, 3, 7),
-  "Bert" = c(7, 6, 6, 2, 6, 9),
-  "Carl" = c(6, 5, 8, 4, 7, 6)
-)
-
-chartJSRadar(scores = scores, labs = items, maxScale = 10)
-```
-
-
-<img src="img/radar.png" width="70%" style="display: block; margin: auto;" />
-
 
 ### Profildiagramme
 
@@ -641,7 +531,7 @@ extra_auszug %>%
   facet_wrap(~ code)
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-27-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-25-1.png" width="70%" style="display: block; margin: auto;" />
 
 Dem Skalenniveau der Items kommen Punkte vielleicht besser entgegen als die Balken:
 
@@ -654,6 +544,6 @@ extra_auszug %>%
   facet_wrap(~ code)
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-28-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-26-1.png" width="70%" style="display: block; margin: auto;" />
 
 

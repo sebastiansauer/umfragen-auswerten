@@ -1,7 +1,7 @@
 --- 
 title: "Umfragen auswerten"
 author: "Sebastian Sauer"
-date: "2022-05-25 14:27:00"
+date: "2022-05-25 21:07:59"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
@@ -70,7 +70,9 @@ Eine praktische Einführung zu Datenanalyse bietet [ModernDive](https://moderndi
 
 ## Messinstrument
 
-Es wird ein Datensatz zur Extraversion analysiert. Extraversion wurde operationalisiert mit dem Inventar *B5T* von Satow REF^[vgl. <https://www.drsatow.de/tests/persoenlichkeitstest/>]. Das Instrument besteht aus 10 Items mit vier Likert-Antwortstufen (von "trifft gar nicht zu" bis "trifft voll und ganz zu") und ist für Forschungszwecke kostenlos nutzbar^[https://www.drsatow.de/tests/persoenlichkeitstest/]:
+Es wird ein Datensatz zur Extraversion analysiert. 
+Extraversion wurde operationalisiert mit dem Inventar *B5T* von Satow [@satow_b5t_2020]. 
+Das Instrument besteht aus 10 Items mit vier Likert-Antwortstufen (von "trifft gar nicht zu" bis "trifft voll und ganz zu") und ist für Forschungszwecke kostenlos nutzbar^[https://www.drsatow.de/tests/persoenlichkeitstest/]:
   
   >    der B5T ist als Paper-Pencil-Version, Excel-Version sowie als Online-Version verfügbar und kann für nichtkommerzielle Forschungs- und für Unterrichtszwecke kostenlos verwendet werden. Der B5T wurde offiziell in die PSYNDEX-Testdatenbank (Tests-Nr. 9006357) und in das elektronische Testarchiv des Leibniz-Zentrums für Psychologische Information und Dokumentation (ZPID) aufgenommen.
 
@@ -193,7 +195,7 @@ Sessioninfo:
 
 
 
-- Datum: 2022-05-25
-- R-Version: R version 4.2.0 (2022-04-22)
+- Datum: 2022-05-02
+- R-Version: R version 4.1.3 (2022-03-10)
 - Betriebssystem: 
 

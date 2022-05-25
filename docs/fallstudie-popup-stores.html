@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Kapitel 3 Fallstudie Popup-Stores | Umfragen auswerten</title>
+<meta name="author" content="Sebastian Sauer">
+<meta name="description" content="3.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # Datenhausmeister library(janitor) # Auch ein Hausmeister library(easystats) # Stats...">
+<meta name="generator" content="bookdown 0.26.2 with bs4_book()">
+<meta property="og:title" content="Kapitel 3 Fallstudie Popup-Stores | Umfragen auswerten">
+<meta property="og:type" content="book">
+<meta property="og:description" content="3.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # Datenhausmeister library(janitor) # Auch ein Hausmeister library(easystats) # Stats...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kapitel 3 Fallstudie Popup-Stores | Umfragen auswerten">
+<meta name="twitter:description" content="3.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # Datenhausmeister library(janitor) # Auch ein Hausmeister library(easystats) # Stats...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><link href="libs/tabwid-1.0.0/tabwid.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<style type="text/css">
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Umfragen auswerten</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html"><span class="header-section-number">1</span> Einleitung</a></li>
+<li><a class="" href="daten-aufr%C3%A4umen.html"><span class="header-section-number">2</span> Daten aufräumen</a></li>
+<li><a class="active" href="fallstudie-popup-stores.html"><span class="header-section-number">3</span> Fallstudie Popup-Stores</a></li>
+<li><a class="" href="normierung.html"><span class="header-section-number">4</span> Normierung</a></li>
+<li><a class="" href="diagnostische-kennwerte.html"><span class="header-section-number">5</span> Diagnostische Kennwerte</a></li>
+<li><a class="" href="itemanalyse.html"><span class="header-section-number">6</span> Itemanalyse</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/sebastiansauer/umfragen-auswerten">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="fallstudie-popup-stores" class="section level1" number="3">
+<h1>
+<span class="header-section-number">Kapitel 3</span> Fallstudie Popup-Stores<a class="anchor" aria-label="anchor" href="#fallstudie-popup-stores"><i class="fas fa-link"></i></a>
+</h1>
+<div id="r-pakete-2" class="section level2" number="3.1">
+<h2>
+<span class="header-section-number">3.1</span> R-Pakete<a class="anchor" aria-label="anchor" href="#r-pakete-2"><i class="fas fa-link"></i></a>
+</h2>
+<p>In diesem Kapitel benötigen wir folgende R-Pakete:</p>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>  <span class="co"># Datenjudo</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://strengejacke.github.io/sjmisc/">sjmisc</a></span><span class="op">)</span>  <span class="co"># Datenhausmeister</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sfirke/janitor">janitor</a></span><span class="op">)</span>  <span class="co"># Auch ein Hausmeister</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/easystats/easystats">easystats</a></span><span class="op">)</span>  <span class="co"># Stats made easy :-)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ardata-fr.github.io/flextable-book/">flextable</a></span><span class="op">)</span>  <span class="co"># html Tabellen, schick</span></code></pre></div>
+</div>
+<div id="einleitung-1" class="section level2" number="3.2">
+<h2>
+<span class="header-section-number">3.2</span> Einleitung<a class="anchor" aria-label="anchor" href="#einleitung-1"><i class="fas fa-link"></i></a>
+</h2>
+<p>In einer Studie untersuchte Frau Prof. Dr. Klug Ursachen von Entscheidungen im Rahmen von Einstellungen und Verhalten bei Pop-up Stores.</p>
+<p>U.a. wurden folgende Fragen untersucht:</p>
+<ul>
+<li>Welchen (kausalen) Effekt hat die Distanz zum und Lage des Pop-up-Stores hinsichtlich der AV?</li>
+<li>Wie stark ist der Moderatoreffekt von Variablen wie z.B. Innovationsorientierung, Shopping-Relevnaz und Soziodemografika?</li>
+<li>Ist ein Effekt auf Einstellung, Verhaltensintention und Verhalten zu beobachten?</li>
+</ul>
+<p>Es handelt sich um ein experimentelles Design mit zwei Faktoren (Lage und Distanz) mit jeweils 3 Stufen.</p>
+<p>Ein Teil der Daten ist (nur) für Lehrzwecke freigeben.</p>
+<p>Folgende Materialien stehen bereit:</p>
+<ul>
+<li>
+<a href="https://raw.githubusercontent.com/sebastiansauer/Lehre/main/data/popupstore/data/d1a.csv">Roh-Datensatz</a>, <span class="math inline">\(n=90\)</span>, Gruppen 1-3</li>
+<li><a href="https://github.com/sebastiansauer/Lehre/blob/main/data/popupstore/materials/0_Konzept_Pop-up_Location_2018-10-30.pdf">Studienkonzept</a></li>
+<li><a href="https://github.com/sebastiansauer/Lehre/blob/main/data/popupstore/materials/A_FB_Pop-up_Location_neu_mitKonstrukten.pdf">Frageobgen</a></li>
+<li><a href="https://github.com/sebastiansauer/Lehre/blob/main/data/popupstore/docs/codebook.xlsx">Codebook</a></li>
+</ul>
+</div>
+<div id="aufgaben" class="section level2" number="3.3">
+<h2>
+<span class="header-section-number">3.3</span> Aufgaben<a class="anchor" aria-label="anchor" href="#aufgaben"><i class="fas fa-link"></i></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li>Entfernen Sie leere Zeilen und Spalten aus dem Datensatz. Tipp: Nutzen Sie das R-Paket <code>{{janitor}}</code>.</li>
+<li>Entfernen Sie konstante Variablen. Tipp: Nutzen Sie das R-Paket <code>{{janitor}}</code>.</li>
+<li>Prüfen Sie auf Duplikate, d.h. doppelte Zeilen. Tipp: Nutzen Sie das R-Paket <code>{{janitor}}</code>.</li>
+<li>Entfernen Sie alle Spalten, die Zeit-Objekte enthalten.</li>
+<li>Ersetzen Sie leere Zellen sowie Zellen mit Inhalt <code>"N/A"</code> durch <code>NA</code>, also durch einen fehlenden Wert. Tipp: <code><a href="https://dplyr.tidyverse.org/reference/na_if.html">na_if()</a></code> aus <code>{{dplyr}}</code>.</li>
+<li>Rekodieren Sie die Anker (Labels) der Ratingskala in Zahlen und zwar von -3 bis +3! Tipp: Nutzen Sie <code><a href="https://dplyr.tidyverse.org/reference/recode.html">recode()</a></code> aus <code>{{dplyr}}</code>.</li>
+<li>Berechnen Sie Spalten-Mittelwerte für alle Konstrukte, die die Ratingskala verwenden. Tipp: Nutzen Sie <code><a href="https://dplyr.tidyverse.org/reference/rowwise.html">rowwise()</a></code> und <code><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across()</a></code>.</li>
+<li>Exportieren Sie die Daten als CSV- und als XLSX-Datei. Tipp: Nutzen Sie das R-Paket <code>{{rio}}</code>.</li>
+<li>Berechnen Sie Cronbachs Alpha! Tipp: Nutzen Sie das R-Paket <code>{{psych}}</code>.</li>
+<li>Berechnen Sie gängige deskriptive Statistiken für die Mittelwerte der Konstrukte. Tipp: Nutzen Sie das R-Paket <code>{{easystats}}</code> und daraus die Funktion <code>describe_distribution()</code>.</li>
+<li>Importieren Sie diese Tabelle nach Word! Tipp: Nutzen Sie das R-Paket <code>{{flextable}}</code>.</li>
+<li>Kurz vor Abgabe Ihres Studienberichts fällt Ihnen ein, dass Sie vergessen haben, das Item <code>v033</code> zu invertieren. Das möchten Sie noch schnell nachholen. Tipp: Einfaches Rechnen.</li>
+</ol>
+</div>
+<div id="lösungen" class="section level2" number="3.4">
+<h2>
+<span class="header-section-number">3.4</span> Lösungen<a class="anchor" aria-label="anchor" href="#l%C3%B6sungen"><i class="fas fa-link"></i></a>
+</h2>
+<div id="ad-1" class="section level3" number="3.4.1">
+<h3>
+<span class="header-section-number">3.4.1</span> Ad 1<a class="anchor" aria-label="anchor" href="#ad-1"><i class="fas fa-link"></i></a>
+</h3>
+<p>Daten laden:</p>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">d_url</span> <span class="op">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/sebastiansauer/Lehre/main/data/popupstore/data/d1a.csv"</span>
+
+<span class="va">d1a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="va">d_url</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">d1a</span><span class="op">)</span>
+<span class="co">#&gt; [1]  90 196</span></code></pre></div>
+<p>Die Tabelel umfasst 90 Zeilen und 196 Spalten.</p>
+<p>Leere Zeilen/Spalten entfernen:</p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sfirke/janitor">janitor</a></span><span class="op">)</span>
+<span class="va">d2</span> <span class="op">&lt;-</span>
+  <span class="va">d1a</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/janitor/man/remove_empty.html">remove_empty</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="ad-2" class="section level3" number="3.4.2">
+<h3>
+<span class="header-section-number">3.4.2</span> Ad 2<a class="anchor" aria-label="anchor" href="#ad-2"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sfirke/janitor">janitor</a></span><span class="op">)</span>
+<span class="va">d3</span> <span class="op">&lt;-</span>
+  <span class="va">d2</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/janitor/man/remove_constant.html">remove_constant</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="ad-3" class="section level3" number="3.4.3">
+<h3>
+<span class="header-section-number">3.4.3</span> Ad 3<a class="anchor" aria-label="anchor" href="#ad-3"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">d3</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/janitor/man/get_dupes.html">get_dupes</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 0 × 84</span>
+<span class="co">#&gt; # … with 84 variables: v001 &lt;dbl&gt;, v002 &lt;dttm&gt;, v003 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   v005 &lt;dbl&gt;, v006 &lt;dttm&gt;, v007 &lt;dttm&gt;, v008 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   v009 &lt;chr&gt;, v010 &lt;chr&gt;, v011 &lt;chr&gt;, v012 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   v013 &lt;chr&gt;, v014 &lt;chr&gt;, v015 &lt;chr&gt;, v016 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   v017 &lt;chr&gt;, v018 &lt;chr&gt;, v019 &lt;chr&gt;, v020 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   v021 &lt;chr&gt;, v022 &lt;chr&gt;, v023 &lt;dbl&gt;, v033 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   v034 &lt;chr&gt;, v035 &lt;chr&gt;, v036 &lt;chr&gt;, v037 &lt;chr&gt;, …</span></code></pre></div>
+<p>Keine Duplikate zu finden.</p>
+</div>
+<div id="ad-4" class="section level3" number="3.4.4">
+<h3>
+<span class="header-section-number">3.4.4</span> Ad 4<a class="anchor" aria-label="anchor" href="#ad-4"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">d4</span> <span class="op">&lt;-</span>
+  <span class="va">d3</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">v002</span>, <span class="va">v006</span>, <span class="va">v007</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="ad-5" class="section level3" number="3.4.5">
+<h3>
+<span class="header-section-number">3.4.5</span> Ad 5<a class="anchor" aria-label="anchor" href="#ad-5"><i class="fas fa-link"></i></a>
+</h3>
+<p>.</p>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">d4</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>v001 <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/na_if.html">na_if</a></span><span class="op">(</span><span class="va">v001</span>, <span class="st">""</span><span class="op">)</span>,
+         v001 <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/na_if.html">na_if</a></span><span class="op">(</span><span class="va">v001</span>, <span class="st">"N/A"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 90 × 80</span>
+<span class="co">#&gt;     v001  v003      v005 v008  v009  v010  v011  v012  v013 </span>
+<span class="co">#&gt;    &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;</span>
+<span class="co">#&gt;  1   794    25    1.03e9 2a02… &lt;NA&gt;  Ja    Ja    Nein  Nein </span>
+<span class="co">#&gt;  2   146    25    1.38e9 2a02… &lt;NA&gt;  Ja    Ja    Nein  Nein </span>
+<span class="co">#&gt;  3   459     4    3.55e8 2003… http… Nein  Ja    Nein  Ja   </span>
+<span class="co">#&gt;  4   324    25    9.95e8 134.… http… Ja    Ja    Nein  Nein </span>
+<span class="co">#&gt;  5   257    25    6.89e8 2003… http… Nein  Nein  Nein  Ja   </span>
+<span class="co">#&gt;  6   182    25    1.70e9 2003… http… Nein  Nein  Nein  Nein </span>
+<span class="co">#&gt;  7    95    25    1.70e9 93.1… http… Ja    Nein  Ja    Nein </span>
+<span class="co">#&gt;  8   355    25    1.60e9 2a02… http… Ja    Nein  Nein  Ja   </span>
+<span class="co">#&gt;  9   570    25    8.10e8 2003… http… Nein  Nein  Nein  Nein </span>
+<span class="co">#&gt; 10   173    25    7.67e7 134.… http… Ja    Nein  Nein  Nein </span>
+<span class="co">#&gt; # … with 80 more rows, and 71 more variables: v014 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   v015 &lt;chr&gt;, v016 &lt;chr&gt;, v017 &lt;chr&gt;, v018 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   v019 &lt;chr&gt;, v020 &lt;chr&gt;, v021 &lt;chr&gt;, v022 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   v023 &lt;dbl&gt;, v033 &lt;chr&gt;, v034 &lt;chr&gt;, v035 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   v036 &lt;chr&gt;, v037 &lt;chr&gt;, v038 &lt;chr&gt;, v039 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   v040 &lt;chr&gt;, v041 &lt;chr&gt;, v042 &lt;chr&gt;, v043 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   v044 &lt;chr&gt;, v045 &lt;chr&gt;, v046 &lt;chr&gt;, v047 &lt;chr&gt;, …</span></code></pre></div>
+<p>Und so weiter für alle Spalten …</p>
+<p>Puh, geht das nicht schlauer?</p>
+<p>Ja, geht. Hier ein kleiner Trick:</p>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">d5</span> <span class="op">&lt;-</span>
+  <span class="va">d4</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_df</a></span><span class="op">(</span><span class="va">na_if</span>, <span class="st">""</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_df</a></span><span class="op">(</span><span class="va">na_if</span>, <span class="st">"N/A"</span><span class="op">)</span></code></pre></div>
+<p>Mit <code><a href="https://purrr.tidyverse.org/reference/map.html">map_df()</a></code> kann man eine Funktion, hier <code><a href="https://dplyr.tidyverse.org/reference/na_if.html">na_if()</a></code> auf jede Spalte der Tabelle (hier: <code>d5</code>) anwenden.
+Als Ergebnis dieses “Funktions-Mapping” soll wieder eine Tabelle - daher <code>map_df</code> zurückgegeben werden.</p>
+<p>Mal ein Check:
+Die Anzahl der fehlenden Werte müsste sich jetzt erhöht haben im Vergleich zur letzten Version des Datensatz, <code>d4</code>:</p>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">d4</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; [1] 1806</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">d5</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; [1] 1893</span></code></pre></div>
+<p>Hm, g.ar nicht so viele mehr. Aber grundsätzlich hat es funktioniert :-)</p>
+<p>Sie brauchen <code><a href="https://purrr.tidyverse.org/reference/map.html">map_df()</a></code> <em>nicht</em> zu verwenden. Es geht auch ohne. Mit <code><a href="https://purrr.tidyverse.org/reference/map.html">map_df()</a></code> ist es nur komfortabler.</p>
+</div>
+<div id="ad-6" class="section level3" number="3.4.6">
+<h3>
+<span class="header-section-number">3.4.6</span> Ad 6<a class="anchor" aria-label="anchor" href="#ad-6"><i class="fas fa-link"></i></a>
+</h3>
+<p>Die Item-Positionen, wann also die Items der Ratingskala beginnen und wann (an welcher Spaltenposition) sie enden,
+ist im Fragebogen ersichtlich.</p>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">d5</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>v033_r <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/recode.html">recode</a></span><span class="op">(</span><span class="va">v033</span>,
+      <span class="st">"lehne voll und ganz ab"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">3</span>,
+      <span class="st">"lehne ab"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>,
+      <span class="st">"lehne eher ab"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>,
+      <span class="st">"weder/noch"</span> <span class="op">=</span> <span class="fl">0</span>,
+      <span class="st">"stimme eher zu"</span> <span class="op">=</span> <span class="fl">1</span>,
+      <span class="st">"stimme zu"</span> <span class="op">=</span> <span class="fl">2</span>,
+      <span class="st">"stimme voll und ganz zu"</span> <span class="op">=</span> <span class="fl">3</span>,
+      .default <span class="op">=</span> <span class="cn">NA_real_</span>  <span class="co"># Ansonsten als NA und zwar NA vom Typ "reelle Zahl"</span>
+  <span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">v001</span>, <span class="va">v033</span>, <span class="va">v033_r</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 10 × 3</span>
+<span class="co">#&gt;     v001 v033                    v033_r</span>
+<span class="co">#&gt;    &lt;dbl&gt; &lt;chr&gt;                    &lt;dbl&gt;</span>
+<span class="co">#&gt;  1   794 stimme voll und ganz zu      3</span>
+<span class="co">#&gt;  2   146 stimme eher zu               1</span>
+<span class="co">#&gt;  3   459 &lt;NA&gt;                        NA</span>
+<span class="co">#&gt;  4   324 stimme eher zu               1</span>
+<span class="co">#&gt;  5   257 lehne eher ab               -1</span>
+<span class="co">#&gt;  6   182 stimme zu                    2</span>
+<span class="co">#&gt;  7    95 stimme eher zu               1</span>
+<span class="co">#&gt;  8   355 stimme zu                    2</span>
+<span class="co">#&gt;  9   570 stimme eher zu               1</span>
+<span class="co">#&gt; 10   173 lehne eher ab               -1</span></code></pre></div>
+<p>Das hat also funktioniert. Aber das jetzt für alle Spalte zu übernehmen,
+puh, viel zu langweilig.
+Gibt’s da vielleicht einen Trick?</p>
+<p>Ja, gibt es.</p>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">d6</span> <span class="op">&lt;-</span>
+  <span class="va">d5</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span>
+    .cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">v033</span><span class="op">:</span><span class="va">v056</span>, <span class="va">v087</span><span class="op">:</span><span class="va">v104</span><span class="op">)</span>,
+    .fns <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/recode.html">recode</a></span><span class="op">(</span><span class="va">.</span>,
+      <span class="st">"lehne voll und ganz ab"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">3</span>,
+      <span class="st">"lehne ab"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>,
+      <span class="st">"lehne eher ab"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>,
+      <span class="st">"weder/noch"</span> <span class="op">=</span> <span class="fl">0</span>,
+      <span class="st">"stimme eher zu"</span> <span class="op">=</span> <span class="fl">1</span>,
+      <span class="st">"stimme zu"</span> <span class="op">=</span> <span class="fl">2</span>,
+      <span class="st">"stimme voll und ganz zu"</span> <span class="op">=</span> <span class="fl">3</span>,
+      .default <span class="op">=</span> <span class="cn">NA_real_</span>  <span class="co"># Andere Wete als NA (Fehlende Werte) vom Typ "reelle Zahl" kennzeichnen</span>
+    <span class="op">)</span>
+  <span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>Mit <code><a href="https://dplyr.tidyverse.org/reference/across.html">across()</a></code> kann man eine Funktion (oder mehrere), <code>.fns</code>, über mehrere Spalten, <code>.cols</code> anwenden,
+hier wenden wir <code><a href="https://dplyr.tidyverse.org/reference/recode.html">recode()</a></code> auf alle Spalten der Ratingskala an.</p>
+</div>
+<div id="ad-7" class="section level3" number="3.4.7">
+<h3>
+<span class="header-section-number">3.4.7</span> Ad 7<a class="anchor" aria-label="anchor" href="#ad-7"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">d7</span> <span class="op">&lt;-</span>
+  <span class="va">d6</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rowwise.html">rowwise</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span>  <span class="co"># Zeilenweise arbeiten im Folgenden</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
+    exp_avg <span class="op">=</span> <span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v033</span><span class="op">:</span><span class="va">v039</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    neu_avg <span class="op">=</span> <span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v040</span><span class="op">:</span><span class="va">v042</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    att_avg <span class="op">=</span> <span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v043</span><span class="op">:</span><span class="va">v047</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    ka_avg <span class="op">=</span> <span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v048</span><span class="op">:</span><span class="va">v053</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, 
+    wom_avg <span class="op">=</span> <span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v054</span><span class="op">:</span><span class="va">v056</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    innp_avg <span class="op">=</span> <span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v087</span><span class="op">:</span><span class="va">v092</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    imp_avg <span class="op">=</span> <span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v093</span><span class="op">:</span><span class="va">v096</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    hedo_avg <span class="op">=</span> <span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v097</span><span class="op">:</span><span class="va">v100</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    sho1_avg <span class="op">=</span> <span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v101</span><span class="op">:</span><span class="va">v104</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/relocate.html">relocate</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">ends_with</a></span><span class="op">(</span><span class="st">"_avg"</span><span class="op">)</span>, .after <span class="op">=</span> <span class="va">v008</span><span class="op">)</span>  <span class="co"># wir verschieben alle Spalten, die mit `_avg` enden nach vorne</span></code></pre></div>
+<p><code><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across()</a></code> ist wie <code><a href="https://rdrr.io/r/base/c.html">c()</a></code>. Allerdings funktioniert <code><a href="https://rdrr.io/r/base/c.html">c()</a></code> leider <em>nicht</em> für zeilenweise Operationen.
+Daher braucht es einen Freund, der das kann, <code><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across()</a></code>.</p>
+</div>
+<div id="ad-8" class="section level3" number="3.4.8">
+<h3>
+<span class="header-section-number">3.4.8</span> Ad 8<a class="anchor" aria-label="anchor" href="#ad-8"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/leeper/rio">rio</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rio/man/export.html">export</a></span><span class="op">(</span><span class="va">d7</span>, file <span class="op">=</span> <span class="st">"d7.csv"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rio/man/export.html">export</a></span><span class="op">(</span><span class="va">d7</span>, file <span class="op">=</span> <span class="st">"d7.xlsx"</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="ad-9" class="section level3" number="3.4.9">
+<h3>
+<span class="header-section-number">3.4.9</span> Ad 9<a class="anchor" aria-label="anchor" href="#ad-9"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://personality-project.org/r/psych/">psych</a></span><span class="op">)</span>
+
+<span class="va">d7</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">v087</span><span class="op">:</span><span class="va">v092</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/psych/man/alpha.html">alpha</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Skala Innovationsorientierung"</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Reliability analysis  Skala Innovationsorientierung  </span>
+<span class="co">#&gt; Call: alpha(x = ., title = "Skala Innovationsorientierung")</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   raw_alpha std.alpha G6(smc) average_r S/N  ase  mean  sd</span>
+<span class="co">#&gt;       0.87      0.88    0.88      0.54   7 0.02 -0.25 1.3</span>
+<span class="co">#&gt;  median_r</span>
+<span class="co">#&gt;      0.52</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  lower alpha upper     95% confidence boundaries</span>
+<span class="co">#&gt; 0.83 0.87 0.91 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Reliability if an item is dropped:</span>
+<span class="co">#&gt;      raw_alpha std.alpha G6(smc) average_r S/N alpha se</span>
+<span class="co">#&gt; v087      0.84      0.84    0.83      0.52 5.4    0.026</span>
+<span class="co">#&gt; v088      0.83      0.83    0.83      0.50 5.0    0.028</span>
+<span class="co">#&gt; v089      0.87      0.87    0.87      0.57 6.5    0.022</span>
+<span class="co">#&gt; v090      0.84      0.84    0.84      0.51 5.1    0.028</span>
+<span class="co">#&gt; v091      0.87      0.87    0.87      0.57 6.5    0.023</span>
+<span class="co">#&gt; v092      0.87      0.87    0.87      0.58 6.9    0.022</span>
+<span class="co">#&gt;      var.r med.r</span>
+<span class="co">#&gt; v087 0.013  0.51</span>
+<span class="co">#&gt; v088 0.015  0.51</span>
+<span class="co">#&gt; v089 0.024  0.55</span>
+<span class="co">#&gt; v090 0.022  0.51</span>
+<span class="co">#&gt; v091 0.018  0.51</span>
+<span class="co">#&gt; v092 0.018  0.55</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Item statistics </span>
+<span class="co">#&gt;       n raw.r std.r r.cor r.drop  mean  sd</span>
+<span class="co">#&gt; v087 61  0.83  0.83  0.82   0.73  0.16 1.8</span>
+<span class="co">#&gt; v088 61  0.87  0.87  0.87   0.80  0.49 1.5</span>
+<span class="co">#&gt; v089 61  0.74  0.73  0.65   0.60 -0.75 1.8</span>
+<span class="co">#&gt; v090 61  0.86  0.86  0.83   0.78 -0.80 1.7</span>
+<span class="co">#&gt; v091 61  0.71  0.73  0.65   0.60  0.00 1.4</span>
+<span class="co">#&gt; v092 61  0.70  0.70  0.62   0.57 -0.59 1.6</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Non missing response frequency for each item</span>
+<span class="co">#&gt;        -3   -2   -1    0    1    2    3 miss</span>
+<span class="co">#&gt; v087 0.07 0.15 0.20 0.08 0.26 0.15 0.10 0.32</span>
+<span class="co">#&gt; v088 0.02 0.11 0.13 0.18 0.31 0.15 0.10 0.32</span>
+<span class="co">#&gt; v089 0.13 0.30 0.21 0.15 0.05 0.10 0.07 0.32</span>
+<span class="co">#&gt; v090 0.21 0.18 0.18 0.20 0.11 0.08 0.03 0.32</span>
+<span class="co">#&gt; v091 0.07 0.10 0.16 0.25 0.30 0.13 0.00 0.32</span>
+<span class="co">#&gt; v092 0.15 0.16 0.18 0.25 0.16 0.10 0.00 0.32</span></code></pre></div>
+</div>
+<div id="ad-10" class="section level3" number="3.4.10">
+<h3>
+<span class="header-section-number">3.4.10</span> Ad 10<a class="anchor" aria-label="anchor" href="#ad-10"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/easystats/easystats">easystats</a></span><span class="op">)</span>
+
+<span class="va">d7</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">ends_with</a></span><span class="op">(</span><span class="st">"_avg"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu">describe_distribution</span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; Variable |  Mean |   SD |  IQR |         Range | Skewness |  Kurtosis |  n | n_Missing</span>
+<span class="co">#&gt; --------------------------------------------------------------------------------------</span>
+<span class="co">#&gt; exp_avg  |  0.90 | 1.12 | 1.57 | [-1.86, 3.00] |    -0.45 |     -0.16 | 76 |        14</span>
+<span class="co">#&gt; neu_avg  |  1.22 | 1.25 | 1.33 | [-2.67, 3.00] |    -0.96 |      0.79 | 70 |        20</span>
+<span class="co">#&gt; att_avg  |  1.04 | 1.13 | 1.20 | [-2.60, 3.00] |    -1.16 |      1.93 | 68 |        22</span>
+<span class="co">#&gt; ka_avg   |  0.91 | 1.20 | 1.21 | [-2.17, 3.00] |    -1.07 |      0.54 | 66 |        24</span>
+<span class="co">#&gt; wom_avg  |  0.31 | 1.16 | 1.25 | [-2.33, 3.00] |     0.35 |      0.23 | 64 |        26</span>
+<span class="co">#&gt; innp_avg | -0.25 | 1.28 | 1.50 | [-2.83, 2.67] |     0.07 |     -0.28 | 61 |        29</span>
+<span class="co">#&gt; imp_avg  | -0.28 | 1.18 | 1.50 | [-3.00, 2.50] |    -0.32 | -7.40e-03 | 61 |        29</span>
+<span class="co">#&gt; hedo_avg |  0.34 | 1.40 | 1.50 | [-3.00, 3.00] |    -0.69 |      0.40 | 60 |        30</span>
+<span class="co">#&gt; sho1_avg | -0.80 | 1.51 | 2.75 | [-3.00, 2.25] |     0.28 |     -0.85 | 60 |        30</span></code></pre></div>
+</div>
+<div id="ad-11" class="section level3" number="3.4.11">
+<h3>
+<span class="header-section-number">3.4.11</span> Ad 11<a class="anchor" aria-label="anchor" href="#ad-11"><i class="fas fa-link"></i></a>
+</h3>
+<p>Es gibt mehrere Wege, das Ziel zu erreichen.
+Einer sieht so aus.</p>
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ardata-fr.github.io/flextable-book/">flextable</a></span><span class="op">)</span>
+
+<span class="va">flex1</span> <span class="op">&lt;-</span> 
+  <span class="va">d7</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">ends_with</a></span><span class="op">(</span><span class="st">"_avg"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu">describe_distribution</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/flextable.html">flextable</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="va">flex1</span></code></pre></div>
+<template id="e0497cff-89bc-4612-a32a-a20581e10e5d"><style>
+.tabwid table{
+  border-spacing:0px !important;
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+</style>
+<div class="tabwid">
+<style>.cl-07ac4498{}.cl-07a5cd98{font-family:'Helvetica';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-07a5ea12{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-07a5ea1c{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-07a632f6{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-07a63300{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-07a63301{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-07a6330a{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-07a6330b{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-07a63314{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<div class="inline-table"><table class="cl-07ac4498">
+<thead><tr style="overflow-wrap:break-word;">
+<td class="cl-07a63314"><p class="cl-07a5ea12"><span class="cl-07a5cd98">Variable</span></p></td>
+<td class="cl-07a6330b"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">Mean</span></p></td>
+<td class="cl-07a6330b"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">SD</span></p></td>
+<td class="cl-07a6330b"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">IQR</span></p></td>
+<td class="cl-07a6330b"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">Min</span></p></td>
+<td class="cl-07a6330b"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">Max</span></p></td>
+<td class="cl-07a6330b"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">Skewness</span></p></td>
+<td class="cl-07a6330b"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">Kurtosis</span></p></td>
+<td class="cl-07a6330b"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">n</span></p></td>
+<td class="cl-07a6330b"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">n_Missing</span></p></td>
+</tr></thead>
+<tbody>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-07a63300"><p class="cl-07a5ea12"><span class="cl-07a5cd98">exp_avg</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">0.8966165</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">1.116262</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">1.571429</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">-1.857143</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">3.000000</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">-0.44852912</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">-0.155202928</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">76</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">14</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-07a63300"><p class="cl-07a5ea12"><span class="cl-07a5cd98">neu_avg</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">1.2238095</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">1.248150</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">1.333333</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">-2.666667</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">3.000000</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">-0.95903822</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">0.790211603</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">70</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">20</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-07a63300"><p class="cl-07a5ea12"><span class="cl-07a5cd98">att_avg</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">1.0441176</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">1.133925</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">1.200000</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">-2.600000</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">3.000000</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">-1.16348010</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">1.927188688</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">68</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">22</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-07a63300"><p class="cl-07a5ea12"><span class="cl-07a5cd98">ka_avg</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">0.9090909</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">1.202981</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">1.208333</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">-2.166667</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">3.000000</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">-1.06540680</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">0.539760618</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">66</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">24</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-07a63300"><p class="cl-07a5ea12"><span class="cl-07a5cd98">wom_avg</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">0.3072917</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">1.161257</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">1.250000</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">-2.333333</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">3.000000</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">0.35118856</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">0.232676307</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">64</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">26</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-07a63300"><p class="cl-07a5ea12"><span class="cl-07a5cd98">innp_avg</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">-0.2486339</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">1.276795</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">1.500000</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">-2.833333</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">2.666667</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">0.06946976</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">-0.280800172</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">61</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">29</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-07a63300"><p class="cl-07a5ea12"><span class="cl-07a5cd98">imp_avg</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">-0.2827869</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">1.177458</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">1.500000</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">-3.000000</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">2.500000</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">-0.32165605</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">-0.007398344</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">61</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">29</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-07a63300"><p class="cl-07a5ea12"><span class="cl-07a5cd98">hedo_avg</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">0.3375000</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">1.401290</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">1.500000</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">-3.000000</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">3.000000</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">-0.68659230</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">0.397527258</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">60</span></p></td>
+<td class="cl-07a632f6"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">30</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-07a6330a"><p class="cl-07a5ea12"><span class="cl-07a5cd98">sho1_avg</span></p></td>
+<td class="cl-07a63301"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">-0.8041667</span></p></td>
+<td class="cl-07a63301"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">1.506407</span></p></td>
+<td class="cl-07a63301"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">2.750000</span></p></td>
+<td class="cl-07a63301"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">-3.000000</span></p></td>
+<td class="cl-07a63301"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">2.250000</span></p></td>
+<td class="cl-07a63301"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">0.27889917</span></p></td>
+<td class="cl-07a63301"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">-0.847516886</span></p></td>
+<td class="cl-07a63301"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">60</span></p></td>
+<td class="cl-07a63301"><p class="cl-07a5ea1c"><span class="cl-07a5cd98">30</span></p></td>
+</tr>
+</tbody>
+</table></div>
+</div></template><div class="flextable-shadow-host" id="a98a0bed-eb1d-4806-a7ec-20e8b6905b4b"></div>
+<script>
+var dest = document.getElementById("a98a0bed-eb1d-4806-a7ec-20e8b6905b4b");
+var template = document.getElementById("e0497cff-89bc-4612-a32a-a20581e10e5d");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+</script><p>Vielleicht noch die Anzahl der Dezimalstellen beschneiden:</p>
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">flex1</span> <span class="op">&lt;-</span> 
+  <span class="va">d7</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">ends_with</a></span><span class="op">(</span><span class="st">"_avg"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu">describe_distribution</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/janitor/man/adorn_rounding.html">adorn_rounding</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/flextable.html">flextable</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="va">flex1</span></code></pre></div>
+<template id="1fa03a5f-8034-40c4-8ae1-7c2add88843b"><style>
+.tabwid table{
+  border-spacing:0px !important;
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+</style>
+<div class="tabwid">
+<style>.cl-07d1ce48{}.cl-07cc6688{font-family:'Helvetica';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-07cc72cc{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-07cc72d6{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-07ccae2c{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-07ccae2d{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-07ccae36{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-07ccae37{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-07ccae40{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-07ccae41{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<div class="inline-table"><table class="cl-07d1ce48">
+<thead><tr style="overflow-wrap:break-word;">
+<td class="cl-07ccae41"><p class="cl-07cc72cc"><span class="cl-07cc6688">Variable</span></p></td>
+<td class="cl-07ccae40"><p class="cl-07cc72d6"><span class="cl-07cc6688">Mean</span></p></td>
+<td class="cl-07ccae40"><p class="cl-07cc72d6"><span class="cl-07cc6688">SD</span></p></td>
+<td class="cl-07ccae40"><p class="cl-07cc72d6"><span class="cl-07cc6688">IQR</span></p></td>
+<td class="cl-07ccae40"><p class="cl-07cc72d6"><span class="cl-07cc6688">Min</span></p></td>
+<td class="cl-07ccae40"><p class="cl-07cc72d6"><span class="cl-07cc6688">Max</span></p></td>
+<td class="cl-07ccae40"><p class="cl-07cc72d6"><span class="cl-07cc6688">Skewness</span></p></td>
+<td class="cl-07ccae40"><p class="cl-07cc72d6"><span class="cl-07cc6688">Kurtosis</span></p></td>
+<td class="cl-07ccae40"><p class="cl-07cc72d6"><span class="cl-07cc6688">n</span></p></td>
+<td class="cl-07ccae40"><p class="cl-07cc72d6"><span class="cl-07cc6688">n_Missing</span></p></td>
+</tr></thead>
+<tbody>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-07ccae2d"><p class="cl-07cc72cc"><span class="cl-07cc6688">exp_avg</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">0.90</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">1.12</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">1.57</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">-1.86</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">3.00</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">-0.45</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">-0.16</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">76</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">14</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-07ccae2d"><p class="cl-07cc72cc"><span class="cl-07cc6688">neu_avg</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">1.22</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">1.25</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">1.33</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">-2.67</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">3.00</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">-0.96</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">0.79</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">70</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">20</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-07ccae2d"><p class="cl-07cc72cc"><span class="cl-07cc6688">att_avg</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">1.04</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">1.13</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">1.20</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">-2.60</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">3.00</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">-1.16</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">1.93</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">68</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">22</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-07ccae2d"><p class="cl-07cc72cc"><span class="cl-07cc6688">ka_avg</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">0.91</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">1.20</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">1.21</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">-2.17</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">3.00</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">-1.07</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">0.54</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">66</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">24</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-07ccae2d"><p class="cl-07cc72cc"><span class="cl-07cc6688">wom_avg</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">0.31</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">1.16</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">1.25</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">-2.33</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">3.00</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">0.35</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">0.23</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">64</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">26</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-07ccae2d"><p class="cl-07cc72cc"><span class="cl-07cc6688">innp_avg</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">-0.25</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">1.28</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">1.50</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">-2.83</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">2.67</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">0.07</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">-0.28</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">61</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">29</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-07ccae2d"><p class="cl-07cc72cc"><span class="cl-07cc6688">imp_avg</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">-0.28</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">1.18</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">1.50</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">-3.00</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">2.50</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">-0.32</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">-0.01</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">61</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">29</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-07ccae2d"><p class="cl-07cc72cc"><span class="cl-07cc6688">hedo_avg</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">0.34</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">1.40</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">1.50</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">-3.00</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">3.00</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">-0.69</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">0.40</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">60</span></p></td>
+<td class="cl-07ccae2c"><p class="cl-07cc72d6"><span class="cl-07cc6688">30</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-07ccae37"><p class="cl-07cc72cc"><span class="cl-07cc6688">sho1_avg</span></p></td>
+<td class="cl-07ccae36"><p class="cl-07cc72d6"><span class="cl-07cc6688">-0.80</span></p></td>
+<td class="cl-07ccae36"><p class="cl-07cc72d6"><span class="cl-07cc6688">1.51</span></p></td>
+<td class="cl-07ccae36"><p class="cl-07cc72d6"><span class="cl-07cc6688">2.75</span></p></td>
+<td class="cl-07ccae36"><p class="cl-07cc72d6"><span class="cl-07cc6688">-3.00</span></p></td>
+<td class="cl-07ccae36"><p class="cl-07cc72d6"><span class="cl-07cc6688">2.25</span></p></td>
+<td class="cl-07ccae36"><p class="cl-07cc72d6"><span class="cl-07cc6688">0.28</span></p></td>
+<td class="cl-07ccae36"><p class="cl-07cc72d6"><span class="cl-07cc6688">-0.85</span></p></td>
+<td class="cl-07ccae36"><p class="cl-07cc72d6"><span class="cl-07cc6688">60</span></p></td>
+<td class="cl-07ccae36"><p class="cl-07cc72d6"><span class="cl-07cc6688">30</span></p></td>
+</tr>
+</tbody>
+</table></div>
+</div></template><div class="flextable-shadow-host" id="471e8bd1-d6c9-4a5d-8985-813996d8afa7"></div>
+<script>
+var dest = document.getElementById("471e8bd1-d6c9-4a5d-8985-813996d8afa7");
+var template = document.getElementById("1fa03a5f-8034-40c4-8ae1-7c2add88843b");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+</script><p>Und so speichert man als Word-Datei:</p>
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/save_as_docx.html">save_as_docx</a></span><span class="op">(</span><span class="va">flex1</span>, path <span class="op">=</span> <span class="st">"flex1.docx"</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="ad-12" class="section level3" number="3.4.12">
+<h3>
+<span class="header-section-number">3.4.12</span> Ad 12<a class="anchor" aria-label="anchor" href="#ad-12"><i class="fas fa-link"></i></a>
+</h3>
+<p>Wie kann ich Items konvertieren? Also negativ gepolte Items positiv umkodieren, also “umdrehen”?</p>
+<p>Die Skala erstreckt sich von -3 bis +3.
+Mit <code><a href="https://dplyr.tidyverse.org/reference/recode.html">recode()</a></code> kann man wie oben auch entsprechend umkodieren.</p>
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">d8</span> <span class="op">&lt;-</span>
+  <span class="va">d7</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>v033_i <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/recode.html">recode</a></span><span class="op">(</span><span class="va">v033</span>,
+                         `-3` <span class="op">=</span> <span class="op">+</span><span class="fl">3</span>,
+                         `-2` <span class="op">=</span> <span class="op">+</span><span class="fl">2</span>,
+                         `-1` <span class="op">=</span> <span class="fl">1</span>,
+                         `0` <span class="op">=</span> <span class="fl">0</span>,
+                         `1` <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>,
+                         `2` <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>,
+                         `3` <span class="op">=</span> <span class="op">-</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>Die Backticks brauchen wir,
+weil es sich bei <code>-1</code> etc. nicht um syntaktisch korrekte Variablennamen handelt.</p>
+<p>Tipp: Einfach mal in die Hilfe schauen.</p>
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">i</span> <span class="op">&lt;-</span> <span class="fl">1</span>
+<span class="va">`i ist eins`</span> <span class="op">&lt;-</span> <span class="fl">1</span>
+<span class="va">i1</span> <span class="op">&lt;-</span> <span class="fl">1</span></code></pre></div>
+
+</div>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="daten-aufr%C3%A4umen.html"><span class="header-section-number">2</span> Daten aufräumen</a></div>
+<div class="next"><a href="normierung.html"><span class="header-section-number">4</span> Normierung</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#fallstudie-popup-stores"><span class="header-section-number">3</span> Fallstudie Popup-Stores</a></li>
+<li><a class="nav-link" href="#r-pakete-2"><span class="header-section-number">3.1</span> R-Pakete</a></li>
+<li><a class="nav-link" href="#einleitung-1"><span class="header-section-number">3.2</span> Einleitung</a></li>
+<li><a class="nav-link" href="#aufgaben"><span class="header-section-number">3.3</span> Aufgaben</a></li>
+<li>
+<a class="nav-link" href="#l%C3%B6sungen"><span class="header-section-number">3.4</span> Lösungen</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#ad-1"><span class="header-section-number">3.4.1</span> Ad 1</a></li>
+<li><a class="nav-link" href="#ad-2"><span class="header-section-number">3.4.2</span> Ad 2</a></li>
+<li><a class="nav-link" href="#ad-3"><span class="header-section-number">3.4.3</span> Ad 3</a></li>
+<li><a class="nav-link" href="#ad-4"><span class="header-section-number">3.4.4</span> Ad 4</a></li>
+<li><a class="nav-link" href="#ad-5"><span class="header-section-number">3.4.5</span> Ad 5</a></li>
+<li><a class="nav-link" href="#ad-6"><span class="header-section-number">3.4.6</span> Ad 6</a></li>
+<li><a class="nav-link" href="#ad-7"><span class="header-section-number">3.4.7</span> Ad 7</a></li>
+<li><a class="nav-link" href="#ad-8"><span class="header-section-number">3.4.8</span> Ad 8</a></li>
+<li><a class="nav-link" href="#ad-9"><span class="header-section-number">3.4.9</span> Ad 9</a></li>
+<li><a class="nav-link" href="#ad-10"><span class="header-section-number">3.4.10</span> Ad 10</a></li>
+<li><a class="nav-link" href="#ad-11"><span class="header-section-number">3.4.11</span> Ad 11</a></li>
+<li><a class="nav-link" href="#ad-12"><span class="header-section-number">3.4.12</span> Ad 12</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/sebastiansauer/umfragen-auswerten/blob/master/020-Fallstudie1.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/sebastiansauer/umfragen-auswerten/edit/master/020-Fallstudie1.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2022-05-25 21:07:59.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

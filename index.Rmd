@@ -86,7 +86,9 @@ Eine praktische Einführung zu Datenanalyse bietet [ModernDive](https://moderndi
 
 ## Messinstrument
 
-Es wird ein Datensatz zur Extraversion analysiert. Extraversion wurde operationalisiert mit dem Inventar *B5T* von Satow REF^[vgl. <https://www.drsatow.de/tests/persoenlichkeitstest/>]. Das Instrument besteht aus 10 Items mit vier Likert-Antwortstufen (von "trifft gar nicht zu" bis "trifft voll und ganz zu") und ist für Forschungszwecke kostenlos nutzbar^[https://www.drsatow.de/tests/persoenlichkeitstest/]:
+Es wird ein Datensatz zur Extraversion analysiert. 
+Extraversion wurde operationalisiert mit dem Inventar *B5T* von Satow [@satow_b5t_2020]. 
+Das Instrument besteht aus 10 Items mit vier Likert-Antwortstufen (von "trifft gar nicht zu" bis "trifft voll und ganz zu") und ist für Forschungszwecke kostenlos nutzbar^[https://www.drsatow.de/tests/persoenlichkeitstest/]:
   
   >    der B5T ist als Paper-Pencil-Version, Excel-Version sowie als Online-Version verfügbar und kann für nichtkommerzielle Forschungs- und für Unterrichtszwecke kostenlos verwendet werden. Der B5T wurde offiziell in die PSYNDEX-Testdatenbank (Tests-Nr. 9006357) und in das elektronische Testarchiv des Leibniz-Zentrums für Psychologische Information und Dokumentation (ZPID) aufgenommen.
 
@@ -96,7 +98,7 @@ An anderer Stelle^[https://www.drsatow.de/cgi-bin/testorder/testorder17_0.pl?t=B
   >   Lizenz: Sie dürfen den Test ausschließlich zu Forschungs- und Unterrichtszwecken einsetzen und übersetzen. Sie müssen die Quelle nennen und ein elektronisches Belegexemplar oder die Quellenangabe (Autor, Titel, Zeitschrift/Buch, Erscheinungsjahr) Ihrer Veröffentlichung an mailATdrsatow.de senden.
 
 
-Zur Reliabilität berichtet @Satow2012, dass Cronbachs Alpha bei .87 läge, was ein guter Wert ist. Machen wir diese Variable für R verfügbar:
+Zur Reliabilität berichtet @Satow2012, dass Cronbachs Alpha bei .87 liege, was ein guter Wert ist. Machen wir diese Variable für R verfügbar:
 
 ```{r}
 extra_alpha <- .87

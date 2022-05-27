@@ -1,7 +1,7 @@
 --- 
 title: "Umfragen auswerten"
 author: "Sebastian Sauer"
-date: "2022-05-27 14:19:33"
+date: "2022-05-27 14:44:42"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]

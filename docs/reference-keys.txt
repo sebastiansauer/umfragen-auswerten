@@ -18,9 +18,9 @@ brave-daten
 text-in-zahlen-umwandeln
 hilfe-ich-habe-keine-zahlen
 introducing-parse_number
-daten-umformen
 items-umkodieren
-extraversionsscore-berechnen
+zeilen-fälle-löschen
+scores-berechnen
 summen--und-mittelwerte
 vertiefung-summen--vs.-mittelwertscores
 berechnung-mit-r
@@ -65,5 +65,3 @@ r-pakete-5
 daten-4
 einführung
 literaturempfehlungen
-zeilen-fälle-löschen
-scores-berechnen

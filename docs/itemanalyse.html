@@ -17,8 +17,7 @@
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
-<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><link href="libs/tabwid-1.0.0/tabwid.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   </style>
@@ -88,7 +87,7 @@
 <span class="header-section-number">6.1</span> R-Pakete<a class="anchor" aria-label="anchor" href="#r-pakete-5"><i class="fas fa-link"></i></a>
 </h2>
 <p>In diesem Kapitel benötigen wir folgende R-Pakete:</p>
-<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>  <span class="co"># Datenjudo</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://strengejacke.github.io/sjmisc/">sjmisc</a></span><span class="op">)</span>  <span class="co"># recode</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://personality-project.org/r/psych/">psych</a></span><span class="op">)</span>  <span class="co"># Itemanalyse</span></code></pre></div>
@@ -97,7 +96,7 @@
 <h2>
 <span class="header-section-number">6.2</span> Daten<a class="anchor" aria-label="anchor" href="#daten-4"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">data_url</span> <span class="op">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/sebastiansauer/modar/master/datasets/extra.csv"</span>
 <span class="va">extra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="va">data_url</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 826 Columns: 34</span>
@@ -123,12 +122,12 @@
 </ol>
 <p>Die Analyse der Faktorenstruktur ist in dieser Analyse nicht umgesetzt.</p>
 <p>Die ersten drei Punkte werden durch eine Funktion, <code><a href="https://rdrr.io/pkg/psych/man/alpha.html">alpha()</a></code> aus dem Paket <code>psych</code> abgedeckt. Dieser Funktion übergibt man eine Tabelle mit Items; man bekommt einige Item-Statistiken zurück. Zuerst erstellen wir eine Tabelle, <code>extra_items</code> nur mit den Items.</p>
-<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">extra_items</span> <span class="op">&lt;-</span> <span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">i01</span><span class="op">:</span><span class="va">i10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://tidyr.tidyverse.org/reference/drop_na.html">drop_na</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>Dann führen wir <code><a href="https://rdrr.io/pkg/psych/man/alpha.html">alpha()</a></code> mit dieser Tabelle aus:</p>
-<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">psych</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/psych/man/alpha.html">alpha</a></span><span class="op">(</span><span class="va">extra_items</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Reliability analysis   </span>
@@ -207,6 +206,9 @@
 <div id="ref-Buhner2011" class="csl-entry">
 Bühner, M. 2011. <em>Einführung in Die Test- Und Fragebogenkonstruktion</em>. <span>PS</span> Psychologie. Hallbergmoos: Pearson Studium. <a href="https://books.google.de/books?id=Y4990CfV3wgC">https://books.google.de/books?id=Y4990CfV3wgC</a>.
 </div>
+<div id="ref-Lienert1998" class="csl-entry">
+Lienert, Gustav A., and Ulrich Raatz. 1998. <em>Testaufbau Und Testanalyse</em>. 6. Auflage. Weinheim: Beltz, Psychologie Verlags Union.
+</div>
 <div id="ref-Satow2012" class="csl-entry">
 Satow, L. 2012. <span>“<span>SCI</span> - Stress- und Coping-Inventar.”</span> <a href="https://doi.org/10.23668/PSYCHARCHIVES.4604">https://doi.org/10.23668/PSYCHARCHIVES.4604</a>.
 </div>
@@ -264,7 +266,7 @@ Steyer, Rolf, and Michael Eid. 1993. <em>Messen Und Testen</em>. Heidelberg: Spr
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2022-05-25 21:07:59.</p>
+    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2022-05-27 14:44:42.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

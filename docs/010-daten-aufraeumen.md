@@ -204,34 +204,26 @@ d %>% mutate(i03_r = parse_number(as.character(i03)))
 
 
 
-## Daten umformen
+<!-- ## Daten umkodieren  -->
 
-In einer Fragebogenstudie (oder vergleichbarer Studie) liegen in der Regel pro Respondent (allgemeiner: pro Beobachtung) eine Reihe von Antworten auf Fragebogen-Items vor. 
-Manchmal liegen die Antworten noch nicht als Zahl vor, sondern als Text, etwa "stimme eher zu". 
-Diese Antwort könnte auf einer vierstufigen Skala einer 3 entsprechen. Eine einfache Möglichkeit zum Umkodieren eröffnet das Paket `sjmisc`. 
-Als Beispielaufgabe soll der Wert "Frau" in 1 umkodiert werden und "Mann" in 0; übrige Werte sollen in `NA` kodiert werden.
+<!-- In einer Fragebogenstudie (oder vergleichbarer Studie) liegen in der Regel pro Respondent (allgemeiner: pro Beobachtung) eine Reihe von Antworten auf Fragebogen-Items vor.  -->
+<!-- Manchmal liegen die Antworten noch nicht als Zahl vor, sondern als Text, etwa "stimme eher zu".  -->
+<!-- Diese Antwort könnte auf einer vierstufigen Skala einer 3 entsprechen. Eine einfache Möglichkeit zum Umkodieren eröffnet das Paket `sjmisc`.  -->
+<!-- Als Beispielaufgabe soll der Wert "Frau" in 1 umkodiert werden und "Mann" in 0; übrige Werte sollen in `NA` kodiert werden. -->
 
+<!-- ```{r} -->
+<!-- data_rec <- extra %>%  -->
+<!--   rec(sex, rec = "Frau = 1; Mann = 0; else = NA") -->
+<!-- ``` -->
 
-```r
-data_rec <- extra %>% 
-  rec(sex, rec = "Frau = 1; Mann = 0; else = NA")
-```
+<!-- Dabei wird eine neue Variable (Spalte) erzeugt, deren Namen der alten Variable entspricht, plus dem Suffix `_r`, in diesem Fall also `sex_r`. Man beachte, dass Textwerte (Strings) *nicht* in Anführungsstriche gesetzt werden müssen, nur der ganze "Rekodierungsterm" muss einmal in Anführungsstriche gesetzt werden. -->
 
-Dabei wird eine neue Variable (Spalte) erzeugt, deren Namen der alten Variable entspricht, plus dem Suffix `_r`, in diesem Fall also `sex_r`. Man beachte, dass Textwerte (Strings) *nicht* in Anführungsstriche gesetzt werden müssen, nur der ganze "Rekodierungsterm" muss einmal in Anführungsstriche gesetzt werden.
+<!-- Prüfen wir das Ergebnis: -->
 
-Prüfen wir das Ergebnis:
-  
-
-```r
-data_rec %>% 
-  count(sex_r)
-#> # A tibble: 3 × 2
-#>   sex_r     n
-#>   <chr> <int>
-#> 1 0       286
-#> 2 1       529
-#> 3 <NA>     11
-```
+<!-- ```{r} -->
+<!-- data_rec %>%  -->
+<!--   count(sex_r) -->
+<!-- ``` -->
 
 
 ## Items umkodieren
@@ -276,18 +268,75 @@ extra %>%
 
 
 
+## Zeilen (Fälle) löschen
+
+In jeder braven Tabelle steht pro Zeile (genau) ein Fall;
+mit "Fall", auch als "Beobachtung" bezeichnet, ist ein Untersuchungsobjekt gemeint.
+Häufig sind das in der Psychologie Personen, es könnten aber auch z.B. Versuchsdurchgänge, Teams oder Firmen sein.
+Sagen wir, Sie möchten einen bestimmten Fall löschen.
+Der Einfachheit halber nehmen wir den ersten Fall der Tabelle `extra`.
+Hier hat jeder Fall schon eine "ID", eine unique, also eineindeutige Zuordnung,
+das ist die Spalte `code`. Auch die Spalte `timestamp` taugt vermutlich für eine Zuordnung.
+
+In R könnten Sie die erste Zeile also anhand dieser ID-Spalte ansprechen und entsprechend filtern:
+
+
+```r
+extra_kurz <-
+  extra %>% 
+  ungroup() %>% 
+  filter(code != "HSC" | is.na(code))  # ! ist die logische Verneinung
+```
+
+
+Prüfen wir die Anzahl der Zeilen:
+
+```r
+nrow(extra_kurz)
+#> [1] 825
+nrow(extra)
+#> [1] 826
+```
+
+
+Falls Sie sich wundern: `filter(code != "HSC")` hätte zwar die Zeile, in der bei `code` der Wert `HSC` steht entfernt, aber auch *alle* Zeilen, in denen bei `code` `NA` steht. 
+Darum haben wir die fehlenden Werte explizit drinnen gelassen. 
+Die technischen Details für dieses vorsichitge Verhaltne von `filter()` finden sich [hier](https://stackoverflow.com/questions/28857653/removing-na-observations-with-dplyrfilter).
+
+Alternativ könnte man eine ID-Spalte ergänzen (oder auch falls man keine hat):
+
+
+```r
+extra2 <-
+  extra %>% 
+  mutate(id = 1:nrow(extra)) %>% 
+  relocate(id, .before = 1) # wir ziehen die ID-Variable an die erste Spalte
+```
+
+Und jetzt können wir entspannt filtern:
+
+
+```r
+extra_kurz <-
+  extra2 %>% 
+  filter(id != 1)
+```
+
 
 
 
 <!-- ### Vertiefung: Duplikate entfernen -->
 
 
-## Extraversionsscore berechnen
+## Scores berechnen
 
 
 ### Summen- und Mittelwerte
 
 In der Psychometrie werden komplexe Konstrukte wie etwa das Persönlichkeitsmerkmal Extraversion anhand mehrerer Indikatoren (meistens Items eines Fragebogens) gemessen. Um zu einem Personenwert für Extraversion zu gelangen, werden die Itemwerte im einfachsten Fall summiert. Alternativ kann man auch einen Mittelwert bilden. Dieses Aggregieren bietet den Vorteil, dass sich Messfehler (möglicherweise) herausmitteln. Außerdem versucht man so abzubilden, dass Extraversion aus mehreren unterschiedlichen Facetten besteht, die nicht mit einem einzelnen Item, sondern über mehrere unterschiedliche Items, erfasst werden. Viele Psychometriker sind skeptisch, wenn man versuchen würde, Extraversion mit der Frage "Wie extrovertiert sind Sie?" zu erfassen. Ihre Bedenken sind, dass Menschen die vielen Facetten von Extraversion nicht im Arbeitsgedächtnis vorhalten können. Fragt man hingegen nur einen kleinen Aspekt von Extraversion ab, trägt man der Breite des Konstrukts nicht Rechnung.
+
+Die Zusammenfassung der Itemwerte eines Konstrukts zu einem Mittelwert oder einem Summenwert bezeichnet man als *Score*.
+
 
 
 Ein einfaches Beispiel zur Berechnung des Extraversion-Summenscore:
@@ -370,7 +419,7 @@ extra %>%
 Der Parameter `n` bei `row_means()` gibt den Anteil der *nicht* fehlenden Werte (pro Zeile) wieder, damit ein Wert berechnet wird: Bei zu vielen fehlenden Werten (zu wenig Daten) pro Person wird sonst `NA` zurückgeliefert. Das ist sinnvoll, denn hat eine Person von 10 Items nur 1 Item beantwortet, so kann man wohl nicht zuverlässig sagen, dass Extraversion in seiner Breite zuverlässig geschätzt wird. Die Funktion fügt dem Datensatz eine Spalte hinzu, deren Name mit `var` angegeben wird.
 
 
-### z-Werte
+## z-Werte
 
 Man kann die Aussagekraft eines Mittelwerts noch erhöhen, in dem man ihn z-skaliert. Das geht zum Beispiel so:
 
@@ -492,7 +541,7 @@ extra %>%
   geom_pointrange()
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-22-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-24-1.png" width="70%" style="display: block; margin: auto;" />
 
 
 `geom_pointrange()` zeichnet einen vertikalen (Fehler-)balken sowie einen Punkt in der Mitte; 
@@ -531,7 +580,7 @@ extra_auszug %>%
   facet_wrap(~ code)
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-25-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-27-1.png" width="70%" style="display: block; margin: auto;" />
 
 Dem Skalenniveau der Items kommen Punkte vielleicht besser entgegen als die Balken:
 
@@ -544,6 +593,6 @@ extra_auszug %>%
   facet_wrap(~ code)
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-26-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-28-1.png" width="70%" style="display: block; margin: auto;" />
 
 

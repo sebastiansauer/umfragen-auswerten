@@ -1,7 +1,7 @@
 --- 
 title: "Umfragen auswerten"
 author: "Sebastian Sauer"
-date: "2022-05-25 21:07:59"
+date: "2022-05-27 14:19:33"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
@@ -82,7 +82,7 @@ An anderer Stelle^[https://www.drsatow.de/cgi-bin/testorder/testorder17_0.pl?t=B
   >   Lizenz: Sie dürfen den Test ausschließlich zu Forschungs- und Unterrichtszwecken einsetzen und übersetzen. Sie müssen die Quelle nennen und ein elektronisches Belegexemplar oder die Quellenangabe (Autor, Titel, Zeitschrift/Buch, Erscheinungsjahr) Ihrer Veröffentlichung an mailATdrsatow.de senden.
 
 
-Zur Reliabilität berichtet @Satow2012, dass Cronbachs Alpha bei .87 läge, was ein guter Wert ist. Machen wir diese Variable für R verfügbar:
+Zur Reliabilität berichtet @Satow2012, dass Cronbachs Alpha bei .87 liege, was ein guter Wert ist. Machen wir diese Variable für R verfügbar:
 
 
 ```r

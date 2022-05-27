@@ -65,3 +65,5 @@ r-pakete-5
 daten-4
 einführung
 literaturempfehlungen
+zeilen-fälle-löschen
+scores-berechnen

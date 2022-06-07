@@ -240,7 +240,74 @@ extra %>%
 ```
 
 
+Wenn Sie mehrere Items auswählen wollen,
+benutzen Sie das *tidyselect*-Prinzip:
+Also einfach die Spalten ohne Anführungszeichen per Komma (oder `:`) hintereinander aufführen:
 
+```{r}
+extra %>% 
+  rec(i02r, i06r, rec= "rev")
+```
+
+
+
+## Item-Labels in Zahlen umwandeln
+
+
+Eine ähnliche Sache wie das Umpolen von Items ist folgende Situation: Ihre Umfrage-Software spuckt als Item-Antworten die "Ankertexte" oder "Itemlabels" aus wie *stimme überhaupt nicht zu* oder *stimme voll und ganz zu*.
+Da man bekanntlich (höchstens) mit Zahlen aber nicht mit Texten rechnen kann,
+möchten Sie diese Itemlabels in Zahlen umwandeln.
+Das sieht dann ähnlich zu folgendem Wenn-Dann-Regel-Schema aus:
+
+  
+```
+stimme voll und ganz zu --> 4
+stimme eher zu --> 3
+stimme eher nicht zu--> 2
+stimme überhaupt nicht zu --> 1
+```
+
+Dieses Umwandeln können Sie  mit `case_when()` vornehmen.
+`case_when()` listet einfach Wenn-Dann-Regeln auf.
+
+Erzeugen wir uns mal ein paar Daten, 
+um die Sache zu illustrieren:
+
+
+
+```{r}
+d <-
+  tibble(person_nr = 1:3,
+         i01 = c("stimme überhaupt nicht zu", "stimmer eher zu", "stimme voll und ganz zu"))
+```
+
+So ähnlich würden also Ihre Daten aussehen.
+
+Jetzt zum Umwandeln:
+
+```{r}
+d %>% 
+  mutate(i01_r = case_when(
+    i01 == "stimme überhaupt nicht zu" ~ 1,
+    i01 == "stimmer eher nicht zu" ~ 2,
+    i01 == "stimme eher zu" ~3,
+    i01 == "stimme voll und ganz zu" ~ 4
+  ))
+```
+
+Die Syntax von `case_when()` lautet:
+
+```
+case_when(Prüfung ~ Konsequenz,
+          Prüfung2 ~ Konsequenz)
+```
+
+Wenn `Prüfung` erfüllt ist (`TRUE`), dann wird `Konseequenz` ausgeführt.
+Ansosten wird auf `Prüfung2` getestet, etc.
+
+
+
+Alternativ könnte man auch `rec()` aus `sjmisc` nutzen.
 
 
 ## Zeilen (Fälle) löschen

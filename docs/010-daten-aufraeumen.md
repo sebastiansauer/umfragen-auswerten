@@ -265,7 +265,103 @@ extra %>%
 ```
 
 
+Wenn Sie mehrere Items auswählen wollen,
+benutzen Sie das *tidyselect*-Prinzip:
+Also einfach die Spalten ohne Anführungszeichen per Komma (oder `:`) hintereinander aufführen:
 
+
+```r
+extra %>% 
+  rec(i02r, i06r, rec= "rev")
+#> # A tibble: 826 × 36
+#>    timestamp code    i01  i02r   i03   i04   i05  i06r   i07
+#>    <chr>     <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#>  1 11.03.20… HSC       3     3     3     3     4     4     3
+#>  2 11.03.20… ERB       2     2     1     2     3     2     2
+#>  3 11.03.20… ADP       3     4     1     4     4     1     3
+#>  4 11.03.20… KHB       3     3     2     4     3     3     3
+#>  5 11.03.20… PTG       4     3     1     4     4     3     4
+#>  6 11.03.20… ABL       3     2     1     4     2     3     4
+#>  7 11.03.20… ber       4     4     1     3     3     3     2
+#>  8 11.03.20… hph       3     3     2     3     2     2     3
+#>  9 11.03.20… IHW       4     4     1     4     3     4     3
+#> 10 11.03.20… LEI       4     4     2     4     3     3     3
+#> # … with 816 more rows, and 27 more variables: i08 <dbl>,
+#> #   i09 <dbl>, i10 <dbl>, n_facebook_friends <dbl>,
+#> #   n_hangover <dbl>, age <dbl>, sex <chr>,
+#> #   extra_single_item <dbl>, time_conversation <dbl>,
+#> #   presentation <chr>, n_party <dbl>, clients <chr>,
+#> #   extra_vignette <chr>, i21 <lgl>, extra_vignette2 <dbl>,
+#> #   major <chr>, smoker <chr>, sleep_week <dbl>, …
+```
+
+
+
+## Item-Labels in Zahlen umwandeln
+
+
+Eine ähnliche Sache wie das Umpolen von Items ist folgende Situation: Ihre Umfrage-Software spuckt als Item-Antworten die "Ankertexte" oder "Itemlabels" aus wie *stimme überhaupt nicht zu* oder *stimme voll und ganz zu*.
+Da man bekanntlich (höchstens) mit Zahlen aber nicht mit Texten rechnen kann,
+möchten Sie diese Itemlabels in Zahlen umwandeln.
+Das sieht dann ähnlich zu folgendem Wenn-Dann-Regel-Schema aus:
+
+  
+```
+stimme voll und ganz zu --> 4
+stimme eher zu --> 3
+stimme eher nicht zu--> 2
+stimme überhaupt nicht zu --> 1
+```
+
+Dieses Umwandeln können Sie  mit `case_when()` vornehmen.
+`case_when()` listet einfach Wenn-Dann-Regeln auf.
+
+Erzeugen wir uns mal ein paar Daten, 
+um die Sache zu illustrieren:
+
+
+
+
+```r
+d <-
+  tibble(person_nr = 1:3,
+         i01 = c("stimme überhaupt nicht zu", "stimmer eher zu", "stimme voll und ganz zu"))
+```
+
+So ähnlich würden also Ihre Daten aussehen.
+
+Jetzt zum Umwandeln:
+
+
+```r
+d %>% 
+  mutate(i01_r = case_when(
+    i01 == "stimme überhaupt nicht zu" ~ 1,
+    i01 == "stimmer eher nicht zu" ~ 2,
+    i01 == "stimme eher zu" ~3,
+    i01 == "stimme voll und ganz zu" ~ 4
+  ))
+#> # A tibble: 3 × 3
+#>   person_nr i01                       i01_r
+#>       <int> <chr>                     <dbl>
+#> 1         1 stimme überhaupt nicht zu     1
+#> 2         2 stimmer eher zu              NA
+#> 3         3 stimme voll und ganz zu       4
+```
+
+Die Syntax von `case_when()` lautet:
+
+```
+case_when(Prüfung ~ Konsequenz,
+          Prüfung2 ~ Konsequenz)
+```
+
+Wenn `Prüfung` erfüllt ist (`TRUE`), dann wird `Konseequenz` ausgeführt.
+Ansosten wird auf `Prüfung2` getestet, etc.
+
+
+
+Alternativ könnte man auch `rec()` aus `sjmisc` nutzen.
 
 
 ## Zeilen (Fälle) löschen
@@ -541,7 +637,7 @@ extra %>%
   geom_pointrange()
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-24-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-27-1.png" width="70%" style="display: block; margin: auto;" />
 
 
 `geom_pointrange()` zeichnet einen vertikalen (Fehler-)balken sowie einen Punkt in der Mitte; 
@@ -580,7 +676,7 @@ extra_auszug %>%
   facet_wrap(~ code)
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-27-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-30-1.png" width="70%" style="display: block; margin: auto;" />
 
 Dem Skalenniveau der Items kommen Punkte vielleicht besser entgegen als die Balken:
 
@@ -593,6 +689,6 @@ extra_auszug %>%
   facet_wrap(~ code)
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-28-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-31-1.png" width="70%" style="display: block; margin: auto;" />
 
 

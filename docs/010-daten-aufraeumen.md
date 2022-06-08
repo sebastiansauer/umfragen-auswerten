@@ -78,6 +78,79 @@ Beachten Sie das Prinzip von "tidy data":
 - In jeder Zelle steht *eine Wert*.
 
 
+
+## Eine Gesamttabelle
+
+
+Sie haben die Daten anhand mehrerer Fragebogen erhoben?
+Oder Sie haben mehrere Gruppen untersucht?
+Jetzt haben Sie *mehrere* Datentabellen, die 
+auf eine Analyse harren?
+
+*Verheiraten* ist angesagt.
+Sie müssen *alle* Ihre Daten in *eine* Tabelle (Datensatz) bringen.
+
+Dazu kann man zwei Fälle unterscheiden:
+
+
+### Zeilenweises zusammenführen
+
+1. *Jede Person* hat zwei (oder mehrere) Fragebögen ausgefüllt. In Datensatz A finden sich die ersten paar Variablen und in Datensatz B die restlichen Variablen. Aber in beiden Datensätzen kommen alle Personen vor.
+
+
+
+
+
+Etwas ausführlicher ist es im Folgenden dargestellt.
+
+Sagen wir, wir haben zwei Tabellen, die wir "untereinander" (also zeilenweise) "zusammenkleben" möchten:
+
+
+
+```r
+tab1 <- mtcars %>% slice(1:16)
+tab2 <- mtcars %>% slice(17:32)
+
+mtcars_gesamt <-
+  tab1 %>% 
+  bind_rows(tab2)
+```
+
+
+
+
+### Spaltenweises Zusammenführen
+
+
+2. *In jeder Gruppe* wurde ein anderer Fragebogen ausgefüllt (z.B. weil Sie unterschiedliche experimentelle Gruppen untersucht haben). Sie haben also zwei Datensätze mit unterschiedlichen Personen (nämlich in Datensatz A die Personen der Gruppe A und in Datensatz B die Personen der Gruppe B). Aber in jedem Datensatz finden sich die gleichen Variablen.
+
+
+Sagen wir, wir haben zwei Tabellen, die wir "hintereinander kleben" möchten, also spaltenweise zusammenführen möchten:
+
+
+
+```r
+tab1 <- mtcars %>% select(1:5)
+tab2 <- mtcars %>% select(6:11)
+
+mtcars_gesamt <-
+  tab1 %>% 
+  bind_cols(tab2)
+```
+
+
+
+*Achtung* Diese Art des Zusammenfügens prüft *nicht*, 
+ob die Sortierung der Tabellen identisch ist:
+Ob also die Zeile für "Schorsch" aus Tabelle 1 auch mit Schorschs Zeile aus Tabelle 2 zusammengefügt werden (und nicht etwas mit denen von Alois).
+Sie müssen also selber dafür sorgen,
+dass die Sortierung richtig ist.
+Alternativ könnten Sie mit einem `join` arbeiten,
+der die korrekte Sortierung für Sie übernimmt.
+
+
+
+
 ## Text in Zahlen umwandeln
 
 
@@ -637,7 +710,7 @@ extra %>%
   geom_pointrange()
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-27-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-29-1.png" width="70%" style="display: block; margin: auto;" />
 
 
 `geom_pointrange()` zeichnet einen vertikalen (Fehler-)balken sowie einen Punkt in der Mitte; 
@@ -676,7 +749,7 @@ extra_auszug %>%
   facet_wrap(~ code)
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-30-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-32-1.png" width="70%" style="display: block; margin: auto;" />
 
 Dem Skalenniveau der Items kommen Punkte vielleicht besser entgegen als die Balken:
 
@@ -689,6 +762,6 @@ extra_auszug %>%
   facet_wrap(~ code)
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-31-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-33-1.png" width="70%" style="display: block; margin: auto;" />
 
 

@@ -15,6 +15,9 @@ r-pakete-1
 daten-1
 überblick
 brave-daten
+eine-gesamttabelle
+zeilenweises-zusammenführen
+spaltenweises-zusammenführen
 text-in-zahlen-umwandeln
 hilfe-ich-habe-keine-zahlen
 introducing-parse_number

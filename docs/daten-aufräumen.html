@@ -7,7 +7,7 @@
 <title>Kapitel 2 Daten aufräumen | Umfragen auswerten</title>
 <meta name="author" content="Sebastian Sauer">
 <meta name="description" content="2.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # recode library(ggstatsplot) # Diagram aufbügeln library(mice) # Fehlende Werte...">
-<meta name="generator" content="bookdown 0.26.2 with bs4_book()">
+<meta name="generator" content="bookdown 0.26 with bs4_book()">
 <meta property="og:title" content="Kapitel 2 Daten aufräumen | Umfragen auswerten">
 <meta property="og:type" content="book">
 <meta property="og:description" content="2.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # recode library(ggstatsplot) # Diagram aufbügeln library(mice) # Fehlende Werte...">
@@ -17,7 +17,9 @@
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
-<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><link href="libs/tabwid-1.0.0/tabwid.css" rel="stylesheet">
+<link href="libs/tabwid-1.0.0/scrool.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   </style>
@@ -67,10 +69,11 @@
         <ul class="book-toc list-unstyled">
 <li><a class="" href="index.html"><span class="header-section-number">1</span> Einleitung</a></li>
 <li><a class="active" href="daten-aufr%C3%A4umen.html"><span class="header-section-number">2</span> Daten aufräumen</a></li>
-<li><a class="" href="fallstudie-popup-stores.html"><span class="header-section-number">3</span> Fallstudie Popup-Stores</a></li>
-<li><a class="" href="normierung.html"><span class="header-section-number">4</span> Normierung</a></li>
-<li><a class="" href="diagnostische-kennwerte.html"><span class="header-section-number">5</span> Diagnostische Kennwerte</a></li>
-<li><a class="" href="itemanalyse.html"><span class="header-section-number">6</span> Itemanalyse</a></li>
+<li><a class="" href="zentrale-ergebnisse.html"><span class="header-section-number">3</span> Zentrale Ergebnisse</a></li>
+<li><a class="" href="fallstudie-popup-stores.html"><span class="header-section-number">4</span> Fallstudie Popup-Stores</a></li>
+<li><a class="" href="normierung.html"><span class="header-section-number">5</span> Normierung</a></li>
+<li><a class="" href="diagnostische-kennwerte.html"><span class="header-section-number">6</span> Diagnostische Kennwerte</a></li>
+<li><a class="" href="itemanalyse.html"><span class="header-section-number">7</span> Itemanalyse</a></li>
 </ul>
 
         <div class="book-extra">
@@ -185,6 +188,7 @@ Sie müssen <em>alle</em> Ihre Daten in <em>eine</em> Tabelle (Datensatz) bringe
 <span class="va">mtcars_gesamt</span> <span class="op">&lt;-</span>
   <span class="va">tab1</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_cols</a></span><span class="op">(</span><span class="va">tab2</span><span class="op">)</span></code></pre></div>
+<p><a href="https://dplyr.tidyverse.org/reference/bind.html">Hier</a> findet sich auch ein nützliches Beispiel.</p>
 <p><em>Achtung</em> Diese Art des Zusammenfügens prüft <em>nicht</em>,
 ob die Sortierung der Tabellen identisch ist:
 Ob also die Zeile für “Schorsch” aus Tabelle 1 auch mit Schorschs Zeile aus Tabelle 2 zusammengefügt werden (und nicht etwas mit denen von Alois).
@@ -507,7 +511,7 @@ Gibt es aber fehlende Werte, sollte man Mittelwerte statt Summenwerte vorziehen.
 <p>Vergleichen wir das mit dem Mittelwert-Score. Jetzt lassen wir R die Rechenarbeit machen:</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Alois</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>
-<span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">mean</a></span><span class="op">(</span><span class="va">Alois</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Alois</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; [1] 3</span></code></pre></div>
 <p>Der Mittelwert von Alois beträgt 3 – das passt genau zu unserer Argumentation von gerade (s. oben), dass 3 eine bessere Schätzung der Ausprägung der latenten Variable von Alois ist. Daher ist der Mittelwert dem Summenscore vorzuziehen.</p>
 <p>Ein anderer Vorteil des Mittelwerts ist, dass er etwas anschaulicher ist als der Summenscore: Ein Mittelwert von 3 (auf einer Skala von 1 bis 4) ist anschaulicher als eine Summe von 9 (bei drei Items). Wir werden daher den Mittelwert vorziehen.</p>
@@ -585,7 +589,7 @@ hier zur Erinnerung:</p>
 <code class="sourceCode R"><span class="va">extra_alpha</span> <span class="op">&lt;-</span> <span class="fl">.87</span></code></pre></div>
 <p>Berechnen wir nun mit Hilfe von R den Standardmessfehler:</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">extra_stdmessfehler</span> <span class="op">=</span> <span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">sd</a></span><span class="op">(</span><span class="va">extra</span><span class="op">$</span><span class="va">extra_mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">extra_alpha</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">extra_stdmessfehler</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">extra</span><span class="op">$</span><span class="va">extra_mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">extra_alpha</span><span class="op">)</span>
 <span class="va">extra_stdmessfehler</span>
 <span class="co">#&gt; [1] 0.1628459</span></code></pre></div>
 <p>Jetzt, da wir den Standardmessfehler kennen, können wir in gewohnter Manier “links und rechts” auf einen Messwert den zweifachen Wert des Standardmessfehlers draufpacken, um ein 95% Konfidenzintervall zu erhalten:</p>
@@ -653,7 +657,7 @@ als Parameter werden der mittlere Wert, die untere Grenze und die obere Grenze a
 </div>
   <div class="chapter-nav">
 <div class="prev"><a href="index.html"><span class="header-section-number">1</span> Einleitung</a></div>
-<div class="next"><a href="fallstudie-popup-stores.html"><span class="header-section-number">3</span> Fallstudie Popup-Stores</a></div>
+<div class="next"><a href="zentrale-ergebnisse.html"><span class="header-section-number">3</span> Zentrale Ergebnisse</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
@@ -708,7 +712,7 @@ als Parameter werden der mittlere Wert, die untere Grenze und die obere Grenze a
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2022-06-08 18:23:27.</p>
+    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2022-06-20 18:28:08.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

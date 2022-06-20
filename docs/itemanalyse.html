@@ -4,20 +4,22 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Kapitel 6 Itemanalyse | Umfragen auswerten</title>
+<title>Kapitel 7 Itemanalyse | Umfragen auswerten</title>
 <meta name="author" content="Sebastian Sauer">
-<meta name="description" content="6.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # recode library(psych) # Itemanalyse  6.2 Daten data_url &lt;-...">
-<meta name="generator" content="bookdown 0.26.2 with bs4_book()">
-<meta property="og:title" content="Kapitel 6 Itemanalyse | Umfragen auswerten">
+<meta name="description" content="7.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # recode library(psych) # Itemanalyse  7.2 Daten data_url &lt;-...">
+<meta name="generator" content="bookdown 0.26 with bs4_book()">
+<meta property="og:title" content="Kapitel 7 Itemanalyse | Umfragen auswerten">
 <meta property="og:type" content="book">
-<meta property="og:description" content="6.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # recode library(psych) # Itemanalyse  6.2 Daten data_url &lt;-...">
+<meta property="og:description" content="7.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # recode library(psych) # Itemanalyse  7.2 Daten data_url &lt;-...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Kapitel 6 Itemanalyse | Umfragen auswerten">
-<meta name="twitter:description" content="6.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # recode library(psych) # Itemanalyse  6.2 Daten data_url &lt;-...">
+<meta name="twitter:title" content="Kapitel 7 Itemanalyse | Umfragen auswerten">
+<meta name="twitter:description" content="7.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # recode library(psych) # Itemanalyse  7.2 Daten data_url &lt;-...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
-<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><link href="libs/tabwid-1.0.0/tabwid.css" rel="stylesheet">
+<link href="libs/tabwid-1.0.0/scrool.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   </style>
@@ -67,10 +69,11 @@
         <ul class="book-toc list-unstyled">
 <li><a class="" href="index.html"><span class="header-section-number">1</span> Einleitung</a></li>
 <li><a class="" href="daten-aufr%C3%A4umen.html"><span class="header-section-number">2</span> Daten aufräumen</a></li>
-<li><a class="" href="fallstudie-popup-stores.html"><span class="header-section-number">3</span> Fallstudie Popup-Stores</a></li>
-<li><a class="" href="normierung.html"><span class="header-section-number">4</span> Normierung</a></li>
-<li><a class="" href="diagnostische-kennwerte.html"><span class="header-section-number">5</span> Diagnostische Kennwerte</a></li>
-<li><a class="active" href="itemanalyse.html"><span class="header-section-number">6</span> Itemanalyse</a></li>
+<li><a class="" href="zentrale-ergebnisse.html"><span class="header-section-number">3</span> Zentrale Ergebnisse</a></li>
+<li><a class="" href="fallstudie-popup-stores.html"><span class="header-section-number">4</span> Fallstudie Popup-Stores</a></li>
+<li><a class="" href="normierung.html"><span class="header-section-number">5</span> Normierung</a></li>
+<li><a class="" href="diagnostische-kennwerte.html"><span class="header-section-number">6</span> Diagnostische Kennwerte</a></li>
+<li><a class="active" href="itemanalyse.html"><span class="header-section-number">7</span> Itemanalyse</a></li>
 </ul>
 
         <div class="book-extra">
@@ -78,25 +81,25 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="itemanalyse" class="section level1" number="6">
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="itemanalyse" class="section level1" number="7">
 <h1>
-<span class="header-section-number">Kapitel 6</span> Itemanalyse<a class="anchor" aria-label="anchor" href="#itemanalyse"><i class="fas fa-link"></i></a>
+<span class="header-section-number">Kapitel 7</span> Itemanalyse<a class="anchor" aria-label="anchor" href="#itemanalyse"><i class="fas fa-link"></i></a>
 </h1>
-<div id="r-pakete-5" class="section level2" number="6.1">
+<div id="r-pakete-6" class="section level2" number="7.1">
 <h2>
-<span class="header-section-number">6.1</span> R-Pakete<a class="anchor" aria-label="anchor" href="#r-pakete-5"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.1</span> R-Pakete<a class="anchor" aria-label="anchor" href="#r-pakete-6"><i class="fas fa-link"></i></a>
 </h2>
 <p>In diesem Kapitel benötigen wir folgende R-Pakete:</p>
-<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>  <span class="co"># Datenjudo</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://strengejacke.github.io/sjmisc/">sjmisc</a></span><span class="op">)</span>  <span class="co"># recode</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://personality-project.org/r/psych/">psych</a></span><span class="op">)</span>  <span class="co"># Itemanalyse</span></code></pre></div>
 </div>
-<div id="daten-4" class="section level2" number="6.2">
+<div id="daten-5" class="section level2" number="7.2">
 <h2>
-<span class="header-section-number">6.2</span> Daten<a class="anchor" aria-label="anchor" href="#daten-4"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.2</span> Daten<a class="anchor" aria-label="anchor" href="#daten-5"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">data_url</span> <span class="op">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/sebastiansauer/modar/master/datasets/extra.csv"</span>
 <span class="va">extra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="va">data_url</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 826 Columns: 34</span>
@@ -109,11 +112,11 @@
 <span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span>
 <span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></code></pre></div>
 </div>
-<div id="einführung" class="section level2" number="6.3">
+<div id="einführung" class="section level2" number="7.3">
 <h2>
-<span class="header-section-number">6.3</span> Einführung<a class="anchor" aria-label="anchor" href="#einf%C3%BChrung"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3</span> Einführung<a class="anchor" aria-label="anchor" href="#einf%C3%BChrung"><i class="fas fa-link"></i></a>
 </h2>
-<p>Unter <em>Itemanalyse</em> versteht man einen wesentlichen Teil der Validierung eines psychometrischen Tests. Zentrales Element ist die empirische Prüfung der Güte der Items eines Instruments. Entsprechend kann man von der <em>internen Validität</em> eines <em>Tests</em><a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;nicht zu verwechseln mit der internen Validität einer Studie&lt;/p&gt;"><sup>7</sup></a> sprechen. Üblicherweise werden dabei die folgenden Aspekte untersucht:</p>
+<p>Unter <em>Itemanalyse</em> versteht man einen wesentlichen Teil der Validierung eines psychometrischen Tests. Zentrales Element ist die empirische Prüfung der Güte der Items eines Instruments. Entsprechend kann man von der <em>internen Validität</em> eines <em>Tests</em><a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;nicht zu verwechseln mit der internen Validität einer Studie&lt;/p&gt;"><sup>8</sup></a> sprechen. Üblicherweise werden dabei die folgenden Aspekte untersucht:</p>
 <ol style="list-style-type: decimal">
 <li>Itemschwierigkeit</li>
 <li>Itemtrennschärfe</li>
@@ -122,12 +125,12 @@
 </ol>
 <p>Die Analyse der Faktorenstruktur ist in dieser Analyse nicht umgesetzt.</p>
 <p>Die ersten drei Punkte werden durch eine Funktion, <code><a href="https://rdrr.io/pkg/psych/man/alpha.html">alpha()</a></code> aus dem Paket <code>psych</code> abgedeckt. Dieser Funktion übergibt man eine Tabelle mit Items; man bekommt einige Item-Statistiken zurück. Zuerst erstellen wir eine Tabelle, <code>extra_items</code> nur mit den Items.</p>
-<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">extra_items</span> <span class="op">&lt;-</span> <span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">i01</span><span class="op">:</span><span class="va">i10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://tidyr.tidyverse.org/reference/drop_na.html">drop_na</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>Dann führen wir <code><a href="https://rdrr.io/pkg/psych/man/alpha.html">alpha()</a></code> mit dieser Tabelle aus:</p>
-<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb103"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">psych</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/psych/man/alpha.html">alpha</a></span><span class="op">(</span><span class="va">extra_items</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Reliability analysis   </span>
@@ -138,8 +141,10 @@
 <span class="co">#&gt;  median_r</span>
 <span class="co">#&gt;      0.27</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  lower alpha upper     95% confidence boundaries</span>
-<span class="co">#&gt; 0.75 0.77 0.8 </span>
+<span class="co">#&gt;     95% confidence boundaries </span>
+<span class="co">#&gt;          lower alpha upper</span>
+<span class="co">#&gt; Feldt     0.75  0.77   0.8</span>
+<span class="co">#&gt; Duhachek  0.75  0.77   0.8</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  Reliability if an item is dropped:</span>
 <span class="co">#&gt;      raw_alpha std.alpha G6(smc) average_r S/N alpha se</span>
@@ -192,13 +197,13 @@
 <span class="co">#&gt; i10  0.23 0.43 0.26 0.08    0</span></code></pre></div>
 <p>Hilfe zur recht ausführlichen Ausgabe bekommt man <code><a href="https://rdrr.io/pkg/psych/man/alpha.html">?alpha</a></code>.</p>
 <p>Das <code>raw_alpha</code> ist das für gewöhnliche berichtete Alpha-Koeffizient (<span class="math inline">\(\alpha\)</span>) berechnet auf Basis der Kovarianzen, nicht Korrelationen), als Schätzwert für die Reliabilität im Sinne der internen Konsistenz der Skala. Außerdem wird ein Konfidenzbereich für den Alpha-Koeffizienten angegeben. Interessant ist auch die Frage, ob bzw. wie sich die Reliabilität der Skala ändert, wenn man ein bestimmtes Items entfernt: Wird die Reliabilität besser nach Entfernen des Items, so ist das ein Hinweis, dass das Item umformuliert oder entfernt werden sollte. Im vorliegenden Fall ist das Item <code>i03</code> ein Kandidat zur Überarbeitung.</p>
-<p>Darüber hinaus wird Guttmans <span class="math inline">\(\lambda_6\)</span> (Lambda-6) berichtet, der in dieser Analyse aber nicht weiter betrachtet wird. <code>average_r</code> ist die mittlere Korrelation aller Itempaare (“Interitemkorrelation”); dieser Koeffizient misst, wie stark die paarweise Korrelation der Items untereinander ist. Bei der Schwierigkeit ist es wünschenswert, dass ein breiter Bereich abgedeckt wird, also einige Items leicht und andere schwer sind, damit Personen mit geringer und hoher Ausprägung in der latenten Fähigkeit<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;“Fähigkeit” wird hier im breiten Sine verwendet, auch für Persönlichkeitskonstrukte wie Extroversion.&lt;/p&gt;"><sup>8</sup></a> jeweils Items mit passender Schwierigkeit auffinden.</p>
+<p>Darüber hinaus wird Guttmans <span class="math inline">\(\lambda_6\)</span> (Lambda-6) berichtet, der in dieser Analyse aber nicht weiter betrachtet wird. <code>average_r</code> ist die mittlere Korrelation aller Itempaare (“Interitemkorrelation”); dieser Koeffizient misst, wie stark die paarweise Korrelation der Items untereinander ist. Bei der Schwierigkeit ist es wünschenswert, dass ein breiter Bereich abgedeckt wird, also einige Items leicht und andere schwer sind, damit Personen mit geringer und hoher Ausprägung in der latenten Fähigkeit<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;“Fähigkeit” wird hier im breiten Sine verwendet, auch für Persönlichkeitskonstrukte wie Extroversion.&lt;/p&gt;"><sup>9</sup></a> jeweils Items mit passender Schwierigkeit auffinden.</p>
 <p><code>mean</code> gibt den Mittelwert der Skala an (über alle Items); das ist ein Hinweis zur “Gesamtschwierigkeit” der Skala.Weiter unten in der Ausgabe wird für jedes einzelne Item die Schwierigkeit ausgegeben; <code>sd</code> ist die zugehörige Streuung. <code>S/N</code> steht für Signal-Noise-Ratio; dieser Koeffizient wird hier nicht weiter analysiert.</p>
 <p>Die Itemtrennschärfe (synonym: Part-Whole-Korrelation) wird pro Item mit <code>raw.r</code> angezeigt.</p>
 </div>
-<div id="literaturempfehlungen" class="section level2" number="6.4">
+<div id="literaturempfehlungen" class="section level2" number="7.4">
 <h2>
-<span class="header-section-number">6.4</span> Literaturempfehlungen<a class="anchor" aria-label="anchor" href="#literaturempfehlungen"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.4</span> Literaturempfehlungen<a class="anchor" aria-label="anchor" href="#literaturempfehlungen"><i class="fas fa-link"></i></a>
 </h2>
 <p><span class="citation">Bühner (2011)</span> bietet eine gute Einführung in die Analyse psychometrischer Daten, allerdings mit SPSS-Syntax, keine R-Syntax.</p>
 
@@ -238,17 +243,18 @@ Steyer, Rolf, and Michael Eid. 1993. <em>Messen Und Testen</em>. Heidelberg: Spr
 
 
 
+
   <div class="chapter-nav">
-<div class="prev"><a href="diagnostische-kennwerte.html"><span class="header-section-number">5</span> Diagnostische Kennwerte</a></div>
+<div class="prev"><a href="diagnostische-kennwerte.html"><span class="header-section-number">6</span> Diagnostische Kennwerte</a></div>
 <div class="empty"></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#itemanalyse"><span class="header-section-number">6</span> Itemanalyse</a></li>
-<li><a class="nav-link" href="#r-pakete-5"><span class="header-section-number">6.1</span> R-Pakete</a></li>
-<li><a class="nav-link" href="#daten-4"><span class="header-section-number">6.2</span> Daten</a></li>
-<li><a class="nav-link" href="#einf%C3%BChrung"><span class="header-section-number">6.3</span> Einführung</a></li>
-<li><a class="nav-link" href="#literaturempfehlungen"><span class="header-section-number">6.4</span> Literaturempfehlungen</a></li>
+<li><a class="nav-link" href="#itemanalyse"><span class="header-section-number">7</span> Itemanalyse</a></li>
+<li><a class="nav-link" href="#r-pakete-6"><span class="header-section-number">7.1</span> R-Pakete</a></li>
+<li><a class="nav-link" href="#daten-5"><span class="header-section-number">7.2</span> Daten</a></li>
+<li><a class="nav-link" href="#einf%C3%BChrung"><span class="header-section-number">7.3</span> Einführung</a></li>
+<li><a class="nav-link" href="#literaturempfehlungen"><span class="header-section-number">7.4</span> Literaturempfehlungen</a></li>
 </ul>
 
       <div class="book-extra">
@@ -266,7 +272,7 @@ Steyer, Rolf, and Michael Eid. 1993. <em>Messen Und Testen</em>. Heidelberg: Spr
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2022-06-08 18:23:27.</p>
+    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2022-06-20 18:28:08.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

@@ -4,20 +4,22 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Kapitel 3 Fallstudie Popup-Stores | Umfragen auswerten</title>
+<title>Kapitel 4 Fallstudie Popup-Stores | Umfragen auswerten</title>
 <meta name="author" content="Sebastian Sauer">
-<meta name="description" content="3.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # Datenhausmeister library(janitor) # Auch ein Hausmeister library(easystats) # Stats...">
-<meta name="generator" content="bookdown 0.26.2 with bs4_book()">
-<meta property="og:title" content="Kapitel 3 Fallstudie Popup-Stores | Umfragen auswerten">
+<meta name="description" content="4.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # Datenhausmeister library(janitor) # Auch ein Hausmeister library(easystats) # Stats...">
+<meta name="generator" content="bookdown 0.26 with bs4_book()">
+<meta property="og:title" content="Kapitel 4 Fallstudie Popup-Stores | Umfragen auswerten">
 <meta property="og:type" content="book">
-<meta property="og:description" content="3.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # Datenhausmeister library(janitor) # Auch ein Hausmeister library(easystats) # Stats...">
+<meta property="og:description" content="4.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # Datenhausmeister library(janitor) # Auch ein Hausmeister library(easystats) # Stats...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Kapitel 3 Fallstudie Popup-Stores | Umfragen auswerten">
-<meta name="twitter:description" content="3.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # Datenhausmeister library(janitor) # Auch ein Hausmeister library(easystats) # Stats...">
+<meta name="twitter:title" content="Kapitel 4 Fallstudie Popup-Stores | Umfragen auswerten">
+<meta name="twitter:description" content="4.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # Datenhausmeister library(janitor) # Auch ein Hausmeister library(easystats) # Stats...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
-<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><link href="libs/tabwid-1.0.0/tabwid.css" rel="stylesheet">
+<link href="libs/tabwid-1.0.0/scrool.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   </style>
@@ -67,10 +69,11 @@
         <ul class="book-toc list-unstyled">
 <li><a class="" href="index.html"><span class="header-section-number">1</span> Einleitung</a></li>
 <li><a class="" href="daten-aufr%C3%A4umen.html"><span class="header-section-number">2</span> Daten aufräumen</a></li>
-<li><a class="active" href="fallstudie-popup-stores.html"><span class="header-section-number">3</span> Fallstudie Popup-Stores</a></li>
-<li><a class="" href="normierung.html"><span class="header-section-number">4</span> Normierung</a></li>
-<li><a class="" href="diagnostische-kennwerte.html"><span class="header-section-number">5</span> Diagnostische Kennwerte</a></li>
-<li><a class="" href="itemanalyse.html"><span class="header-section-number">6</span> Itemanalyse</a></li>
+<li><a class="" href="zentrale-ergebnisse.html"><span class="header-section-number">3</span> Zentrale Ergebnisse</a></li>
+<li><a class="active" href="fallstudie-popup-stores.html"><span class="header-section-number">4</span> Fallstudie Popup-Stores</a></li>
+<li><a class="" href="normierung.html"><span class="header-section-number">5</span> Normierung</a></li>
+<li><a class="" href="diagnostische-kennwerte.html"><span class="header-section-number">6</span> Diagnostische Kennwerte</a></li>
+<li><a class="" href="itemanalyse.html"><span class="header-section-number">7</span> Itemanalyse</a></li>
 </ul>
 
         <div class="book-extra">
@@ -78,25 +81,25 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="fallstudie-popup-stores" class="section level1" number="3">
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="fallstudie-popup-stores" class="section level1" number="4">
 <h1>
-<span class="header-section-number">Kapitel 3</span> Fallstudie Popup-Stores<a class="anchor" aria-label="anchor" href="#fallstudie-popup-stores"><i class="fas fa-link"></i></a>
+<span class="header-section-number">Kapitel 4</span> Fallstudie Popup-Stores<a class="anchor" aria-label="anchor" href="#fallstudie-popup-stores"><i class="fas fa-link"></i></a>
 </h1>
-<div id="r-pakete-2" class="section level2" number="3.1">
+<div id="r-pakete-3" class="section level2" number="4.1">
 <h2>
-<span class="header-section-number">3.1</span> R-Pakete<a class="anchor" aria-label="anchor" href="#r-pakete-2"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.1</span> R-Pakete<a class="anchor" aria-label="anchor" href="#r-pakete-3"><i class="fas fa-link"></i></a>
 </h2>
 <p>In diesem Kapitel benötigen wir folgende R-Pakete:</p>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>  <span class="co"># Datenjudo</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://strengejacke.github.io/sjmisc/">sjmisc</a></span><span class="op">)</span>  <span class="co"># Datenhausmeister</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sfirke/janitor">janitor</a></span><span class="op">)</span>  <span class="co"># Auch ein Hausmeister</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/easystats/easystats">easystats</a></span><span class="op">)</span>  <span class="co"># Stats made easy :-)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ardata-fr.github.io/flextable-book/">flextable</a></span><span class="op">)</span>  <span class="co"># html Tabellen, schick</span></code></pre></div>
 </div>
-<div id="einleitung-1" class="section level2" number="3.2">
+<div id="einleitung-1" class="section level2" number="4.2">
 <h2>
-<span class="header-section-number">3.2</span> Einleitung<a class="anchor" aria-label="anchor" href="#einleitung-1"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.2</span> Einleitung<a class="anchor" aria-label="anchor" href="#einleitung-1"><i class="fas fa-link"></i></a>
 </h2>
 <p>In einer Studie untersuchte Frau Prof. Dr. Klug Ursachen von Entscheidungen im Rahmen von Einstellungen und Verhalten bei Pop-up Stores.</p>
 <p>U.a. wurden folgende Fragen untersucht:</p>
@@ -116,9 +119,9 @@
 <li><a href="https://github.com/sebastiansauer/Lehre/blob/main/data/popupstore/docs/codebook.xlsx">Codebook</a></li>
 </ul>
 </div>
-<div id="aufgaben" class="section level2" number="3.3">
+<div id="aufgaben" class="section level2" number="4.3">
 <h2>
-<span class="header-section-number">3.3</span> Aufgaben<a class="anchor" aria-label="anchor" href="#aufgaben"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.3</span> Aufgaben<a class="anchor" aria-label="anchor" href="#aufgaben"><i class="fas fa-link"></i></a>
 </h2>
 <ol style="list-style-type: decimal">
 <li>Entfernen Sie leere Zeilen und Spalten aus dem Datensatz. Tipp: Nutzen Sie das R-Paket <code>{{janitor}}</code>.</li>
@@ -135,16 +138,16 @@
 <li>Kurz vor Abgabe Ihres Studienberichts fällt Ihnen ein, dass Sie vergessen haben, das Item <code>v033</code> zu invertieren. Das möchten Sie noch schnell nachholen. Tipp: Einfaches Rechnen.</li>
 </ol>
 </div>
-<div id="lösungen" class="section level2" number="3.4">
+<div id="lösungen" class="section level2" number="4.4">
 <h2>
-<span class="header-section-number">3.4</span> Lösungen<a class="anchor" aria-label="anchor" href="#l%C3%B6sungen"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.4</span> Lösungen<a class="anchor" aria-label="anchor" href="#l%C3%B6sungen"><i class="fas fa-link"></i></a>
 </h2>
-<div id="ad-1" class="section level3" number="3.4.1">
+<div id="ad-1" class="section level3" number="4.4.1">
 <h3>
-<span class="header-section-number">3.4.1</span> Ad 1<a class="anchor" aria-label="anchor" href="#ad-1"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.4.1</span> Ad 1<a class="anchor" aria-label="anchor" href="#ad-1"><i class="fas fa-link"></i></a>
 </h3>
 <p>Daten laden:</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">d_url</span> <span class="op">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/sebastiansauer/Lehre/main/data/popupstore/data/d1a.csv"</span>
 
 <span class="va">d1a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="va">d_url</span><span class="op">)</span>
@@ -153,27 +156,27 @@
 <span class="co">#&gt; [1]  90 196</span></code></pre></div>
 <p>Die Tabelel umfasst 90 Zeilen und 196 Spalten.</p>
 <p>Leere Zeilen/Spalten entfernen:</p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sfirke/janitor">janitor</a></span><span class="op">)</span>
 <span class="va">d2</span> <span class="op">&lt;-</span>
   <span class="va">d1a</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://rdrr.io/pkg/janitor/man/remove_empty.html">remove_empty</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="ad-2" class="section level3" number="3.4.2">
+<div id="ad-2" class="section level3" number="4.4.2">
 <h3>
-<span class="header-section-number">3.4.2</span> Ad 2<a class="anchor" aria-label="anchor" href="#ad-2"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.4.2</span> Ad 2<a class="anchor" aria-label="anchor" href="#ad-2"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sfirke/janitor">janitor</a></span><span class="op">)</span>
 <span class="va">d3</span> <span class="op">&lt;-</span>
   <span class="va">d2</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://rdrr.io/pkg/janitor/man/remove_constant.html">remove_constant</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="ad-3" class="section level3" number="3.4.3">
+<div id="ad-3" class="section level3" number="4.4.3">
 <h3>
-<span class="header-section-number">3.4.3</span> Ad 3<a class="anchor" aria-label="anchor" href="#ad-3"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.4.3</span> Ad 3<a class="anchor" aria-label="anchor" href="#ad-3"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">d3</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://rdrr.io/pkg/janitor/man/get_dupes.html">get_dupes</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 0 × 84</span>
@@ -186,21 +189,21 @@
 <span class="co">#&gt; #   v034 &lt;chr&gt;, v035 &lt;chr&gt;, v036 &lt;chr&gt;, v037 &lt;chr&gt;, …</span></code></pre></div>
 <p>Keine Duplikate zu finden.</p>
 </div>
-<div id="ad-4" class="section level3" number="3.4.4">
+<div id="ad-4" class="section level3" number="4.4.4">
 <h3>
-<span class="header-section-number">3.4.4</span> Ad 4<a class="anchor" aria-label="anchor" href="#ad-4"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.4.4</span> Ad 4<a class="anchor" aria-label="anchor" href="#ad-4"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">d4</span> <span class="op">&lt;-</span>
   <span class="va">d3</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">v002</span>, <span class="va">v006</span>, <span class="va">v007</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="ad-5" class="section level3" number="3.4.5">
+<div id="ad-5" class="section level3" number="4.4.5">
 <h3>
-<span class="header-section-number">3.4.5</span> Ad 5<a class="anchor" aria-label="anchor" href="#ad-5"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.4.5</span> Ad 5<a class="anchor" aria-label="anchor" href="#ad-5"><i class="fas fa-link"></i></a>
 </h3>
 <p>.</p>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">d4</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>v001 <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/na_if.html">na_if</a></span><span class="op">(</span><span class="va">v001</span>, <span class="st">""</span><span class="op">)</span>,
          v001 <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/na_if.html">na_if</a></span><span class="op">(</span><span class="va">v001</span>, <span class="st">"N/A"</span><span class="op">)</span><span class="op">)</span>
@@ -227,7 +230,7 @@
 <p>Und so weiter für alle Spalten …</p>
 <p>Puh, geht das nicht schlauer?</p>
 <p>Ja, geht. Hier ein kleiner Trick:</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">d5</span> <span class="op">&lt;-</span>
   <span class="va">d4</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_df</a></span><span class="op">(</span><span class="va">na_if</span>, <span class="st">""</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
@@ -236,22 +239,22 @@
 Als Ergebnis dieses “Funktions-Mapping” soll wieder eine Tabelle - daher <code>map_df</code> zurückgegeben werden.</p>
 <p>Mal ein Check:
 Die Anzahl der fehlenden Werte müsste sich jetzt erhöht haben im Vergleich zur letzten Version des Datensatz, <code>d4</code>:</p>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">d4</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">d4</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] 1806</span></code></pre></div>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">d5</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">d5</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] 1893</span></code></pre></div>
 <p>Hm, g.ar nicht so viele mehr. Aber grundsätzlich hat es funktioniert :-)</p>
 <p>Sie brauchen <code><a href="https://purrr.tidyverse.org/reference/map.html">map_df()</a></code> <em>nicht</em> zu verwenden. Es geht auch ohne. Mit <code><a href="https://purrr.tidyverse.org/reference/map.html">map_df()</a></code> ist es nur komfortabler.</p>
 </div>
-<div id="ad-6" class="section level3" number="3.4.6">
+<div id="ad-6" class="section level3" number="4.4.6">
 <h3>
-<span class="header-section-number">3.4.6</span> Ad 6<a class="anchor" aria-label="anchor" href="#ad-6"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.4.6</span> Ad 6<a class="anchor" aria-label="anchor" href="#ad-6"><i class="fas fa-link"></i></a>
 </h3>
 <p>Die Item-Positionen, wann also die Items der Ratingskala beginnen und wann (an welcher Spaltenposition) sie enden,
 ist im Fragebogen ersichtlich.</p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">d5</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>v033_r <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/recode.html">recode</a></span><span class="op">(</span><span class="va">v033</span>,
       <span class="st">"lehne voll und ganz ab"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">3</span>,
@@ -282,7 +285,7 @@ ist im Fragebogen ersichtlich.</p>
 puh, viel zu langweilig.
 Gibt’s da vielleicht einen Trick?</p>
 <p>Ja, gibt es.</p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">d6</span> <span class="op">&lt;-</span>
   <span class="va">d5</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span>
@@ -301,43 +304,43 @@ Gibt’s da vielleicht einen Trick?</p>
 <p>Mit <code><a href="https://dplyr.tidyverse.org/reference/across.html">across()</a></code> kann man eine Funktion (oder mehrere), <code>.fns</code>, über mehrere Spalten, <code>.cols</code> anwenden,
 hier wenden wir <code><a href="https://dplyr.tidyverse.org/reference/recode.html">recode()</a></code> auf alle Spalten der Ratingskala an.</p>
 </div>
-<div id="ad-7" class="section level3" number="3.4.7">
+<div id="ad-7" class="section level3" number="4.4.7">
 <h3>
-<span class="header-section-number">3.4.7</span> Ad 7<a class="anchor" aria-label="anchor" href="#ad-7"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.4.7</span> Ad 7<a class="anchor" aria-label="anchor" href="#ad-7"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">d7</span> <span class="op">&lt;-</span>
   <span class="va">d6</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rowwise.html">rowwise</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span>  <span class="co"># Zeilenweise arbeiten im Folgenden</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
-    exp_avg <span class="op">=</span> <span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v033</span><span class="op">:</span><span class="va">v039</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-    neu_avg <span class="op">=</span> <span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v040</span><span class="op">:</span><span class="va">v042</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-    att_avg <span class="op">=</span> <span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v043</span><span class="op">:</span><span class="va">v047</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-    ka_avg <span class="op">=</span> <span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v048</span><span class="op">:</span><span class="va">v053</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, 
-    wom_avg <span class="op">=</span> <span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v054</span><span class="op">:</span><span class="va">v056</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-    innp_avg <span class="op">=</span> <span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v087</span><span class="op">:</span><span class="va">v092</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-    imp_avg <span class="op">=</span> <span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v093</span><span class="op">:</span><span class="va">v096</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-    hedo_avg <span class="op">=</span> <span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v097</span><span class="op">:</span><span class="va">v100</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-    sho1_avg <span class="op">=</span> <span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v101</span><span class="op">:</span><span class="va">v104</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+    exp_avg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v033</span><span class="op">:</span><span class="va">v039</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    neu_avg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v040</span><span class="op">:</span><span class="va">v042</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    att_avg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v043</span><span class="op">:</span><span class="va">v047</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    ka_avg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v048</span><span class="op">:</span><span class="va">v053</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, 
+    wom_avg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v054</span><span class="op">:</span><span class="va">v056</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    innp_avg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v087</span><span class="op">:</span><span class="va">v092</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    imp_avg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v093</span><span class="op">:</span><span class="va">v096</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    hedo_avg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v097</span><span class="op">:</span><span class="va">v100</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    sho1_avg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across</a></span><span class="op">(</span><span class="va">v101</span><span class="op">:</span><span class="va">v104</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
   <span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/relocate.html">relocate</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">ends_with</a></span><span class="op">(</span><span class="st">"_avg"</span><span class="op">)</span>, .after <span class="op">=</span> <span class="va">v008</span><span class="op">)</span>  <span class="co"># wir verschieben alle Spalten, die mit `_avg` enden nach vorne</span></code></pre></div>
 <p><code><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across()</a></code> ist wie <code><a href="https://rdrr.io/r/base/c.html">c()</a></code>. Allerdings funktioniert <code><a href="https://rdrr.io/r/base/c.html">c()</a></code> leider <em>nicht</em> für zeilenweise Operationen.
 Daher braucht es einen Freund, der das kann, <code><a href="https://dplyr.tidyverse.org/reference/c_across.html">c_across()</a></code>.</p>
 </div>
-<div id="ad-8" class="section level3" number="3.4.8">
+<div id="ad-8" class="section level3" number="4.4.8">
 <h3>
-<span class="header-section-number">3.4.8</span> Ad 8<a class="anchor" aria-label="anchor" href="#ad-8"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.4.8</span> Ad 8<a class="anchor" aria-label="anchor" href="#ad-8"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/leeper/rio">rio</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/rio/man/export.html">export</a></span><span class="op">(</span><span class="va">d7</span>, file <span class="op">=</span> <span class="st">"d7.csv"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/rio/man/export.html">export</a></span><span class="op">(</span><span class="va">d7</span>, file <span class="op">=</span> <span class="st">"d7.xlsx"</span><span class="op">)</span></code></pre></div>
+<span class="fu">export</span><span class="op">(</span><span class="va">d7</span>, file <span class="op">=</span> <span class="st">"d7.csv"</span><span class="op">)</span>
+<span class="fu">export</span><span class="op">(</span><span class="va">d7</span>, file <span class="op">=</span> <span class="st">"d7.xlsx"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="ad-9" class="section level3" number="3.4.9">
+<div id="ad-9" class="section level3" number="4.4.9">
 <h3>
-<span class="header-section-number">3.4.9</span> Ad 9<a class="anchor" aria-label="anchor" href="#ad-9"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.4.9</span> Ad 9<a class="anchor" aria-label="anchor" href="#ad-9"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://personality-project.org/r/psych/">psych</a></span><span class="op">)</span>
 
 <span class="va">d7</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
@@ -389,11 +392,11 @@ Daher braucht es einen Freund, der das kann, <code><a href="https://dplyr.tidyve
 <span class="co">#&gt; v091 0.07 0.10 0.16 0.25 0.30 0.13 0.00 0.32</span>
 <span class="co">#&gt; v092 0.15 0.16 0.18 0.25 0.16 0.10 0.00 0.32</span></code></pre></div>
 </div>
-<div id="ad-10" class="section level3" number="3.4.10">
+<div id="ad-10" class="section level3" number="4.4.10">
 <h3>
-<span class="header-section-number">3.4.10</span> Ad 10<a class="anchor" aria-label="anchor" href="#ad-10"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.4.10</span> Ad 10<a class="anchor" aria-label="anchor" href="#ad-10"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/easystats/easystats">easystats</a></span><span class="op">)</span>
 
 <span class="va">d7</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
@@ -411,13 +414,13 @@ Daher braucht es einen Freund, der das kann, <code><a href="https://dplyr.tidyve
 <span class="co">#&gt; hedo_avg |  0.34 | 1.40 | 1.50 | [-3.00, 3.00] |    -0.69 |      0.40 | 60 |        30</span>
 <span class="co">#&gt; sho1_avg | -0.80 | 1.51 | 2.75 | [-3.00, 2.25] |     0.28 |     -0.85 | 60 |        30</span></code></pre></div>
 </div>
-<div id="ad-11" class="section level3" number="3.4.11">
+<div id="ad-11" class="section level3" number="4.4.11">
 <h3>
-<span class="header-section-number">3.4.11</span> Ad 11<a class="anchor" aria-label="anchor" href="#ad-11"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.4.11</span> Ad 11<a class="anchor" aria-label="anchor" href="#ad-11"><i class="fas fa-link"></i></a>
 </h3>
 <p>Es gibt mehrere Wege, das Ziel zu erreichen.
 Einer sieht so aus.</p>
-<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ardata-fr.github.io/flextable-book/">flextable</a></span><span class="op">)</span>
 
 <span class="va">flex1</span> <span class="op">&lt;-</span> 
@@ -603,7 +606,7 @@ var fantome = dest.attachShadow({mode: 'open'});
 var templateContent = template.content;
 fantome.appendChild(templateContent);
 </script><p>Vielleicht noch die Anzahl der Dezimalstellen beschneiden:</p>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">flex1</span> <span class="op">&lt;-</span> 
   <span class="va">d7</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">ends_with</a></span><span class="op">(</span><span class="st">"_avg"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
@@ -788,17 +791,17 @@ var fantome = dest.attachShadow({mode: 'open'});
 var templateContent = template.content;
 fantome.appendChild(templateContent);
 </script><p>Und so speichert man als Word-Datei:</p>
-<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/save_as_docx.html">save_as_docx</a></span><span class="op">(</span><span class="va">flex1</span>, path <span class="op">=</span> <span class="st">"flex1.docx"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="ad-12" class="section level3" number="3.4.12">
+<div id="ad-12" class="section level3" number="4.4.12">
 <h3>
-<span class="header-section-number">3.4.12</span> Ad 12<a class="anchor" aria-label="anchor" href="#ad-12"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.4.12</span> Ad 12<a class="anchor" aria-label="anchor" href="#ad-12"><i class="fas fa-link"></i></a>
 </h3>
 <p>Wie kann ich Items konvertieren? Also negativ gepolte Items positiv umkodieren, also “umdrehen”?</p>
 <p>Die Skala erstreckt sich von -3 bis +3.
 Mit <code><a href="https://dplyr.tidyverse.org/reference/recode.html">recode()</a></code> kann man wie oben auch entsprechend umkodieren.</p>
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">d8</span> <span class="op">&lt;-</span>
   <span class="va">d7</span> <span class="op"><a href="https://rdrr.io/pkg/janitor/man/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>v033_i <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/recode.html">recode</a></span><span class="op">(</span><span class="va">v033</span>,
@@ -812,7 +815,7 @@ Mit <code><a href="https://dplyr.tidyverse.org/reference/recode.html">recode()</
 <p>Die Backticks brauchen wir,
 weil es sich bei <code>-1</code> etc. nicht um syntaktisch korrekte Variablennamen handelt.</p>
 <p>Tipp: Einfach mal in die Hilfe schauen.</p>
-<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">i</span> <span class="op">&lt;-</span> <span class="fl">1</span>
 <span class="va">`i ist eins`</span> <span class="op">&lt;-</span> <span class="fl">1</span>
 <span class="va">i1</span> <span class="op">&lt;-</span> <span class="fl">1</span></code></pre></div>
@@ -821,29 +824,29 @@ weil es sich bei <code>-1</code> etc. nicht um syntaktisch korrekte Variablennam
 </div>
 </div>
   <div class="chapter-nav">
-<div class="prev"><a href="daten-aufr%C3%A4umen.html"><span class="header-section-number">2</span> Daten aufräumen</a></div>
-<div class="next"><a href="normierung.html"><span class="header-section-number">4</span> Normierung</a></div>
+<div class="prev"><a href="zentrale-ergebnisse.html"><span class="header-section-number">3</span> Zentrale Ergebnisse</a></div>
+<div class="next"><a href="normierung.html"><span class="header-section-number">5</span> Normierung</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#fallstudie-popup-stores"><span class="header-section-number">3</span> Fallstudie Popup-Stores</a></li>
-<li><a class="nav-link" href="#r-pakete-2"><span class="header-section-number">3.1</span> R-Pakete</a></li>
-<li><a class="nav-link" href="#einleitung-1"><span class="header-section-number">3.2</span> Einleitung</a></li>
-<li><a class="nav-link" href="#aufgaben"><span class="header-section-number">3.3</span> Aufgaben</a></li>
+<li><a class="nav-link" href="#fallstudie-popup-stores"><span class="header-section-number">4</span> Fallstudie Popup-Stores</a></li>
+<li><a class="nav-link" href="#r-pakete-3"><span class="header-section-number">4.1</span> R-Pakete</a></li>
+<li><a class="nav-link" href="#einleitung-1"><span class="header-section-number">4.2</span> Einleitung</a></li>
+<li><a class="nav-link" href="#aufgaben"><span class="header-section-number">4.3</span> Aufgaben</a></li>
 <li>
-<a class="nav-link" href="#l%C3%B6sungen"><span class="header-section-number">3.4</span> Lösungen</a><ul class="nav navbar-nav">
-<li><a class="nav-link" href="#ad-1"><span class="header-section-number">3.4.1</span> Ad 1</a></li>
-<li><a class="nav-link" href="#ad-2"><span class="header-section-number">3.4.2</span> Ad 2</a></li>
-<li><a class="nav-link" href="#ad-3"><span class="header-section-number">3.4.3</span> Ad 3</a></li>
-<li><a class="nav-link" href="#ad-4"><span class="header-section-number">3.4.4</span> Ad 4</a></li>
-<li><a class="nav-link" href="#ad-5"><span class="header-section-number">3.4.5</span> Ad 5</a></li>
-<li><a class="nav-link" href="#ad-6"><span class="header-section-number">3.4.6</span> Ad 6</a></li>
-<li><a class="nav-link" href="#ad-7"><span class="header-section-number">3.4.7</span> Ad 7</a></li>
-<li><a class="nav-link" href="#ad-8"><span class="header-section-number">3.4.8</span> Ad 8</a></li>
-<li><a class="nav-link" href="#ad-9"><span class="header-section-number">3.4.9</span> Ad 9</a></li>
-<li><a class="nav-link" href="#ad-10"><span class="header-section-number">3.4.10</span> Ad 10</a></li>
-<li><a class="nav-link" href="#ad-11"><span class="header-section-number">3.4.11</span> Ad 11</a></li>
-<li><a class="nav-link" href="#ad-12"><span class="header-section-number">3.4.12</span> Ad 12</a></li>
+<a class="nav-link" href="#l%C3%B6sungen"><span class="header-section-number">4.4</span> Lösungen</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#ad-1"><span class="header-section-number">4.4.1</span> Ad 1</a></li>
+<li><a class="nav-link" href="#ad-2"><span class="header-section-number">4.4.2</span> Ad 2</a></li>
+<li><a class="nav-link" href="#ad-3"><span class="header-section-number">4.4.3</span> Ad 3</a></li>
+<li><a class="nav-link" href="#ad-4"><span class="header-section-number">4.4.4</span> Ad 4</a></li>
+<li><a class="nav-link" href="#ad-5"><span class="header-section-number">4.4.5</span> Ad 5</a></li>
+<li><a class="nav-link" href="#ad-6"><span class="header-section-number">4.4.6</span> Ad 6</a></li>
+<li><a class="nav-link" href="#ad-7"><span class="header-section-number">4.4.7</span> Ad 7</a></li>
+<li><a class="nav-link" href="#ad-8"><span class="header-section-number">4.4.8</span> Ad 8</a></li>
+<li><a class="nav-link" href="#ad-9"><span class="header-section-number">4.4.9</span> Ad 9</a></li>
+<li><a class="nav-link" href="#ad-10"><span class="header-section-number">4.4.10</span> Ad 10</a></li>
+<li><a class="nav-link" href="#ad-11"><span class="header-section-number">4.4.11</span> Ad 11</a></li>
+<li><a class="nav-link" href="#ad-12"><span class="header-section-number">4.4.12</span> Ad 12</a></li>
 </ul>
 </li>
 </ul>
@@ -863,7 +866,7 @@ weil es sich bei <code>-1</code> etc. nicht um syntaktisch korrekte Variablennam
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2022-06-08 18:23:27.</p>
+    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2022-06-20 18:28:08.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

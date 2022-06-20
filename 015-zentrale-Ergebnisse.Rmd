@@ -1,0 +1,291 @@
+# Zentrale Ergebnisse
+
+
+
+## Cave
+
+Dieses Kapitel berichtet das *Wie* des Darstellens von Ergebnissen.
+Es geht nicht darum, *warum* man welches Vorgehen wählt und welches Vorgehen am sinnvollsten ist.
+
+Konsultieren Sie für letzteres das Statistikbuch Ihres Vertrauens :-)
+
+
+
+```{r knitr-setup, echo = FALSE}
+knitr::opts_chunk$set(
+  comment = "#>",
+  collapse = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = TRUE,
+  out.width = "70%",
+  fig.align = 'center',
+  fig.width = 6,
+  fig.asp = 0.618,  # 1 / phi
+  fig.show = "hold",
+  # size = "tiny",
+  tidy.opts=list(width.cutoff = 80) #,
+  # tidy=TRUE
+)
+```
+
+
+## Vorbereitung
+
+
+
+### R-Pakete
+
+
+In diesem Kapitel benötigen wir folgende R-Pakete:
+
+
+```{r message=FALSE}
+library(tidyverse)  # Datenjudo
+library(easystats)  # make stasts easy again
+library(knitr)  # Tabellen schick
+library(moderndive)  # Regressionsausgabe schick
+library(rstanarm)  # Bayes
+```
+
+
+
+`{easystats}` ist ein Metapaket^[Nicht zu verwechseln mit Megapaket], ein R-Paket also, das mehrere R-Pakete beinhaltet.
+[Hier](https://easystats.github.io/easystats/) findet sich ein Überblick.
+Das Paket ist noch nicht auf CRAN,
+aber es kann wie folgt problemlos installiert werden:
+
+
+```{r eval = FALSE}
+install.packages("easystats", repos = "https://easystats.r-universe.dev")
+```
+
+
+
+### Daten
+
+
+ 
+```{r load-extra-web, eval = TRUE}
+data_url <- "https://raw.githubusercontent.com/sebastiansauer/modar/master/datasets/extra.csv"
+extra <- read_csv(data_url)
+```
+
+
+## Relevante Variablen
+
+Damit es einfach bleibt, begrenzen wir uns auf ein paar Variablen.
+
+Sagen wir, 
+das sind die Variablen, die uns interessieren:
+
+```{r}
+extra_corr_names <- 
+extra %>% 
+  select(n_facebook_friends, n_hangover, age, extra_single_item, n_party, extra_mean) %>% 
+  names()
+
+extra_corr_names
+```
+
+
+
+## Deskriptive Ergebnisse darstellen
+
+Sie können deskriptive Ergebnisse (Ihrer relevanten Variablen) z.B. so darstellen.
+
+
+```{r}
+extra %>% 
+  select(any_of(extra_corr_names)) %>% 
+  describe_distribution() %>% 
+  kable(digits = 2)
+```
+
+
+## Korrelationen darstellen
+
+In einer Umfrage erhebt man häufig mehrere Variablen, ein Teil davon oft *Konstrukte*.
+Es bietet sich in einem ersten Schritt an, die Korrelationen dieser Variablen untereinander
+darzustellen.
+
+
+
+### Korrelationsmatrix
+
+
+
+```{r}
+extra %>% 
+  select(any_of(extra_corr_names)) %>%  
+  correlation() %>% 
+  summary() %>% 
+  kable(digits = 2)
+```
+
+
+Sie möchten das Ergebnis als normalen R-Dataframe? 
+Sie haben keine Lust auf dieses Rumgetue, sondern wollen das lieber als selber gerade ziehen.
+Also gut:
+
+
+```{r}
+cor_results <- 
+extra %>% 
+  select(any_of(extra_corr_names)) %>%  
+  correlation() %>% 
+  summary()
+
+cor_results
+```
+
+
+
+
+Man kann sich die Korrelationsmatrix auch in der Bayes-Geschmacksrichtung ausgeben lassen:
+
+
+```{r}
+extra %>% 
+  select(any_of(extra_corr_names)) %>%  
+  correlation(bayesian = TRUE) %>% 
+  summary() %>% 
+  kable(digits = 2)
+```
+
+
+### Korrelationsmatrizen visualisieren
+
+Viele R-Pakete bieten sich an. Nehmen wir `{easystats}`.
+
+
+```{r}
+extra %>% 
+  select(any_of(extra_corr_names)) %>%  
+  correlation() %>% 
+  summary() %>% 
+  plot() +
+  labs(title = "Korrelationsmatrix, boa")
+```
+
+
+
+
+
+## Regressionsergebnisse
+
+
+### Frequentistisch
+
+```{r}
+lm1 <- lm(extra_mean ~ n_facebook_friends + n_hangover, data = extra)
+```
+
+
+
+```{r results="asis"}
+lm1_tab <- 
+get_regression_table(lm1) 
+
+lm1_tab %>% 
+  kable(digits = 2)
+```
+
+
+
+### Bayesianisch
+
+Für Bayes gibt es keine ganz so komfortable Lösung.
+Aber keine Panik, es sollte nur wenige Minuten kosten.
+
+
+```{r}
+lm2 <- stan_glm(extra_mean ~ n_facebook_friends + n_hangover, 
+                refresh = 0,
+                data = extra)
+```
+
+Ergebnisse, d.h. die Koeffizienten:
+
+```{r}
+parameters(lm2)
+```
+
+
+Und als Tabelle:
+
+```{r}
+parameters(lm2) %>% 
+  kable(digits = 2)
+```
+
+
+Dazu noch $R^2$:
+
+
+```{r}
+r2_bayes(lm2)
+```
+
+
+Das schreiben Sie entweder als Fußnote unter die Tabelle oder erwähnen es im Text.
+
+
+### Reportr
+
+Hier ist noch ein experimentelles Feature:
+Es gibt Ihnen den Text aus, um die Ergebnisse Ihrer Bayes-Analyse zu berichten.
+
+```{r}
+report(lm2)
+```
+
+Hier wird das sog. [SEXIT](https://easystats.github.io/bayestestR/reference/sexit.html)-Framework verwendet.
+
+## Tabellen von R nach Word
+
+### Rmd-Dokument als Word-Dokument ausgeben lassen.
+
+
+Vielleicht die einfachste Möglichkeit: Erstellen Sie Ihre Analyse nicht als .R-Daten, sondern als .Rmd-Datei.
+Dann "knittern" Sie die Analyse als Word-Dokument. Fertig!
+
+Um eine schicke Tabelle zu bekommen,
+nutzen Sie die den Befehl `kable()`. 
+Den wenden Sie auf einen Dataframe an, der als schicke Tabelle auf die Welt kommen soll.
+
+
+### Rmd-Dokument copy-pasten
+
+
+Sie können auch Folgendes tun: Erstellen Sie Ihre Analyse als Rmd-Datei;
+knittern Sie das Dokument.
+Sie erhalten dann ein HTML-Dokument, aus dem Sie problemlos copy-pasten können (von HTML nach Word).
+
+
+### Ich will kein Rmd!
+
+
+Wenn Sie (partout) nicht mit Rmd-Dateien arbeiten wollen,
+hilft Ihnen das R-Paket `{flextable}`:
+
+```{r}
+library(flextable)
+```
+
+
+```{r}
+meine_flex_tab <- flextable(lm1_tab)
+
+meine_flex_tab
+```
+
+
+Dieses Objekt können Sie dann als .docx abspeichern:
+
+
+```{r eval = FALSE}
+save_as_docx("Tabelle 1 " = meine_flex_tab, path = "meine_tab.docx")
+```
+
+

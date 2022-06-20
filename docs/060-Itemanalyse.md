@@ -77,8 +77,10 @@ psych::alpha(extra_items)
 #>  median_r
 #>      0.27
 #> 
-#>  lower alpha upper     95% confidence boundaries
-#> 0.75 0.77 0.8 
+#>     95% confidence boundaries 
+#>          lower alpha upper
+#> Feldt     0.75  0.77   0.8
+#> Duhachek  0.75  0.77   0.8
 #> 
 #>  Reliability if an item is dropped:
 #>      raw_alpha std.alpha G6(smc) average_r S/N alpha se

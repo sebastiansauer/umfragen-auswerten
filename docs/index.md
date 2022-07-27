@@ -1,7 +1,7 @@
 --- 
 title: "Umfragen auswerten"
 author: "Sebastian Sauer"
-date: "2022-06-20 18:28:08"
+date: "2022-07-27 15:38:16"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
@@ -23,6 +23,13 @@ biblio-style: apalike
 
 # Einleitung
 
+
+
+
+<div class="figure" style="text-align: center">
+<img src="img/IMG_0788.JPG" alt="Lustige Tierchen, buntes Treiben: Willkommen beim Auswerten von Umfragedaten" width="100%" />
+<p class="caption">(\#fig:unnamed-chunk-1)Lustige Tierchen, buntes Treiben: Willkommen beim Auswerten von Umfragedaten</p>
+</div>
 
 
 Fragebogendaten zu psychologischen Variablen (wie z.B. Extraversion), die wissenschaftlichen Ansprüchen genügen, bezeichnet man als *psychometrische Daten* [vgl. @Steyer1993]. 
@@ -195,7 +202,7 @@ Sessioninfo:
 
 
 
-- Datum: 2022-05-02
-- R-Version: R version 4.1.3 (2022-03-10)
+- Datum: 2022-07-27
+- R-Version: R version 4.2.0 (2022-04-22)
 - Betriebssystem: 
 

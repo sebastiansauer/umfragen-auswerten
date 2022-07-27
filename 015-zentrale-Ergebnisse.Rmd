@@ -236,7 +236,7 @@ Das schreiben Sie entweder als Fußnote unter die Tabelle oder erwähnen es im T
 Hier ist noch ein experimentelles Feature:
 Es gibt Ihnen den Text aus, um die Ergebnisse Ihrer Bayes-Analyse zu berichten.
 
-```{r}
+```{r results = "asis"}
 report(lm2)
 ```
 

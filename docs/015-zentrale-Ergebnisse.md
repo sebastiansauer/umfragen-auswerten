@@ -301,20 +301,24 @@ r2_bayes(lm2)
 Das schreiben Sie entweder als Fußnote unter die Tabelle oder erwähnen es im Text.
 
 
+### Reportr
+
 Hier ist noch ein experimentelles Feature:
 Es gibt Ihnen den Text aus, um die Ergebnisse Ihrer Bayes-Analyse zu berichten.
 
 
 ```r
 report(lm2)
-#> We fitted a Bayesian linear model (estimated using MCMC sampling with 4 chains of 2000 iterations and a warmup of 1000) to predict extra_mean with n_facebook_friends and n_hangover (formula: extra_mean ~ n_facebook_friends + n_hangover). Priors over parameters were set as normal (mean = 0.00, SD = 2.95e-04) and normal (mean = 0.00, SD = 0.07) distributions. The model's explanatory power is weak (R2 = 0.03, 95% CI [7.66e-03, 0.05], adj. R2 = 0.01). The model's intercept, corresponding to n_facebook_friends = 0 and n_hangover = 0, is at 2.88 (95% CI [2.85, 2.92]). Within this model:
-#> 
-#>   - The effect of n facebook friends (Median = 3.12e-06, 95% CI [-5.98e-06, 1.18e-05]) has a 75.58% probability of being positive (> 0), 0.00% of being significant (> 0.02), and 0.00% of being large (> 0.13). The estimation successfully converged (Rhat = 1.000) and the indices are reliable (ESS = 5300)
-#>   - The effect of n hangover (Median = 4.55e-03, 95% CI [2.38e-03, 6.74e-03]) has a 100.00% probability of being positive (> 0), 0.00% of being significant (> 0.02), and 0.00% of being large (> 0.13). The estimation successfully converged (Rhat = 0.999) and the indices are reliable (ESS = 4881)
-#> 
-#> Following the Sequential Effect eXistence and sIgnificance Testing (SEXIT) framework, we report the median of the posterior distribution and its 95% CI (Highest Density Interval), along the probability of direction (pd), the probability of significance and the probability of being large. The thresholds beyond which the effect is considered as significant (i.e., non-negligible) and large are |0.02| and |0.13| (corresponding respectively to 0.05 and 0.30 of the outcome's SD). Convergence and stability of the Bayesian sampling has been assessed using R-hat, which should be below 1.01 (Vehtari et al., 2019), and Effective Sample Size (ESS), which should be greater than 1000 (Burkner, 2017).
 ```
 
+We fitted a Bayesian linear model (estimated using MCMC sampling with 4 chains of 2000 iterations and a warmup of 1000) to predict extra_mean with n_facebook_friends and n_hangover (formula: extra_mean ~ n_facebook_friends + n_hangover). Priors over parameters were set as normal (mean = 0.00, SD = 2.95e-04) and normal (mean = 0.00, SD = 0.07) distributions. The model's explanatory power is weak (R2 = 0.03, 95% CI [7.66e-03, 0.05], adj. R2 = 0.01). The model's intercept, corresponding to n_facebook_friends = 0 and n_hangover = 0, is at 2.88 (95% CI [2.85, 2.92]). Within this model:
+
+  - The effect of n facebook friends (Median = 3.12e-06, 95% CI [-5.98e-06, 1.18e-05]) has a 75.58% probability of being positive (> 0), 0.00% of being significant (> 0.02), and 0.00% of being large (> 0.13). The estimation successfully converged (Rhat = 1.000) and the indices are reliable (ESS = 5300)
+  - The effect of n hangover (Median = 4.55e-03, 95% CI [2.38e-03, 6.74e-03]) has a 100.00% probability of being positive (> 0), 0.00% of being significant (> 0.02), and 0.00% of being large (> 0.13). The estimation successfully converged (Rhat = 0.999) and the indices are reliable (ESS = 4881)
+
+Following the Sequential Effect eXistence and sIgnificance Testing (SEXIT) framework, we report the median of the posterior distribution and its 95% CI (Highest Density Interval), along the probability of direction (pd), the probability of significance and the probability of being large. The thresholds beyond which the effect is considered as significant (i.e., non-negligible) and large are |0.02| and |0.13| (corresponding respectively to 0.05 and 0.30 of the outcome's SD). Convergence and stability of the Bayesian sampling has been assessed using R-hat, which should be below 1.01 (Vehtari et al., 2019), and Effective Sample Size (ESS), which should be greater than 1000 (Burkner, 2017).
+
+Hier wird das sog. [SEXIT](https://easystats.github.io/bayestestR/reference/sexit.html)-Framework verwendet.
 
 ## Tabellen von R nach Word
 

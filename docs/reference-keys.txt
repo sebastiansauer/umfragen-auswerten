@@ -45,6 +45,7 @@ korrelationsmatrizen-visualisieren
 regressionsergebnisse
 frequentistisch
 bayesianisch
+reportr
 tabellen-von-r-nach-word
 rmd-dokument-als-word-dokument-ausgeben-lassen.
 rmd-dokument-copy-pasten
@@ -86,3 +87,4 @@ r-pakete-6
 daten-5
 einführung
 literaturempfehlungen
+fig:unnamed-chunk-1

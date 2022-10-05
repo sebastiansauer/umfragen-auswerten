@@ -374,12 +374,12 @@ case_when(Prüfung ~ Konsequenz,
           Prüfung2 ~ Konsequenz)
 ```
 
-Wenn `Prüfung` erfüllt ist (`TRUE`), dann wird `Konseequenz` ausgeführt.
-Ansosten wird auf `Prüfung2` getestet, etc.
+Nur wenn `Prüfung` erfüllt ist (den Wert `TRUE` hat), dann wird `Konsequenz` ausgeführt.
+Ansonsten wird auf `Prüfung2` getestet, etc.
 
 
 
-Alternativ könnte man auch `rec()` aus `sjmisc` nutzen.
+Eine alternative Funktion des Umkodierens ist `rec()` aus `sjmisc` nutzen.
 
 
 ## Zeilen (Fälle) löschen

@@ -77,6 +77,8 @@ Die Itemtrennschärfe (synonym: Part-Whole-Korrelation) wird pro Item mit `raw.r
 ## Literaturempfehlungen
 
 @Buhner2011 bietet eine gute Einführung in die Analyse psychometrischer Daten, allerdings mit SPSS-Syntax, keine R-Syntax.
+Einen guten Überblick über die angewandte Itemanalyse bietet @mair_modern_2018.
+
 
 
 

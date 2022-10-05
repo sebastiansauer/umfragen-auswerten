@@ -7,7 +7,7 @@
 <title>Kapitel 6 Diagnostische Kennwerte | Umfragen auswerten</title>
 <meta name="author" content="Sebastian Sauer">
 <meta name="description" content="6.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(psych) # Itemanalyse  6.2 Daten data_url &lt;-...">
-<meta name="generator" content="bookdown 0.27 with bs4_book()">
+<meta name="generator" content="bookdown 0.29 with bs4_book()">
 <meta property="og:title" content="Kapitel 6 Diagnostische Kennwerte | Umfragen auswerten">
 <meta property="og:type" content="book">
 <meta property="og:description" content="6.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(psych) # Itemanalyse  6.2 Daten data_url &lt;-...">
@@ -72,6 +72,7 @@
 <li><a class="" href="normierung.html"><span class="header-section-number">5</span> Normierung</a></li>
 <li><a class="active" href="diagnostische-kennwerte.html"><span class="header-section-number">6</span> Diagnostische Kennwerte</a></li>
 <li><a class="" href="itemanalyse.html"><span class="header-section-number">7</span> Itemanalyse</a></li>
+<li><a class="" href="fallstudie-normierung.html"><span class="header-section-number">8</span> Fallstudie Normierung</a></li>
 </ul>
 
         <div class="book-extra">
@@ -125,7 +126,7 @@
 <span><span class="co">#&gt; `stat_bin()` using `bins = 30`. Pick better value with</span></span>
 <span><span class="co">#&gt; `binwidth`.</span></span>
 <span><span class="co">#&gt; Warning: Removed 4 rows containing non-finite values</span></span>
-<span><span class="co">#&gt; (stat_bin).</span></span></code></pre></div>
+<span><span class="co">#&gt; (`stat_bin()`).</span></span></code></pre></div>
 <div class="inline-figure"><img src="050-Diagnostik_files/figure-html/unnamed-chunk-3-1.png" width="672"></div>
 <p>Möchte man mehrere Gruppen vergleichen, so ist der Boxplot eine geeignete Visualisierung:</p>
 <div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
@@ -133,7 +134,7 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">extra_mean</span>, x <span class="op">=</span> <span class="va">sex</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: Removed 4 rows containing non-finite values</span></span>
-<span><span class="co">#&gt; (stat_boxplot).</span></span></code></pre></div>
+<span><span class="co">#&gt; (`stat_boxplot()`).</span></span></code></pre></div>
 <div class="inline-figure"><img src="050-Diagnostik_files/figure-html/unnamed-chunk-4-1.png" width="672"></div>
 <!-- Eine Variante, etwas aufgebügelt: -->
 <!-- ```{r} -->
@@ -226,7 +227,7 @@ so dass insgesamt von diesem Diagramm abgeraten werden muss.</p>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2022-07-27 15:32:58.</p>
+    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2022-10-05 13:45:17.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
@@ -239,7 +240,7 @@ so dass insgesamt von diesem Diagramm abgeraten werden muss.</p>
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Kapitel 8 Fallstudie Normierung | Umfragen auswerten</title>
+<meta name="author" content="Sebastian Sauer">
+<meta name="description" content='library(tidyverse) library(DataExplorer) library(easystats) library(knitr)  # für "kable", erstellt HTML-Tabellen  8.1 Explorative Datenanalyse data_url &lt;-...'>
+<meta name="generator" content="bookdown 0.29 with bs4_book()">
+<meta property="og:title" content="Kapitel 8 Fallstudie Normierung | Umfragen auswerten">
+<meta property="og:type" content="book">
+<meta property="og:description" content='library(tidyverse) library(DataExplorer) library(easystats) library(knitr)  # für "kable", erstellt HTML-Tabellen  8.1 Explorative Datenanalyse data_url &lt;-...'>
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kapitel 8 Fallstudie Normierung | Umfragen auswerten">
+<meta name="twitter:description" content='library(tidyverse) library(DataExplorer) library(easystats) library(knitr)  # für "kable", erstellt HTML-Tabellen  8.1 Explorative Datenanalyse data_url &lt;-...'>
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.4.0/transition.js"></script><script src="libs/bs3compat-0.4.0/tabs.js"></script><script src="libs/bs3compat-0.4.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<style type="text/css">
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Umfragen auswerten</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html"><span class="header-section-number">1</span> Einleitung</a></li>
+<li><a class="" href="daten-aufr%C3%A4umen.html"><span class="header-section-number">2</span> Daten aufräumen</a></li>
+<li><a class="" href="zentrale-ergebnisse.html"><span class="header-section-number">3</span> Zentrale Ergebnisse</a></li>
+<li><a class="" href="fallstudie-popup-stores.html"><span class="header-section-number">4</span> Fallstudie Popup-Stores</a></li>
+<li><a class="" href="normierung.html"><span class="header-section-number">5</span> Normierung</a></li>
+<li><a class="" href="diagnostische-kennwerte.html"><span class="header-section-number">6</span> Diagnostische Kennwerte</a></li>
+<li><a class="" href="itemanalyse.html"><span class="header-section-number">7</span> Itemanalyse</a></li>
+<li><a class="active" href="fallstudie-normierung.html"><span class="header-section-number">8</span> Fallstudie Normierung</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/sebastiansauer/umfragen-auswerten">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="fallstudie-normierung" class="section level1" number="8">
+<h1>
+<span class="header-section-number">Kapitel 8</span> Fallstudie Normierung<a class="anchor" aria-label="anchor" href="#fallstudie-normierung"><i class="fas fa-link"></i></a>
+</h1>
+<div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://boxuancui.github.io/DataExplorer/">DataExplorer</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/easystats/">easystats</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/">knitr</a></span><span class="op">)</span>   <span class="co"># für "kable", erstellt HTML-Tabellen</span></span></code></pre></div>
+<div id="explorative-datenanalyse" class="section level2" number="8.1">
+<h2>
+<span class="header-section-number">8.1</span> Explorative Datenanalyse<a class="anchor" aria-label="anchor" href="#explorative-datenanalyse"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data_url</span> <span class="op">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/sebastiansauer/modar/master/datasets/extra.csv"</span></span>
+<span><span class="va">extra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="va">data_url</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">ends_with</a></span><span class="op">(</span><span class="st">"_mean"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="http://boxuancui.github.io/DataExplorer/reference/plot_histogram.html">plot_histogram</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="070-Fallstudie-Normierung_files/figure-html/plot-distribs-1.png" width="672"></div>
+<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">extra_mean</span>, <span class="va">n_facebook_friends</span>, <span class="va">n_hangover</span>, <span class="va">age</span>, <span class="va">sex</span>, <span class="va">time_conversation</span>, <span class="va">sleep_week</span>, <span class="va">sleep_wend</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">describe_distribution</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Variable           |     Mean |       SD |    IQR |            Range | Skewness | Kurtosis |   n | n_Missing</span></span>
+<span><span class="co">#&gt; ------------------------------------------------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; extra_mean         |     2.89 |     0.45 |   0.60 |     [1.20, 4.00] |    -0.43 |    -0.11 | 822 |         4</span></span>
+<span><span class="co">#&gt; n_facebook_friends |   532.61 |  3704.48 | 300.00 | [0.00, 96055.00] |    25.67 |   662.76 | 671 |       155</span></span>
+<span><span class="co">#&gt; n_hangover         |     9.47 |    30.72 |   9.00 |   [0.00, 738.00] |    17.54 |   399.53 | 800 |        26</span></span>
+<span><span class="co">#&gt; age                |    25.50 |     5.75 |   6.00 |   [18.00, 54.00] |     1.81 |     4.39 | 813 |        13</span></span>
+<span><span class="co">#&gt; time_conversation  | 1.34e+06 | 3.65e+07 |  10.00 | [0.00, 1.00e+09] |    27.37 |   749.00 | 749 |        77</span></span>
+<span><span class="co">#&gt; sleep_week         |    18.00 |    26.98 |   2.00 |    [5.00, 85.00] |     2.16 |     3.46 |  12 |       814</span></span>
+<span><span class="co">#&gt; sleep_wend         |     8.25 |     1.22 |   2.75 |    [7.00, 10.00] |     0.52 |    -1.27 |  12 |       814</span></span></code></pre></div>
+</div>
+<div id="normwerte-berechnen" class="section level2" number="8.2">
+<h2>
+<span class="header-section-number">8.2</span> Normwerte berechnen<a class="anchor" aria-label="anchor" href="#normwerte-berechnen"><i class="fas fa-link"></i></a>
+</h2>
+<div id="hilfsfunktionen" class="section level3" number="8.2.1">
+<h3>
+<span class="header-section-number">8.2.1</span> Hilfsfunktionen<a class="anchor" aria-label="anchor" href="#hilfsfunktionen"><i class="fas fa-link"></i></a>
+</h3>
+<p>Zwei Hilfskräfte: Die erste Funktion berechnet Normwerte, s.<a href="https://de.wikipedia.org/wiki/Normwertskala">Infos here</a>:</p>
+<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">convert_to_norm_value</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">score</span>, <span class="va">data_vec</span>, <span class="va">mu</span> <span class="op">=</span> <span class="fl">0</span>, <span class="va">sigma</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">out</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="op">(</span><span class="va">score</span> <span class="op">-</span> <span class="fu">mean</span><span class="op">(</span><span class="va">data_vec</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">sd</a></span><span class="op">(</span><span class="va">data_vec</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="va">sigma</span> <span class="op">+</span> <span class="va">mu</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>Probieren wir es aus. Aber zuerst müssen wir die <code>NA</code> entfernen,
+da das <code>convert_to_norm_value</code> nicht kann.</p>
+<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">extra_drop_na</span> <span class="op">&lt;-</span> </span>
+<span><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">extra_mean</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/drop_na.html">drop_na</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  </span>
+<span><span class="fu">convert_to_norm_value</span><span class="op">(</span>score <span class="op">=</span> <span class="fl">3</span>, data_vec <span class="op">=</span> <span class="va">extra_drop_na</span><span class="op">$</span><span class="va">extra_mean</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.2415975</span></span></code></pre></div>
+<pre><code>
+
+
+Diese Funktion wenden wir für mehrere Normierungsarten an, im Rahmen einer zweiten Funktion:
+
+
+```r
+compute_all_norms &lt;- function(x, min_score = 0, max_score = max(x), by = .5){
+  
+  x_ecdf &lt;- ecdf(x)  # empircal cumulative distribution function - gives back function
+  
+  out &lt;-
+    tibble(
+      score = seq(from = min_score, to = max_score, by = by),
+      perc_rank = x_ecdf(score),
+      z = map_dbl(score, ~ convert_to_norm_value(.x, data_vec = x)),
+      stanine = map_dbl(score, ~ convert_to_norm_value(.x, data_vec = x, mu = 5, sigma = 2)),
+      T = map_dbl(score, ~ convert_to_norm_value(.x, data_vec = x, mu = 50, sigma = 10)),
+      perc_normal = map_dbl(z, pnorm)
+    ) %&gt;% 
+    mutate(stanine = case_when(
+      stanine &gt; 9 ~ 9,
+      stanine &lt; 1 ~ 1,
+      TRUE ~ stanine
+    ))
+  return(out)
+}</code></pre>
+</div>
+<div id="normwerte-berechnen-1" class="section level3" number="8.2.2">
+<h3>
+<span class="header-section-number">8.2.2</span> Normwerte berechnen<a class="anchor" aria-label="anchor" href="#normwerte-berechnen-1"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">ends_with</a></span><span class="op">(</span><span class="st">"_mean"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu">compute_all_norms</span><span class="op">(</span><span class="va">.</span>, min_score <span class="op">=</span> <span class="fl">1</span>, max_score <span class="op">=</span> <span class="fl">4</span>, by <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span>, </span>
+<span>                     digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>$extra_mean</p>
+<div class="inline-table"><table class="table table-sm">
+<thead><tr class="header">
+<th align="right">score</th>
+<th align="right">perc_rank</th>
+<th align="right">z</th>
+<th align="right">stanine</th>
+<th align="right">T</th>
+<th align="right">perc_normal</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1.0</td>
+<td align="right">0.00</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1.1</td>
+<td align="right">0.00</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1.2</td>
+<td align="right">0.00</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1.3</td>
+<td align="right">0.00</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1.4</td>
+<td align="right">0.00</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1.5</td>
+<td align="right">0.00</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1.6</td>
+<td align="right">0.00</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1.7</td>
+<td align="right">0.01</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1.8</td>
+<td align="right">0.02</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1.9</td>
+<td align="right">0.03</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">2.0</td>
+<td align="right">0.05</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">2.1</td>
+<td align="right">0.08</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">2.2</td>
+<td align="right">0.10</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">2.3</td>
+<td align="right">0.12</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">2.4</td>
+<td align="right">0.16</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">2.5</td>
+<td align="right">0.21</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">2.6</td>
+<td align="right">0.28</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">2.7</td>
+<td align="right">0.36</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">2.8</td>
+<td align="right">0.43</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">2.9</td>
+<td align="right">0.51</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">3.0</td>
+<td align="right">0.60</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">3.1</td>
+<td align="right">0.69</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">3.2</td>
+<td align="right">0.78</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">3.3</td>
+<td align="right">0.85</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">3.4</td>
+<td align="right">0.90</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">3.5</td>
+<td align="right">0.94</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">3.6</td>
+<td align="right">0.97</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">3.7</td>
+<td align="right">0.99</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">3.8</td>
+<td align="right">1.00</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">3.9</td>
+<td align="right">1.00</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">4.0</td>
+<td align="right">1.00</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table></div>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Buhner2011" class="csl-entry">
+Bühner, M. 2011. <em>Einführung in Die Test- Und Fragebogenkonstruktion</em>. <span>PS</span> Psychologie. Hallbergmoos: Pearson Studium. <a href="https://books.google.de/books?id=Y4990CfV3wgC">https://books.google.de/books?id=Y4990CfV3wgC</a>.
+</div>
+<div id="ref-Lienert1998" class="csl-entry">
+Lienert, Gustav A., and Ulrich Raatz. 1998. <em>Testaufbau Und Testanalyse</em>. 6. Auflage. Weinheim: Beltz, Psychologie Verlags Union.
+</div>
+<div id="ref-Satow2012" class="csl-entry">
+Satow, L. 2012. <span>“<span>SCI</span> - Stress- und Coping-Inventar.”</span> <a href="https://doi.org/10.23668/PSYCHARCHIVES.4604">https://doi.org/10.23668/PSYCHARCHIVES.4604</a>.
+</div>
+<div id="ref-satow_b5t_2020" class="csl-entry">
+———. 2020. <span>“B5T®. Big-Five-Persönlichkeitstest.”</span> <a href="https://doi.org/10.23668/PSYCHARCHIVES.4611">https://doi.org/10.23668/PSYCHARCHIVES.4611</a>.
+</div>
+<div id="ref-Sauer2019" class="csl-entry">
+Sauer, Sebastian. 2019. <em>Moderne Datenanalyse Mit r: Daten Einlesen, Aufbereiten, Visualisieren Und Modellieren</em>. 1. Auflage 2019. <span>FOM</span>-Edition. Wiesbaden: Springer. <a href="https://www.springer.com/de/book/9783658215866">https://www.springer.com/de/book/9783658215866</a>.
+</div>
+<div id="ref-Steyer1993" class="csl-entry">
+Steyer, Rolf, and Michael Eid. 1993. <em>Messen Und Testen</em>. Heidelberg: Springer.
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="chapter-nav">
+<div class="prev"><a href="itemanalyse.html"><span class="header-section-number">7</span> Itemanalyse</a></div>
+<div class="empty"></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#fallstudie-normierung"><span class="header-section-number">8</span> Fallstudie Normierung</a></li>
+<li><a class="nav-link" href="#explorative-datenanalyse"><span class="header-section-number">8.1</span> Explorative Datenanalyse</a></li>
+<li>
+<a class="nav-link" href="#normwerte-berechnen"><span class="header-section-number">8.2</span> Normwerte berechnen</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#hilfsfunktionen"><span class="header-section-number">8.2.1</span> Hilfsfunktionen</a></li>
+<li><a class="nav-link" href="#normwerte-berechnen-1"><span class="header-section-number">8.2.2</span> Normwerte berechnen</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/sebastiansauer/umfragen-auswerten/blob/master/070-Fallstudie-Normierung.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/sebastiansauer/umfragen-auswerten/edit/master/070-Fallstudie-Normierung.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2022-10-05 13:45:17.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

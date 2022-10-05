@@ -7,7 +7,7 @@
 <title>Kapitel 7 Itemanalyse | Umfragen auswerten</title>
 <meta name="author" content="Sebastian Sauer">
 <meta name="description" content="7.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # recode library(psych) # Itemanalyse  7.2 Daten data_url &lt;-...">
-<meta name="generator" content="bookdown 0.27 with bs4_book()">
+<meta name="generator" content="bookdown 0.29 with bs4_book()">
 <meta property="og:title" content="Kapitel 7 Itemanalyse | Umfragen auswerten">
 <meta property="og:type" content="book">
 <meta property="og:description" content="7.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # recode library(psych) # Itemanalyse  7.2 Daten data_url &lt;-...">
@@ -72,6 +72,7 @@
 <li><a class="" href="normierung.html"><span class="header-section-number">5</span> Normierung</a></li>
 <li><a class="" href="diagnostische-kennwerte.html"><span class="header-section-number">6</span> Diagnostische Kennwerte</a></li>
 <li><a class="active" href="itemanalyse.html"><span class="header-section-number">7</span> Itemanalyse</a></li>
+<li><a class="" href="fallstudie-normierung.html"><span class="header-section-number">8</span> Fallstudie Normierung</a></li>
 </ul>
 
         <div class="book-extra">
@@ -205,46 +206,12 @@
 </h2>
 <p><span class="citation">Bühner (2011)</span> bietet eine gute Einführung in die Analyse psychometrischer Daten, allerdings mit SPSS-Syntax, keine R-Syntax.</p>
 
-<div id="refs" class="references csl-bib-body hanging-indent">
-<div id="ref-Buhner2011" class="csl-entry">
-Bühner, M. 2011. <em>Einführung in Die Test- Und Fragebogenkonstruktion</em>. <span>PS</span> Psychologie. Hallbergmoos: Pearson Studium. <a href="https://books.google.de/books?id=Y4990CfV3wgC">https://books.google.de/books?id=Y4990CfV3wgC</a>.
-</div>
-<div id="ref-Lienert1998" class="csl-entry">
-Lienert, Gustav A., and Ulrich Raatz. 1998. <em>Testaufbau Und Testanalyse</em>. 6. Auflage. Weinheim: Beltz, Psychologie Verlags Union.
-</div>
-<div id="ref-Satow2012" class="csl-entry">
-Satow, L. 2012. <span>“<span>SCI</span> - Stress- und Coping-Inventar.”</span> <a href="https://doi.org/10.23668/PSYCHARCHIVES.4604">https://doi.org/10.23668/PSYCHARCHIVES.4604</a>.
-</div>
-<div id="ref-satow_b5t_2020" class="csl-entry">
-———. 2020. <span>“B5T®. Big-Five-Persönlichkeitstest.”</span> <a href="https://doi.org/10.23668/PSYCHARCHIVES.4611">https://doi.org/10.23668/PSYCHARCHIVES.4611</a>.
-</div>
-<div id="ref-Sauer2019" class="csl-entry">
-Sauer, Sebastian. 2019. <em>Moderne Datenanalyse Mit r: Daten Einlesen, Aufbereiten, Visualisieren Und Modellieren</em>. 1. Auflage 2019. <span>FOM</span>-Edition. Wiesbaden: Springer. <a href="https://www.springer.com/de/book/9783658215866">https://www.springer.com/de/book/9783658215866</a>.
-</div>
-<div id="ref-Steyer1993" class="csl-entry">
-Steyer, Rolf, and Michael Eid. 1993. <em>Messen Und Testen</em>. Heidelberg: Springer.
 </div>
 </div>
-</div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   <div class="chapter-nav">
 <div class="prev"><a href="diagnostische-kennwerte.html"><span class="header-section-number">6</span> Diagnostische Kennwerte</a></div>
-<div class="empty"></div>
+<div class="next"><a href="fallstudie-normierung.html"><span class="header-section-number">8</span> Fallstudie Normierung</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
@@ -270,7 +237,7 @@ Steyer, Rolf, and Michael Eid. 1993. <em>Messen Und Testen</em>. Heidelberg: Spr
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2022-07-27 15:32:58.</p>
+    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2022-10-05 13:45:17.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
@@ -283,7 +250,7 @@ Steyer, Rolf, and Michael Eid. 1993. <em>Messen Und Testen</em>. Heidelberg: Spr
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');

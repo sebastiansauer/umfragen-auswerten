@@ -57,7 +57,7 @@ extra %>%
 #> `stat_bin()` using `bins = 30`. Pick better value with
 #> `binwidth`.
 #> Warning: Removed 4 rows containing non-finite values
-#> (stat_bin).
+#> (`stat_bin()`).
 ```
 
 <img src="050-Diagnostik_files/figure-html/unnamed-chunk-3-1.png" width="672" />
@@ -71,7 +71,7 @@ extra %>%
   ggplot(aes(y = extra_mean, x = sex)) +
   geom_boxplot()
 #> Warning: Removed 4 rows containing non-finite values
-#> (stat_boxplot).
+#> (`stat_boxplot()`).
 ```
 
 <img src="050-Diagnostik_files/figure-html/unnamed-chunk-4-1.png" width="672" />

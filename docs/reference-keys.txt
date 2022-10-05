@@ -1,3 +1,4 @@
+fig:unnamed-chunk-1
 tab:extra-score-mean
 einleitung
 hilfe-zu-r
@@ -87,4 +88,8 @@ r-pakete-6
 daten-5
 einführung
 literaturempfehlungen
-fig:unnamed-chunk-1
+fallstudie-normierung
+explorative-datenanalyse
+normwerte-berechnen
+hilfsfunktionen
+normwerte-berechnen-1

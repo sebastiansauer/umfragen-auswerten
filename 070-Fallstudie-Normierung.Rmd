@@ -1,0 +1,105 @@
+# Fallstudie Normierung
+
+
+```{r message=FALSE}
+library(tidyverse)
+library(DataExplorer)
+library(easystats)
+library(knitr)   # für "kable", erstellt HTML-Tabellen
+```
+
+
+## Explorative Datenanalyse
+
+```{r load-extra-web, message = FALSE}
+data_url <- "https://raw.githubusercontent.com/sebastiansauer/modar/master/datasets/extra.csv"
+extra <- read_csv(data_url)
+```
+
+
+
+```{r plot-distribs}
+extra %>% 
+  select(ends_with("_mean")) %>% 
+  plot_histogram()
+```
+
+
+```{r}
+extra %>% 
+  select(extra_mean, n_facebook_friends, n_hangover, age, sex, time_conversation, sleep_week, sleep_wend) %>% 
+  describe_distribution()
+```
+
+
+## Normwerte berechnen
+
+
+### Hilfsfunktionen
+
+Zwei Hilfskräfte: Die erste Funktion berechnet Normwerte, s.[Infos here](https://de.wikipedia.org/wiki/Normwertskala):
+
+```{r}
+convert_to_norm_value <- function(score, data_vec, mu = 0, sigma = 1) {
+  out <- ((score - mean(data_vec, na.rm = TRUE)) / sd(data_vec)) * sigma + mu
+  return(out)
+}
+```
+
+
+
+Probieren wir es aus. Aber zuerst müssen wir die `NA` entfernen,
+da das `convert_to_norm_value` nicht kann.
+
+```{r}
+extra_drop_na <- 
+extra %>% 
+  select(extra_mean) %>% 
+  drop_na()
+  
+convert_to_norm_value(score = 3, data_vec = extra_drop_na$extra_mean)
+```
+```
+
+
+
+Diese Funktion wenden wir für mehrere Normierungsarten an, im Rahmen einer zweiten Funktion:
+
+```{r}
+compute_all_norms <- function(x, min_score = 0, max_score = max(x), by = .5){
+  
+  x_ecdf <- ecdf(x)  # empircal cumulative distribution function - gives back function
+  
+  out <-
+    tibble(
+      score = seq(from = min_score, to = max_score, by = by),
+      perc_rank = x_ecdf(score),
+      z = map_dbl(score, ~ convert_to_norm_value(.x, data_vec = x)),
+      stanine = map_dbl(score, ~ convert_to_norm_value(.x, data_vec = x, mu = 5, sigma = 2)),
+      T = map_dbl(score, ~ convert_to_norm_value(.x, data_vec = x, mu = 50, sigma = 10)),
+      perc_normal = map_dbl(z, pnorm)
+    ) %>% 
+    mutate(stanine = case_when(
+      stanine > 9 ~ 9,
+      stanine < 1 ~ 1,
+      TRUE ~ stanine
+    ))
+  return(out)
+}
+```
+
+
+
+
+
+### Normwerte berechnen
+
+
+```{r norms-overall, results = "asis"}
+extra %>% 
+  select(ends_with("_mean")) %>% 
+  map(~ kable(compute_all_norms(., min_score = 1, max_score = 4, by = .1), 
+                     digits = 2)) %>% 
+  print()
+```
+

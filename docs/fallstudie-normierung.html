@@ -7,7 +7,7 @@
 <title>Kapitel 8 Fallstudie Normierung | Umfragen auswerten</title>
 <meta name="author" content="Sebastian Sauer">
 <meta name="description" content='library(tidyverse) library(DataExplorer) library(easystats)  8.1 Explorative Datenanalyse data_url &lt;- "https://raw.githubusercontent.com/sebastiansauer/modar/master/datasets/extra.csv" extra &lt;-...'>
-<meta name="generator" content="bookdown 0.29 with bs4_book()">
+<meta name="generator" content="bookdown 0.34 with bs4_book()">
 <meta property="og:title" content="Kapitel 8 Fallstudie Normierung | Umfragen auswerten">
 <meta property="og:type" content="book">
 <meta property="og:description" content='library(tidyverse) library(DataExplorer) library(easystats)  8.1 Explorative Datenanalyse data_url &lt;- "https://raw.githubusercontent.com/sebastiansauer/modar/master/datasets/extra.csv" extra &lt;-...'>
@@ -16,7 +16,7 @@
 <meta name="twitter:description" content='library(tidyverse) library(DataExplorer) library(easystats)  8.1 Explorative Datenanalyse data_url &lt;- "https://raw.githubusercontent.com/sebastiansauer/modar/master/datasets/extra.csv" extra &lt;-...'>
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.4.0/transition.js"></script><script src="libs/bs3compat-0.4.0/tabs.js"></script><script src="libs/bs3compat-0.4.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.4.2/transition.js"></script><script src="libs/bs3compat-0.4.2/tabs.js"></script><script src="libs/bs3compat-0.4.2/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
@@ -84,7 +84,7 @@
 <h1>
 <span class="header-section-number">Kapitel 8</span> Fallstudie Normierung<a class="anchor" aria-label="anchor" href="#fallstudie-normierung"><i class="fas fa-link"></i></a>
 </h1>
-<div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://boxuancui.github.io/DataExplorer/">DataExplorer</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/easystats/">easystats</a></span><span class="op">)</span></span></code></pre></div>
@@ -92,15 +92,15 @@
 <h2>
 <span class="header-section-number">8.1</span> Explorative Datenanalyse<a class="anchor" aria-label="anchor" href="#explorative-datenanalyse"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_url</span> <span class="op">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/sebastiansauer/modar/master/datasets/extra.csv"</span></span>
 <span><span class="va">extra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="va">data_url</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">ends_with</a></span><span class="op">(</span><span class="st">"_mean"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="http://boxuancui.github.io/DataExplorer/reference/plot_histogram.html">plot_histogram</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-figure"><img src="070-Fallstudie-Normierung_files/figure-html/plot-distribs-1.png" width="672"></div>
-<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">extra_mean</span>, <span class="va">n_facebook_friends</span>, <span class="va">n_hangover</span>, <span class="va">age</span>, <span class="va">sex</span>, <span class="va">time_conversation</span>, <span class="va">sleep_week</span>, <span class="va">sleep_wend</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">describe_distribution</span><span class="op">(</span><span class="op">)</span></span>
@@ -123,7 +123,7 @@
 <span class="header-section-number">8.2.1</span> Hilfsfunktionen<a class="anchor" aria-label="anchor" href="#hilfsfunktionen"><i class="fas fa-link"></i></a>
 </h3>
 <p>Zwei Hilfskräfte (in Form von R-Funktionen) brauchen wir: Die erste Funktion berechnet Normwerte, s.<a href="https://de.wikipedia.org/wiki/Normwertskala">Infos here</a>:</p>
-<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">convert_to_norm_value</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="kw">function</span><span class="op">(</span><span class="va">score</span>, <span class="va">data_vec</span>, <span class="va">mu</span> <span class="op">=</span> <span class="fl">0</span>, <span class="va">sigma</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">numerator</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">score</span> <span class="op">-</span> <span class="fu">mean</span><span class="op">(</span><span class="va">data_vec</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
@@ -132,7 +132,7 @@
 <span><span class="op">}</span></span></code></pre></div>
 <p>Probieren wir es aus. Aber zuerst müssen wir die <code>NA</code> entfernen,
 da das <code>convert_to_norm_value</code> nicht kann.</p>
-<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">extra_drop_na</span> <span class="op">&lt;-</span> </span>
 <span><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">extra_mean</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
@@ -141,7 +141,7 @@ da das <code>convert_to_norm_value</code> nicht kann.</p>
 <span><span class="fu">convert_to_norm_value</span><span class="op">(</span>score <span class="op">=</span> <span class="fl">3</span>, data_vec <span class="op">=</span> <span class="va">extra_drop_na</span><span class="op">$</span><span class="va">extra_mean</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.2415975</span></span></code></pre></div>
 <p>Diese Funktion wenden wir für mehrere Normierungsarten an, im Rahmen einer zweiten Funktion:</p>
-<div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">compute_all_norms</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">min_score</span> <span class="op">=</span> <span class="fl">0</span>, <span class="va">max_score</span> <span class="op">=</span> <span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="va">by</span> <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span><span class="op">{</span></span>
 <span>  </span>
 <span>  <span class="va">x_ecdf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/ecdf.html">ecdf</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>  <span class="co"># empircal cumulative distribution function - gives back function</span></span>
@@ -167,7 +167,7 @@ da das <code>convert_to_norm_value</code> nicht kann.</p>
 <h3>
 <span class="header-section-number">8.2.2</span> Normwerte berechnen<a class="anchor" aria-label="anchor" href="#normwerte-berechnen-1"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">ends_with</a></span><span class="op">(</span><span class="st">"_mean"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/drop_na.html">drop_na</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
@@ -506,7 +506,7 @@ Steyer, Rolf, and Michael Eid. 1993. <em>Messen Und Testen</em>. Heidelberg: Spr
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2022-10-05 14:03:22.</p>
+    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2023-06-23 13:08:07.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

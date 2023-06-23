@@ -7,7 +7,7 @@
 <title>Kapitel 3 Zentrale Ergebnisse | Umfragen auswerten</title>
 <meta name="author" content="Sebastian Sauer">
 <meta name="description" content="3.1 Cave Dieses Kapitel berichtet das Wie des Darstellens von Ergebnissen. Es geht nicht darum, warum man welches Vorgehen wählt und welches Vorgehen am sinnvollsten ist. Konsultieren Sie für...">
-<meta name="generator" content="bookdown 0.29 with bs4_book()">
+<meta name="generator" content="bookdown 0.34 with bs4_book()">
 <meta property="og:title" content="Kapitel 3 Zentrale Ergebnisse | Umfragen auswerten">
 <meta property="og:type" content="book">
 <meta property="og:description" content="3.1 Cave Dieses Kapitel berichtet das Wie des Darstellens von Ergebnissen. Es geht nicht darum, warum man welches Vorgehen wählt und welches Vorgehen am sinnvollsten ist. Konsultieren Sie für...">
@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="3.1 Cave Dieses Kapitel berichtet das Wie des Darstellens von Ergebnissen. Es geht nicht darum, warum man welches Vorgehen wählt und welches Vorgehen am sinnvollsten ist. Konsultieren Sie für...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.4.0/transition.js"></script><script src="libs/bs3compat-0.4.0/tabs.js"></script><script src="libs/bs3compat-0.4.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.4.2/transition.js"></script><script src="libs/bs3compat-0.4.2/tabs.js"></script><script src="libs/bs3compat-0.4.2/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
@@ -101,7 +101,7 @@ Es geht nicht darum, <em>warum</em> man welches Vorgehen wählt und welches Vorg
 <span class="header-section-number">3.2.1</span> R-Pakete<a class="anchor" aria-label="anchor" href="#r-pakete-2"><i class="fas fa-link"></i></a>
 </h3>
 <p>In diesem Kapitel benötigen wir folgende R-Pakete:</p>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>  <span class="co"># Datenjudo</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/easystats/">easystats</a></span><span class="op">)</span>  <span class="co"># make stasts easy again</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/">knitr</a></span><span class="op">)</span>  <span class="co"># Tabellen schick</span></span>
@@ -111,14 +111,14 @@ Es geht nicht darum, <em>warum</em> man welches Vorgehen wählt und welches Vorg
 <a href="https://easystats.github.io/easystats/">Hier</a> findet sich ein Überblick.
 Das Paket ist noch nicht auf CRAN,
 aber es kann wie folgt problemlos installiert werden:</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"easystats"</span>, repos <span class="op">=</span> <span class="st">"https://easystats.r-universe.dev"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="daten-2" class="section level3" number="3.2.2">
 <h3>
 <span class="header-section-number">3.2.2</span> Daten<a class="anchor" aria-label="anchor" href="#daten-2"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_url</span> <span class="op">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/sebastiansauer/modar/master/datasets/extra.csv"</span></span>
 <span><span class="va">extra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="va">data_url</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -130,7 +130,7 @@ aber es kann wie folgt problemlos installiert werden:</p>
 <p>Damit es einfach bleibt, begrenzen wir uns auf ein paar Variablen.</p>
 <p>Sagen wir,
 das sind die Variablen, die uns interessieren:</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">extra_corr_names</span> <span class="op">&lt;-</span> </span>
 <span><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">n_facebook_friends</span>, <span class="va">n_hangover</span>, <span class="va">age</span>, <span class="va">extra_single_item</span>, <span class="va">n_party</span>, <span class="va">extra_mean</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
@@ -146,7 +146,7 @@ das sind die Variablen, die uns interessieren:</p>
 <span class="header-section-number">3.4</span> Deskriptive Ergebnisse darstellen<a class="anchor" aria-label="anchor" href="#deskriptive-ergebnisse-darstellen"><i class="fas fa-link"></i></a>
 </h2>
 <p>Sie können deskriptive Ergebnisse (Ihrer relevanten Variablen) z.B. so darstellen.</p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html">any_of</a></span><span class="op">(</span><span class="va">extra_corr_names</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">describe_distribution</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
@@ -263,7 +263,7 @@ darzustellen.</p>
 <h3>
 <span class="header-section-number">3.5.1</span> Korrelationsmatrix<a class="anchor" aria-label="anchor" href="#korrelationsmatrix"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html">any_of</a></span><span class="op">(</span><span class="va">extra_corr_names</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>  </span>
 <span>  <span class="fu">correlation</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
@@ -332,7 +332,7 @@ darzustellen.</p>
 <p>Sie möchten das Ergebnis als normalen R-Dataframe?
 Sie haben keine Lust auf dieses Rumgetue, sondern wollen das lieber als selber gerade ziehen.
 Also gut:</p>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cor_results</span> <span class="op">&lt;-</span> </span>
 <span><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html">any_of</a></span><span class="op">(</span><span class="va">extra_corr_names</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>  </span>
@@ -352,7 +352,7 @@ Also gut:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; p-value adjustment method: Holm (1979)</span></span></code></pre></div>
 <p>Man kann sich die Korrelationsmatrix auch in der Bayes-Geschmacksrichtung ausgeben lassen:</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html">any_of</a></span><span class="op">(</span><span class="va">extra_corr_names</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>  </span>
 <span>  <span class="fu">correlation</span><span class="op">(</span>bayesian <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
@@ -424,7 +424,7 @@ Also gut:</p>
 <span class="header-section-number">3.5.2</span> Korrelationsmatrizen visualisieren<a class="anchor" aria-label="anchor" href="#korrelationsmatrizen-visualisieren"><i class="fas fa-link"></i></a>
 </h3>
 <p>Viele R-Pakete bieten sich an. Nehmen wir <a href="https://easystats.github.io/easystats/">easystats</a>.</p>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html">any_of</a></span><span class="op">(</span><span class="va">extra_corr_names</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>  </span>
 <span>  <span class="fu">correlation</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
@@ -442,11 +442,11 @@ Also gut:</p>
 <h3>
 <span class="header-section-number">3.6.1</span> Frequentistisch<a class="anchor" aria-label="anchor" href="#frequentistisch"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">extra_mean</span> <span class="op">~</span> <span class="va">n_facebook_friends</span> <span class="op">+</span> <span class="va">n_hangover</span>, data <span class="op">=</span> <span class="va">extra</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lm1_tab</span> <span class="op">&lt;-</span> </span>
-<span><span class="fu"><a href="moderndive.github.io/moderndive//reference/get_regression_table.html">get_regression_table</a></span><span class="op">(</span><span class="va">lm1</span><span class="op">)</span> </span>
+<span><span class="fu"><a href="moderndive.github.io/moderndive/reference/get_regression_table.html">get_regression_table</a></span><span class="op">(</span><span class="va">lm1</span><span class="op">)</span> </span>
 <span></span>
 <span><span class="va">lm1_tab</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
@@ -506,12 +506,12 @@ Also gut:</p>
 </h3>
 <p>Für Bayes gibt es keine ganz so komfortable Lösung.
 Aber keine Panik, es sollte nur wenige Minuten kosten.</p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lm2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html">stan_glm</a></span><span class="op">(</span><span class="va">extra_mean</span> <span class="op">~</span> <span class="va">n_facebook_friends</span> <span class="op">+</span> <span class="va">n_hangover</span>, </span>
 <span>                refresh <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>                data <span class="op">=</span> <span class="va">extra</span><span class="op">)</span></span></code></pre></div>
 <p>Ergebnisse, d.h. die Koeffizienten:</p>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">parameters</span><span class="op">(</span><span class="va">lm2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Parameter          |   Median |        95% CI |     pd | % in ROPE |  Rhat |     ESS |                     Prior</span></span>
 <span><span class="co">#&gt; ----------------------------------------------------------------------------------------------------------------</span></span>
@@ -519,7 +519,7 @@ Aber keine Panik, es sollte nur wenige Minuten kosten.</p>
 <span><span class="co">#&gt; n_facebook_friends | 3.12e-06 | [ 0.00, 0.00] | 75.58% |      100% | 1.000 | 5300.00 | Normal (0.00 +- 2.95e-04)</span></span>
 <span><span class="co">#&gt; n_hangover         | 4.55e-03 | [ 0.00, 0.01] |   100% |      100% | 0.999 | 4881.00 |     Normal (0.00 +- 0.07)</span></span></code></pre></div>
 <p>Und als Tabelle:</p>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">parameters</span><span class="op">(</span><span class="va">lm2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-table"><table class="table table-sm">
@@ -597,7 +597,7 @@ Aber keine Panik, es sollte nur wenige Minuten kosten.</p>
 </tbody>
 </table></div>
 <p>Dazu noch <span class="math inline">\(R^2\)</span>:</p>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">r2_bayes</span><span class="op">(</span><span class="va">lm2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Bayesian R2 with Compatibility Interval</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -610,7 +610,7 @@ Aber keine Panik, es sollte nur wenige Minuten kosten.</p>
 </h3>
 <p>Hier ist noch ein experimentelles Feature:
 Es gibt Ihnen den Text aus, um die Ergebnisse Ihrer Bayes-Analyse zu berichten.</p>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">report</span><span class="op">(</span><span class="va">lm2</span><span class="op">)</span></span></code></pre></div>
 <p>We fitted a Bayesian linear model (estimated using MCMC sampling with 4 chains of 2000 iterations and a warmup of 1000) to predict extra_mean with n_facebook_friends and n_hangover (formula: extra_mean ~ n_facebook_friends + n_hangover). Priors over parameters were set as normal (mean = 0.00, SD = 2.95e-04) and normal (mean = 0.00, SD = 0.07) distributions. The model’s explanatory power is weak (R2 = 0.03, 95% CI [7.66e-03, 0.05], adj. R2 = 0.01). The model’s intercept, corresponding to n_facebook_friends = 0 and n_hangover = 0, is at 2.88 (95% CI [2.85, 2.92]). Within this model:</p>
 <ul>
@@ -649,9 +649,9 @@ Sie erhalten dann ein HTML-Dokument, aus dem Sie problemlos copy-pasten können 
 </h3>
 <p>Wenn Sie (partout) nicht mit Rmd-Dateien arbeiten wollen,
 hilft Ihnen das R-Paket <a href="https://ardata-fr.github.io/flextable-book/">flextable</a>:</p>
-<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ardata-fr.github.io/flextable-book/">flextable</a></span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">meine_flex_tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/flextable.html">flextable</a></span><span class="op">(</span><span class="va">lm1_tab</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">meine_flex_tab</span></span></code></pre></div>
@@ -747,7 +747,7 @@ var fantome = dest.attachShadow({mode: 'open'});
 var templateContent = template.content;
 fantome.appendChild(templateContent);
 </script><p>Dieses Objekt können Sie dann als .docx abspeichern:</p>
-<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/save_as_docx.html">save_as_docx</a></span><span class="op">(</span><span class="st">"Tabelle 1 "</span> <span class="op">=</span> <span class="va">meine_flex_tab</span>, path <span class="op">=</span> <span class="st">"meine_tab.docx"</span><span class="op">)</span></span></code></pre></div>
 
 </div>
@@ -807,7 +807,7 @@ fantome.appendChild(templateContent);
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2022-10-05 14:03:22.</p>
+    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2023-06-23 13:08:07.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

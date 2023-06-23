@@ -22,6 +22,7 @@ spaltenweises-zusammenführen
 text-in-zahlen-umwandeln
 hilfe-ich-habe-keine-zahlen
 introducing-parse_number
+schleifen-befehl-auf-mehrere-spalten-anwenden
 items-umkodieren
 item-labels-in-zahlen-umwandeln
 zeilen-fälle-löschen

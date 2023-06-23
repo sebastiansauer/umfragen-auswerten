@@ -30,7 +30,7 @@ In diesem Kapitel benötigen wir folgende R-Pakete:
 ```{r message=FALSE}
 library(tidyverse)  # Datenjudo
 library(sjmisc)  # recode
-library(ggstatsplot)  # Diagram aufbügeln
+library(ggstatsplot)  # Diagramm aufbügeln
 library(mice)  # Fehlende Werte ersetzen
 ```
 
@@ -273,6 +273,30 @@ d %>% mutate(i03_r = parse_number(as.character(i03)))
 <!-- data_rec %>%  -->
 <!--   count(sex_r) -->
 <!-- ``` -->
+
+### Schleifen: Befehl auf mehrere Spalten anwenden
+
+Wir können einen Befehl auf mehrere Spalten einer Tabelle anwenden,
+und zwar mit `across` (aus `tidyverse`):
+
+```{r}
+d %>% 
+  mutate(across(i01:i03, as.character))
+```
+
+Neben `as.character` könnte `parse_number` ein Befehl sein,
+den man auf mehrere Spalten gleichzeitig anwenden will:
+
+```{r}
+d %>% 
+  mutate(across(i01:i03, as.character)) %>% 
+  mutate(across(i01:i03, parse_number))
+```
+
+
+Natürlich müssen Sie `across` nicht verwenden; Sie können auch "von Hand" die Spalten einzeln beatmen und jeweils (pro Spalte) `as.character` und `parse_number` anwenden.
+
+
 
 
 ## Items umkodieren

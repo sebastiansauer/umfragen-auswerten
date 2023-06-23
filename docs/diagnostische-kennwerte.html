@@ -7,7 +7,7 @@
 <title>Kapitel 6 Diagnostische Kennwerte | Umfragen auswerten</title>
 <meta name="author" content="Sebastian Sauer">
 <meta name="description" content="6.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(psych) # Itemanalyse  6.2 Daten data_url &lt;-...">
-<meta name="generator" content="bookdown 0.29 with bs4_book()">
+<meta name="generator" content="bookdown 0.34 with bs4_book()">
 <meta property="og:title" content="Kapitel 6 Diagnostische Kennwerte | Umfragen auswerten">
 <meta property="og:type" content="book">
 <meta property="og:description" content="6.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(psych) # Itemanalyse  6.2 Daten data_url &lt;-...">
@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="6.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(psych) # Itemanalyse  6.2 Daten data_url &lt;-...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.4.0/transition.js"></script><script src="libs/bs3compat-0.4.0/tabs.js"></script><script src="libs/bs3compat-0.4.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.4.2/transition.js"></script><script src="libs/bs3compat-0.4.2/tabs.js"></script><script src="libs/bs3compat-0.4.2/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
@@ -89,7 +89,7 @@
 <span class="header-section-number">6.1</span> R-Pakete<a class="anchor" aria-label="anchor" href="#r-pakete-5"><i class="fas fa-link"></i></a>
 </h2>
 <p>In diesem Kapitel benötigen wir folgende R-Pakete:</p>
-<div class="sourceCode" id="cb95"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb97"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>  <span class="co"># Datenjudo</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://personality-project.org/r/psych/">psych</a></span><span class="op">)</span>  <span class="co"># Itemanalyse</span></span></code></pre></div>
 </div>
@@ -97,7 +97,7 @@
 <h2>
 <span class="header-section-number">6.2</span> Daten<a class="anchor" aria-label="anchor" href="#daten-4"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_url</span> <span class="op">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/sebastiansauer/modar/master/datasets/extra.csv"</span></span>
 <span><span class="va">extra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="va">data_url</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 826 Columns: 34</span></span>
@@ -119,7 +119,7 @@
 <span class="header-section-number">6.3.1</span> Histogramm<a class="anchor" aria-label="anchor" href="#histogramm"><i class="fas fa-link"></i></a>
 </h3>
 <p>Eine grundlegende Visualisierung für eine Verteilung - wie z.B. die Testergebnisse einer Stichprobe an Bewerbern - ist ein Histogramm:</p>
-<div class="sourceCode" id="cb97"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb99"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">extra_mean</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -129,7 +129,7 @@
 <span><span class="co">#&gt; (`stat_bin()`).</span></span></code></pre></div>
 <div class="inline-figure"><img src="050-Diagnostik_files/figure-html/unnamed-chunk-3-1.png" width="672"></div>
 <p>Möchte man mehrere Gruppen vergleichen, so ist der Boxplot eine geeignete Visualisierung:</p>
-<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">extra</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">extra_mean</span>, x <span class="op">=</span> <span class="va">sex</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -175,7 +175,7 @@ Der Übersichtlichkeit halber begrenzen wir uns auf die Darstellung von sehr wen
 ein Werteprofil einer oder mehrerer Personen gleichzeitig darzustellen.
 Es weißt allerdings gravierende Mängel auf (siehe<a href="https://rpubs.com/Xtophe/268920">hier</a>),
 so dass insgesamt von diesem Diagramm abgeraten werden muss.</p>
-<div class="sourceCode" id="cb99"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mangothecat/radarchart">radarchart</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">labs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Communicator"</span>, <span class="st">"Data Wangler"</span>, <span class="st">"Programmer"</span>,</span>
@@ -227,7 +227,7 @@ so dass insgesamt von diesem Diagramm abgeraten werden muss.</p>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2022-10-05 14:03:22.</p>
+    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2023-06-23 13:08:07.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

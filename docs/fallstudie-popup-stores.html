@@ -7,7 +7,7 @@
 <title>Kapitel 4 Fallstudie Popup-Stores | Umfragen auswerten</title>
 <meta name="author" content="Sebastian Sauer">
 <meta name="description" content="4.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # Datenhausmeister library(janitor) # Auch ein Hausmeister library(easystats) # Stats...">
-<meta name="generator" content="bookdown 0.29 with bs4_book()">
+<meta name="generator" content="bookdown 0.34 with bs4_book()">
 <meta property="og:title" content="Kapitel 4 Fallstudie Popup-Stores | Umfragen auswerten">
 <meta property="og:type" content="book">
 <meta property="og:description" content="4.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # Datenhausmeister library(janitor) # Auch ein Hausmeister library(easystats) # Stats...">
@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="4.1 R-Pakete In diesem Kapitel benötigen wir folgende R-Pakete: library(tidyverse) # Datenjudo library(sjmisc) # Datenhausmeister library(janitor) # Auch ein Hausmeister library(easystats) # Stats...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.4.0/transition.js"></script><script src="libs/bs3compat-0.4.0/tabs.js"></script><script src="libs/bs3compat-0.4.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.4.2/transition.js"></script><script src="libs/bs3compat-0.4.2/tabs.js"></script><script src="libs/bs3compat-0.4.2/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
@@ -89,7 +89,7 @@
 <span class="header-section-number">4.1</span> R-Pakete<a class="anchor" aria-label="anchor" href="#r-pakete-3"><i class="fas fa-link"></i></a>
 </h2>
 <p>In diesem Kapitel benötigen wir folgende R-Pakete:</p>
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>  <span class="co"># Datenjudo</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://strengejacke.github.io/sjmisc/">sjmisc</a></span><span class="op">)</span>  <span class="co"># Datenhausmeister</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sfirke/janitor">janitor</a></span><span class="op">)</span>  <span class="co"># Auch ein Hausmeister</span></span>
@@ -146,7 +146,7 @@
 <span class="header-section-number">4.4.1</span> Ad 1<a class="anchor" aria-label="anchor" href="#ad-1"><i class="fas fa-link"></i></a>
 </h3>
 <p>Daten laden:</p>
-<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d_url</span> <span class="op">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/sebastiansauer/Lehre/main/data/popupstore/data/d1a.csv"</span></span>
 <span></span>
 <span><span class="va">d1a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="va">d_url</span><span class="op">)</span></span>
@@ -155,29 +155,29 @@
 <span><span class="co">#&gt; [1]  90 196</span></span></code></pre></div>
 <p>Die Tabelel umfasst 90 Zeilen und 196 Spalten.</p>
 <p>Leere Zeilen/Spalten entfernen:</p>
-<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sfirke/janitor">janitor</a></span><span class="op">)</span></span>
 <span><span class="va">d2</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">d1a</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/janitor/man/remove_empty.html">remove_empty</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/remove_empty.html">remove_empty</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="ad-2" class="section level3" number="4.4.2">
 <h3>
 <span class="header-section-number">4.4.2</span> Ad 2<a class="anchor" aria-label="anchor" href="#ad-2"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sfirke/janitor">janitor</a></span><span class="op">)</span></span>
 <span><span class="va">d3</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">d2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/janitor/man/remove_constant.html">remove_constant</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/remove_constant.html">remove_constant</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="ad-3" class="section level3" number="4.4.3">
 <h3>
 <span class="header-section-number">4.4.3</span> Ad 3<a class="anchor" aria-label="anchor" href="#ad-3"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d3</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/janitor/man/get_dupes.html">get_dupes</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/get_dupes.html">get_dupes</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 0 × 84</span></span>
 <span><span class="co">#&gt; # … with 84 variables: v001 &lt;dbl&gt;, v002 &lt;dttm&gt;, v003 &lt;dbl&gt;,</span></span>
 <span><span class="co">#&gt; #   v005 &lt;dbl&gt;, v006 &lt;dttm&gt;, v007 &lt;dttm&gt;, v008 &lt;chr&gt;,</span></span>
@@ -192,7 +192,7 @@
 <h3>
 <span class="header-section-number">4.4.4</span> Ad 4<a class="anchor" aria-label="anchor" href="#ad-4"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d4</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">d3</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">v002</span>, <span class="va">v006</span>, <span class="va">v007</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -202,7 +202,7 @@
 <span class="header-section-number">4.4.5</span> Ad 5<a class="anchor" aria-label="anchor" href="#ad-5"><i class="fas fa-link"></i></a>
 </h3>
 <p>.</p>
-<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d4</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>v001 <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/na_if.html">na_if</a></span><span class="op">(</span><span class="va">v001</span>, <span class="st">""</span><span class="op">)</span>,</span>
 <span>         v001 <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/na_if.html">na_if</a></span><span class="op">(</span><span class="va">v001</span>, <span class="st">"N/A"</span><span class="op">)</span><span class="op">)</span></span>
@@ -229,23 +229,23 @@
 <p>Und so weiter für alle Spalten …</p>
 <p>Puh, geht das nicht schlauer?</p>
 <p>Ja, geht. Hier ein kleiner Trick:</p>
-<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d5</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">d4</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_df</a></span><span class="op">(</span><span class="va">na_if</span>, <span class="st">""</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_df</a></span><span class="op">(</span><span class="va">na_if</span>, <span class="st">"N/A"</span><span class="op">)</span></span></code></pre></div>
-<p>Mit <code><a href="https://purrr.tidyverse.org/reference/map.html">map_df()</a></code> kann man eine Funktion, hier <code><a href="https://dplyr.tidyverse.org/reference/na_if.html">na_if()</a></code> auf jede Spalte der Tabelle (hier: <code>d5</code>) anwenden.
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map_dfr.html">map_df</a></span><span class="op">(</span><span class="va">na_if</span>, <span class="st">""</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map_dfr.html">map_df</a></span><span class="op">(</span><span class="va">na_if</span>, <span class="st">"N/A"</span><span class="op">)</span></span></code></pre></div>
+<p>Mit <code><a href="https://purrr.tidyverse.org/reference/map_dfr.html">map_df()</a></code> kann man eine Funktion, hier <code><a href="https://dplyr.tidyverse.org/reference/na_if.html">na_if()</a></code> auf jede Spalte der Tabelle (hier: <code>d5</code>) anwenden.
 Als Ergebnis dieses “Funktions-Mapping” soll wieder eine Tabelle - daher <code>map_df</code> zurückgegeben werden.</p>
 <p>Mal ein Check:
 Die Anzahl der fehlenden Werte müsste sich jetzt erhöht haben im Vergleich zur letzten Version des Datensatz, <code>d4</code>:</p>
-<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">d4</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 1806</span></span></code></pre></div>
-<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://www.mosaic-web.org/mosaic/reference/aggregating.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">d5</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 1893</span></span></code></pre></div>
 <p>Hm, g.ar nicht so viele mehr. Aber grundsätzlich hat es funktioniert :-)</p>
-<p>Sie brauchen <code><a href="https://purrr.tidyverse.org/reference/map.html">map_df()</a></code> <em>nicht</em> zu verwenden. Es geht auch ohne. Mit <code><a href="https://purrr.tidyverse.org/reference/map.html">map_df()</a></code> ist es nur komfortabler.</p>
+<p>Sie brauchen <code><a href="https://purrr.tidyverse.org/reference/map_dfr.html">map_df()</a></code> <em>nicht</em> zu verwenden. Es geht auch ohne. Mit <code><a href="https://purrr.tidyverse.org/reference/map_dfr.html">map_df()</a></code> ist es nur komfortabler.</p>
 </div>
 <div id="ad-6" class="section level3" number="4.4.6">
 <h3>
@@ -253,7 +253,7 @@ Die Anzahl der fehlenden Werte müsste sich jetzt erhöht haben im Vergleich zur
 </h3>
 <p>Die Item-Positionen, wann also die Items der Ratingskala beginnen und wann (an welcher Spaltenposition) sie enden,
 ist im Fragebogen ersichtlich.</p>
-<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d5</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>v033_r <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/recode.html">recode</a></span><span class="op">(</span><span class="va">v033</span>,</span>
 <span>      <span class="st">"lehne voll und ganz ab"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">3</span>,</span>
@@ -284,7 +284,7 @@ ist im Fragebogen ersichtlich.</p>
 puh, viel zu langweilig.
 Gibt’s da vielleicht einen Trick?</p>
 <p>Ja, gibt es.</p>
-<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d6</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">d5</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span></span>
@@ -307,7 +307,7 @@ hier wenden wir <code><a href="https://dplyr.tidyverse.org/reference/recode.html
 <h3>
 <span class="header-section-number">4.4.7</span> Ad 7<a class="anchor" aria-label="anchor" href="#ad-7"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d7</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">d6</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rowwise.html">rowwise</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>  <span class="co"># Zeilenweise arbeiten im Folgenden</span></span>
@@ -330,7 +330,7 @@ Daher braucht es einen Freund, der das kann, <code><a href="https://dplyr.tidyve
 <h3>
 <span class="header-section-number">4.4.8</span> Ad 8<a class="anchor" aria-label="anchor" href="#ad-8"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/leeper/rio">rio</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/rio/man/export.html">export</a></span><span class="op">(</span><span class="va">d7</span>, file <span class="op">=</span> <span class="st">"d7.csv"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/rio/man/export.html">export</a></span><span class="op">(</span><span class="va">d7</span>, file <span class="op">=</span> <span class="st">"d7.xlsx"</span><span class="op">)</span></span></code></pre></div>
@@ -339,7 +339,7 @@ Daher braucht es einen Freund, der das kann, <code><a href="https://dplyr.tidyve
 <h3>
 <span class="header-section-number">4.4.9</span> Ad 9<a class="anchor" aria-label="anchor" href="#ad-9"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://personality-project.org/r/psych/">psych</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">d7</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
@@ -395,7 +395,7 @@ Daher braucht es einen Freund, der das kann, <code><a href="https://dplyr.tidyve
 <h3>
 <span class="header-section-number">4.4.10</span> Ad 10<a class="anchor" aria-label="anchor" href="#ad-10"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/easystats/">easystats</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">d7</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
@@ -419,7 +419,7 @@ Daher braucht es einen Freund, der das kann, <code><a href="https://dplyr.tidyve
 </h3>
 <p>Es gibt mehrere Wege, das Ziel zu erreichen.
 Einer sieht so aus.</p>
-<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ardata-fr.github.io/flextable-book/">flextable</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">flex1</span> <span class="op">&lt;-</span> </span>
@@ -605,12 +605,12 @@ var fantome = dest.attachShadow({mode: 'open'});
 var templateContent = template.content;
 fantome.appendChild(templateContent);
 </script><p>Vielleicht noch die Anzahl der Dezimalstellen beschneiden:</p>
-<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">flex1</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">d7</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">ends_with</a></span><span class="op">(</span><span class="st">"_avg"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">describe_distribution</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/janitor/man/adorn_rounding.html">adorn_rounding</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/adorn_rounding.html">adorn_rounding</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/flextable.html">flextable</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">flex1</span></span></code></pre></div>
@@ -790,7 +790,7 @@ var fantome = dest.attachShadow({mode: 'open'});
 var templateContent = template.content;
 fantome.appendChild(templateContent);
 </script><p>Und so speichert man als Word-Datei:</p>
-<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/save_as_docx.html">save_as_docx</a></span><span class="op">(</span><span class="va">flex1</span>, path <span class="op">=</span> <span class="st">"flex1.docx"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="ad-12" class="section level3" number="4.4.12">
@@ -800,7 +800,7 @@ fantome.appendChild(templateContent);
 <p>Wie kann ich Items konvertieren? Also negativ gepolte Items positiv umkodieren, also “umdrehen”?</p>
 <p>Die Skala erstreckt sich von -3 bis +3.
 Mit <code><a href="https://dplyr.tidyverse.org/reference/recode.html">recode()</a></code> kann man wie oben auch entsprechend umkodieren.</p>
-<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d8</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">d7</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>v033_i <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/recode.html">recode</a></span><span class="op">(</span><span class="va">v033</span>,</span>
@@ -814,7 +814,7 @@ Mit <code><a href="https://dplyr.tidyverse.org/reference/recode.html">recode()</
 <p>Die Backticks brauchen wir,
 weil es sich bei <code>-1</code> etc. nicht um syntaktisch korrekte Variablennamen handelt.</p>
 <p>Tipp: Einfach mal in die Hilfe schauen.</p>
-<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">i</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
 <span><span class="va">`i ist eins`</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
 <span><span class="va">i1</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></code></pre></div>
@@ -865,7 +865,7 @@ weil es sich bei <code>-1</code> etc. nicht um syntaktisch korrekte Variablennam
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2022-10-05 14:03:22.</p>
+    <p>"<strong>Umfragen auswerten</strong>" was written by Sebastian Sauer. It was last built on 2023-06-23 13:08:07.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

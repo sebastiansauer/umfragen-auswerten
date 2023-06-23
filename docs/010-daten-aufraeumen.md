@@ -15,7 +15,7 @@ In diesem Kapitel benötigen wir folgende R-Pakete:
 ```r
 library(tidyverse)  # Datenjudo
 library(sjmisc)  # recode
-library(ggstatsplot)  # Diagram aufbügeln
+library(ggstatsplot)  # Diagramm aufbügeln
 library(mice)  # Fehlende Werte ersetzen
 ```
 
@@ -299,6 +299,44 @@ d %>% mutate(i03_r = parse_number(as.character(i03)))
 <!--   count(sex_r) -->
 <!-- ``` -->
 
+### Schleifen: Befehl auf mehrere Spalten anwenden
+
+Wir können einen Befehl auf mehrere Spalten einer Tabelle anwenden,
+und zwar mit `across` (aus `tidyverse`):
+
+
+```r
+d %>% 
+  mutate(across(i01:i03, as.character))
+#> # A tibble: 3 × 3
+#>   i01   i02   i03  
+#>   <chr> <chr> <chr>
+#> 1 1     -2    -2   
+#> 2 3     +3    +2   
+#> 3 4     -1    -1
+```
+
+Neben `as.character` könnte `parse_number` ein Befehl sein,
+den man auf mehrere Spalten gleichzeitig anwenden will:
+
+
+```r
+d %>% 
+  mutate(across(i01:i03, as.character)) %>% 
+  mutate(across(i01:i03, parse_number))
+#> # A tibble: 3 × 3
+#>     i01   i02   i03
+#>   <dbl> <dbl> <dbl>
+#> 1     1    -2    -2
+#> 2     3     3     2
+#> 3     4    -1    -1
+```
+
+
+Natürlich müssen Sie `across` nicht verwenden; Sie können auch "von Hand" die Spalten einzeln beatmen und jeweils (pro Spalte) `as.character` und `parse_number` anwenden.
+
+
+
 
 ## Items umkodieren
 
@@ -360,13 +398,13 @@ extra %>%
 #>  8 11.03.20… hph       3     3     2     3     2     2     3
 #>  9 11.03.20… IHW       4     4     1     4     3     4     3
 #> 10 11.03.20… LEI       4     4     2     4     3     3     3
-#> # … with 816 more rows, and 27 more variables: i08 <dbl>,
-#> #   i09 <dbl>, i10 <dbl>, n_facebook_friends <dbl>,
-#> #   n_hangover <dbl>, age <dbl>, sex <chr>,
-#> #   extra_single_item <dbl>, time_conversation <dbl>,
-#> #   presentation <chr>, n_party <dbl>, clients <chr>,
-#> #   extra_vignette <chr>, i21 <lgl>, extra_vignette2 <dbl>,
-#> #   major <chr>, smoker <chr>, sleep_week <dbl>, …
+#> # ℹ 816 more rows
+#> # ℹ 27 more variables: i08 <dbl>, i09 <dbl>, i10 <dbl>,
+#> #   n_facebook_friends <dbl>, n_hangover <dbl>, age <dbl>,
+#> #   sex <chr>, extra_single_item <dbl>,
+#> #   time_conversation <dbl>, presentation <chr>,
+#> #   n_party <dbl>, clients <chr>, extra_vignette <chr>,
+#> #   i21 <lgl>, extra_vignette2 <dbl>, major <chr>, …
 ```
 
 
@@ -711,7 +749,7 @@ extra %>%
   geom_pointrange()
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-29-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-31-1.png" width="70%" style="display: block; margin: auto;" />
 
 
 `geom_pointrange()` zeichnet einen vertikalen (Fehler-)balken sowie einen Punkt in der Mitte; 
@@ -750,7 +788,7 @@ extra_auszug %>%
   facet_wrap(~ code)
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-32-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-34-1.png" width="70%" style="display: block; margin: auto;" />
 
 Dem Skalenniveau der Items kommen Punkte vielleicht besser entgegen als die Balken:
 
@@ -763,6 +801,6 @@ extra_auszug %>%
   facet_wrap(~ code)
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-33-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-35-1.png" width="70%" style="display: block; margin: auto;" />
 
 

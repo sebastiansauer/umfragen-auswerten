@@ -53,7 +53,9 @@ Unter *Itemanalyse* versteht man einen wesentlichen Teil der Validierung eines p
 Die Analyse der Faktorenstruktur ist in dieser Analyse nicht umgesetzt.
 
 
-Die ersten drei Punkte werden durch eine Funktion, `alpha()` aus dem Paket `psych` abgedeckt. Dieser Funktion übergibt man eine Tabelle mit Items; man bekommt einige Item-Statistiken zurück. Zuerst erstellen wir eine Tabelle, `extra_items` nur mit den Items.
+Die ersten drei Punkte werden durch eine Funktion, `alpha()` aus dem Paket `psych` abgedeckt. 
+Dieser Funktion übergibt man eine Tabelle mit Items; man bekommt einige Item-Statistiken zurück. 
+Zuerst erstellen wir eine Tabelle, `extra_items` nur mit den Items.
 
 
 ```r
@@ -137,7 +139,7 @@ Hilfe zur recht ausführlichen Ausgabe bekommt man `?alpha`.
 
 Das `raw_alpha` ist das für gewöhnliche berichtete Alpha-Koeffizient ($\alpha$) berechnet auf Basis der Kovarianzen, nicht Korrelationen), als Schätzwert für die Reliabilität im Sinne der internen Konsistenz der Skala.  Außerdem wird ein Konfidenzbereich für den Alpha-Koeffizienten angegeben.  Interessant ist auch die Frage, ob bzw. wie sich die Reliabilität der Skala ändert, wenn man ein bestimmtes Items entfernt: Wird die Reliabilität besser nach Entfernen des Items, so ist das ein Hinweis, dass das Item umformuliert oder entfernt werden sollte. Im vorliegenden Fall ist das Item `i03` ein Kandidat zur Überarbeitung.
 
-Darüber hinaus wird Guttmans $\lambda_6$ (Lambda-6) berichtet, der in dieser Analyse aber nicht weiter betrachtet wird. `average_r` ist die mittlere Korrelation aller Itempaare ("Interitemkorrelation"); dieser Koeffizient misst, wie stark die paarweise Korrelation der Items untereinander ist. Bei der Schwierigkeit ist es wünschenswert, dass ein breiter Bereich abgedeckt wird, also einige Items leicht und andere schwer sind, damit Personen mit geringer und hoher Ausprägung in der latenten Fähigkeit^["Fähigkeit" wird hier im breiten Sine verwendet, auch für Persönlichkeitskonstrukte wie Extroversion.] jeweils Items mit passender Schwierigkeit auffinden.
+Darüber hinaus wird Guttmans $\lambda_6$ (Lambda-6) berichtet, der in dieser Analyse aber nicht weiter betrachtet wird. `average_r` ist die mittlere Korrelation aller Itempaare ("Interitemkorrelation"); dieser Koeffizient misst, wie stark die paarweise Korrelation der Items untereinander ist. Bei der Schwierigkeit ist es wünschenswert, dass ein breiter Bereich abgedeckt wird, also einige Items leicht und andere schwer sind, damit Personen mit geringer und hoher Ausprägung in der latenten Fähigkeit^["Fähigkeit" wird hier im breiten Sinne verwendet, auch für Persönlichkeitskonstrukte wie Extroversion.] jeweils Items mit passender Schwierigkeit auffinden.
 
 
 `mean` gibt den Mittelwert der Skala an (über alle Items); das ist ein Hinweis zur "Gesamtschwierigkeit" der Skala.Weiter unten in der Ausgabe wird für jedes einzelne Item die Schwierigkeit ausgegeben; `sd` ist die zugehörige Streuung. `S/N` steht für Signal-Noise-Ratio; dieser Koeffizient wird hier nicht weiter analysiert.

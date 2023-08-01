@@ -14,8 +14,8 @@ In diesem Kapitel benötigen wir folgende R-Pakete:
 
 ```r
 library(tidyverse)  # Datenjudo
-library(sjmisc)  # recode
-library(ggstatsplot)  # Diagramm aufbügeln
+library(sjmisc)  # für recode()
+library(ggstatsplot)  # Diagramme aufbügeln
 library(mice)  # Fehlende Werte ersetzen
 ```
 
@@ -32,7 +32,7 @@ library(mice)  # Fehlende Werte ersetzen
 
 ```r
 data_url <- "https://raw.githubusercontent.com/sebastiansauer/modar/master/datasets/extra.csv"
-extra <- read_csv(data_url)
+extra <- read_csv(data_url)  # aus `{easystats}`
 ```
 
 
@@ -536,6 +536,194 @@ extra_kurz <-
 <!-- ### Vertiefung: Duplikate entfernen -->
 
 
+## Datenqualität prüfen
+
+Bevor wir die Daten interpretieren, müssen wir sie auf Herz und Nieren prüfen,
+ein Daten-Gesundheitscheck^[Sanity Check, hört sich cooler an].
+
+Ein paar typische Probleme, die man immer wieder findet, und die wir gelöst haben wollen, sind:
+
+- *Dubletten* (doppelte Zeilen/Fälle) in den Daten
+- Eingabefehler (unplausible oder unmögliche Werte)
+- *Geringe Eingabqualität*: Versuchspersonen haben "Blümchen gekreuzt", also keine ernsthaften Antworten gegeben
+- ...
+
+
+
+### Auf Dubletten prüfen
+
+Betrachten wir der Einfachheit halber folgenden Datensatz, in dem die erste und zweite Zeile identisch sind; die zweite Zeile ist also eine Dublette.
+Die dritte Zeile ist unique.
+
+
+
+```r
+df <-
+  tibble(id = c(1, 2, 3),
+         x = c("a", "a", "caskjld"),
+         y = c(5, 5, 3000))
+
+df
+#> # A tibble: 3 × 3
+#>      id x           y
+#>   <dbl> <chr>   <dbl>
+#> 1     1 a           5
+#> 2     2 a           5
+#> 3     3 caskjld  3000
+```
+
+
+
+### Auf Eingabefehler prüfen
+
+
+Sagen wir, für Variable `x` ist nur ein einzelner Buchstabe erlaubt; 
+alles andere ist ein Eingabe- oder sonstiger Fehler.
+Eine Variable vom Typ "Text" heißt in R `Character` oder `String`.
+Mit `str_length(x)` bekommt man entsprechend die Länge eines Strings.
+Hier prüfen wir, ob die String-Länge 1 ist, dann alles okay.
+Wenn die String-Länge von `x` (für eine bestimmte Zeile) ungleich 1 ist,
+dann nicht-okay:
+
+
+
+```r
+df_check <- 
+  df %>% 
+  mutate(x_check_okay = case_when(
+    str_length(x) == 1 ~ TRUE,
+    str_length(x) != 1 ~ FALSE
+  ))
+
+df_check
+#> # A tibble: 3 × 4
+#>      id x           y x_check_okay
+#>   <dbl> <chr>   <dbl> <lgl>       
+#> 1     1 a           5 TRUE        
+#> 2     2 a           5 TRUE        
+#> 3     3 caskjld  3000 FALSE
+```
+
+Jetzt könnten wir alle "bösen" Zeilen rausschmeißen:
+
+
+```r
+df2 <-
+  df_check %>% 
+  filter(x_check_okay)
+
+df2
+#> # A tibble: 2 × 4
+#>      id x         y x_check_okay
+#>   <dbl> <chr> <dbl> <lgl>       
+#> 1     1 a         5 TRUE        
+#> 2     2 a         5 TRUE
+```
+
+
+
+Als Nächstes prüfen wir, ob `y`, eine metrische (numerische) Variable den richtigen Wertebereich hat.
+Sagen wir, Es sind nur positive Werte nicht größer als 5 erlaubt, also `0<x<=5`.
+
+
+
+```r
+df %>% 
+  mutate(y_check_okay = case_when(
+    0<y & y<=5 ~ TRUE,  # wenn y im erlaubten Wertebereich, dann okay
+    TRUE ~ FALSE  # ansonsten: nicht-okay
+  ))
+#> # A tibble: 3 × 4
+#>      id x           y y_check_okay
+#>   <dbl> <chr>   <dbl> <lgl>       
+#> 1     1 a           5 TRUE        
+#> 2     2 a           5 TRUE        
+#> 3     3 caskjld  3000 FALSE
+```
+
+`case_when` arbeitet die Prüfbedingungen *zeilenweise* ab.
+Ist die erste Zeile (`0<y & y<=5`) nicht erfüllt, dann können wir R sagen: "Immer nicht okay", 
+das erreichen wir mit `TRUE` (`TRUE` ist immer wahr) `~ FALSE` (`y_check_okay` wird auf `FALSE`) gesetzt.
+
+Im Anschluss könnten wir wieder die "bösen Zeilen" herausfiltern.
+
+
+### Geringe Eingabequalität
+
+Vielleicht hätte ihr Fragebogen nicht so lang sein sollen, 60 Minuten Befragung war dann wohl doch etwas viel.
+
+Erfahrungsgemäß verliert man pro Seite Fragebogen substanziell Versuchspersonen.
+Zehn Minuten sind für viele Menschen schon eine lange Befragung.
+Also: Beim nächsten Mal kürzer halten.
+
+Schlimmer noch als keine Antworten sind allerdings schlechte Antworten,
+wenn Versuchspersonen (aus Demotivation heraus) "Blümchen" kreuzen.
+Häufig bedeutet das, dass einfach immer die erste Antwortoption angekreuzt wird;
+das ist am einfachsten für die Versuchsperson.
+
+Wir stellen uns dabei Fragen wie: 
+
+- Hat eine Versuchsperson wenig (keine) Varianz in ihrem Antwortverhalten?
+- Hat eine Versuchsperson viel mehr Varianz als die (allermeisten) anderen?
+
+Technisch gesprochen prüfen wir pro Person mehrere Spalten eines Datensatzes,
+etwa indem wir die Varianz berechnen.
+Eine Komplikation ist, dass Datensätze in R *spaltenweise* aufgebaut sind,
+wir aber das Ergebnis *pro Zeile* (Versuchsperson) haben möchten.
+
+
+
+```r
+extra2 <- 
+extra %>% 
+  rowwise() %>% 
+  mutate(extra_var = var(c_across(i01:i10))) 
+
+extra2 %>% 
+  select(extra_var) %>% 
+  arrange(extra_var) %>% 
+  head()
+#> # A tibble: 6 × 1
+#> # Rowwise: 
+#>   extra_var
+#>       <dbl>
+#> 1       0  
+#> 2       0.1
+#> 3       0.1
+#> 4       0.1
+#> 5       0.1
+#> 6       0.1
+```
+
+
+Aber was ist viel und was ist weniger Varianz in diesem Zusammenhang?
+
+Am besten schauen wir uns mal die typische Varianz der Itemantworten für diesen Datensatz an.
+
+
+```r
+library(DataExplorer)
+extra2 %>% 
+  select(extra_var) %>% 
+  plot_histogram()
+```
+
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-28-1.png" width="70%" style="display: block; margin: auto;" />
+
+
+
+Auf dieser Basis könnte man Fälle (Versuchspersonen, d.h. Zeilen) entfernen,
+die keine Varianz oder eine Varianz höher als 1.75 aufweisen.
+
+
+```r
+extra3 <-
+  extra2 %>% 
+  filter(extra_var > 0 & extra_var < 1.76)
+```
+
+
+
 ## Scores berechnen
 
 
@@ -749,7 +937,7 @@ extra %>%
   geom_pointrange()
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-31-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-38-1.png" width="70%" style="display: block; margin: auto;" />
 
 
 `geom_pointrange()` zeichnet einen vertikalen (Fehler-)balken sowie einen Punkt in der Mitte; 
@@ -788,7 +976,7 @@ extra_auszug %>%
   facet_wrap(~ code)
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-34-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-41-1.png" width="70%" style="display: block; margin: auto;" />
 
 Dem Skalenniveau der Items kommen Punkte vielleicht besser entgegen als die Balken:
 
@@ -801,6 +989,6 @@ extra_auszug %>%
   facet_wrap(~ code)
 ```
 
-<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-35-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="010-daten-aufraeumen_files/figure-html/unnamed-chunk-42-1.png" width="70%" style="display: block; margin: auto;" />
 
 

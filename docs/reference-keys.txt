@@ -94,3 +94,8 @@ explorative-datenanalyse
 normwerte-berechnen
 hilfsfunktionen
 normwerte-berechnen-1
+url-your-book-url-like-httpsbookdown.orgyihuibookdown
+datenqualität-prüfen
+auf-dubletten-prüfen
+auf-eingabefehler-prüfen
+geringe-eingabequalität
